@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Labs | Research Grade Peptides</title>
+    <meta name="description" content="Premium research peptides for biological optimization.">
+
+    <!-- Google Fonts: Oswald (Headings) + Montserrat (Brand/Body) + Inter (Text) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#020617',    // Near Black
+                            navy: '#0F172A',    // Slate 900
+                            blue: '#0052cc',    // Standard Blue
+                            cyan: '#00C2FF',    // Tech Cyan
+                            slate: '#F8FAFC',   // Very Light Gray
+                        },
+                        accent: {
+                            cyan: '#22D3EE',
+                            blue: '#3B82F6',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        heading: ['"Oswald"', 'sans-serif'],
+                        brand: ['"Montserrat"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-tech': 'linear-gradient(135deg, #00C2FF 0%, #0052cc 100%)',
+                        'gradient-dark': 'linear-gradient(180deg, #020617 0%, #0F172A 100%)',
+                        'mesh': "url('data:image/svg+xml,%3Csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"%230052cc\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"%3E%3Ccircle cx=\"3\" cy=\"3\" r=\"1\"/%3E%3C/g%3E%3C/svg%3E')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .brand-text {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .tech-border {
+            border: 1px solid rgba(0, 82, 204, 0.1);
+            position: relative;
+        }
+
+        .tech-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 2px;
+            background: #00C2FF;
+        }
+
+        .tech-border::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 2px;
+            background: #0052cc;
+        }
+
+        /* Animations */
+        @keyframes subtle-float {
+            0% {
+                transform: translateY(0px) rotate(-2deg);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(-1deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(-2deg);
+            }
+        }
+
+        .float-animation {
+            animation: subtle-float 6s ease-in-out infinite;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-hover:hover .card-img {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .card-hover:hover .card-reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+    </style>
+    </style>
+</head>
+
+<body class="antialiased selection:bg-brand-cyan selection:text-white overflow-x-hidden">
+
+    <!-- Tech Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-slate-200/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-4 group cursor-pointer">
+                <!-- Logo Mark -->
+                <div class="relative">
+                    <div
+                        class="w-12 h-12 bg-brand-dark flex items-center justify-center transform group-hover:rotate-90 transition-transform duration-500 shadow-xl overflow-hidden">
+                        <div
+                            class="absolute inset-0 bg-gradient-tech opacity-20 group-hover:opacity-40 transition-opacity">
+                        </div>
+                        <span class="text-white font-black text-2xl brand-text relative z-10">A</span>
+                    </div>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-brand-cyan rounded-full border-2 border-white">
+                    </div>
+                </div>
+                <div class="flex flex-col leading-tight">
+                    <span class="text-2xl font-black tracking-tighter brand-text text-brand-dark">APEX</span>
+                    <span
+                        class="text-[10px] font-bold tracking-[0.4em] brand-text text-brand-blue -mt-1">LABORATORIES</span>
+                </div>
+            </div>
+
+            <div
+                class="hidden md:flex items-center gap-12 font-bold text-[11px] uppercase tracking-[0.2em] text-slate-500">
+                <a href="#collection" class="hover:text-brand-blue transition-colors relative group">
+                    Catalog
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#science" class="hover:text-brand-blue transition-colors relative group">
+                    The Standard
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#about" class="hover:text-brand-blue transition-colors relative group">
+                    Research
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
+                </a>
+            </div>
+
+            <button
+                class="group relative overflow-hidden bg-brand-dark px-8 py-3 rounded-none font-bold uppercase text-[10px] tracking-[0.2em] text-white shadow-2xl hover:shadow-brand-blue/20 transition-all duration-500">
+                <span class="relative z-10 flex items-center gap-3">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-brand-cyan"></i>
+                    Secure Portal
+                </span>
+                <div
+                    class="absolute inset-0 bg-brand-blue translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                </div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Lab Hero Section -->
+    <header class="relative pt-40 pb-32 lg:pt-56 lg:pb-48 bg-white overflow-hidden">
+        <!-- Background Ornaments -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-mesh opacity-40"></div>
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-blue/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-brand-cyan/5 rounded-full blur-[120px]"></div>
+
+        <!-- Animated Circuit Lines (Visual Decor) -->
+        <div class="absolute top-1/4 left-0 w-32 h-[1px] bg-gradient-to-r from-transparent to-brand-cyan opacity-30">
+        </div>
+        <div class="absolute top-1/3 left-10 w-24 h-[1px] bg-gradient-to-r from-transparent to-brand-blue opacity-30">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
+            <div class="relative z-10 fade-in-up">
+                <div
+                    class="inline-flex items-center gap-4 px-4 py-2 bg-slate-100 border-l-4 border-brand-cyan mb-10 shadow-sm">
+                    <span class="flex gap-1">
+                        <span class="w-1.5 h-1.5 bg-brand-cyan rounded-full animate-ping"></span>
+                        <span class="w-1.5 h-1.5 bg-brand-cyan rounded-full opacity-50"></span>
+                    </span>
+                    <span class="text-[10px] font-black tracking-[0.3em] uppercase text-brand-dark">Purity Verified >
+                        99.8%</span>
+                </div>
+
+                <h1
+                    class="text-7xl md:text-8xl lg:text-[110px] text-brand-dark mb-8 leading-[0.85] font-black tracking-tighter">
+                    ELITE <br />
+                    <span class="text-transparent bg-clip-text bg-gradient-tech">SYNTHESIS</span>
+                </h1>
+
+                <p
+                    class="text-slate-500 text-lg md:text-xl font-medium leading-relaxed mb-12 max-w-lg border-l border-slate-200 pl-8">
+                    Advancing human potential through precision-engineered research peptides. Pure. Stable. Verified.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <a href="#collection"
+                        class="group relative px-10 py-5 bg-brand-dark text-white font-bold uppercase text-xs tracking-[0.2em] shadow-2xl transition-all duration-300 overflow-hidden">
+                        <span class="relative z-10 flex items-center gap-3">
+                            Inventory Access <i data-lucide="chevron-right"
+                                class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                        <div
+                            class="absolute inset-0 bg-brand-blue -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
+                        </div>
+                    </a>
+                    <a href="#science"
+                        class="px-10 py-5 bg-white border-2 border-slate-200 text-brand-dark font-bold uppercase text-xs tracking-[0.2em] hover:border-brand-dark hover:bg-slate-50 transition-all flex items-center justify-center">
+                        Lab Reports
+                    </a>
+                </div>
+
+                <!-- Trust Stats -->
+                <div class="mt-20 grid grid-cols-3 gap-8">
+                    <div>
+                        <div class="text-2xl font-black text-brand-dark">99.8%</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Min Purity
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-brand-dark">HPLC</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Verified</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-brand-dark">24H</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Logistics</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative hidden lg:block fade-in-up" style="animation-delay: 0.3s;">
+                <!-- Main Glass Frame -->
+                <div class="relative z-20 float-animation">
+                    <div class="absolute -inset-10 bg-brand-cyan/20 blur-[100px] border-full opacity-30"></div>
+                    <div class="bg-white p-6 shadow-[0_50px_100px_-15px_rgba(0,0,0,0.1)] border border-slate-100">
+                        <div class="bg-slate-50 p-10 flex items-center justify-center relative">
+                            <img src="assets/APEX LABS(VIAL STICKER)BPC-157.png" alt="Featured Product"
+                                class="w-full h-auto object-contain drop-shadow-2xl">
+
+                            <!-- Product Tag -->
+                            <div
+                                class="absolute bottom-6 left-6 right-6 p-6 glass-panel border border-white/50 shadow-xl">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-[10px] font-black text-brand-blue tracking-[0.2em] uppercase">Ref:
+                                        BP-157/K</span>
+                                    <span
+                                        class="text-[10px] font-bold text-brand-cyan bg-brand-cyan/10 px-2 py-0.5 uppercase">Stabilized</span>
+                                </div>
+                                <div class="text-2xl font-black text-brand-dark tracking-tight">BPC-157 REGEN</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decorative geometric patterns -->
+                <div class="absolute -top-10 -right-10 w-40 h-40 border border-slate-100 -z-10 bg-slate-50/50"></div>
+                <div class="absolute bottom-20 -left-10 w-32 h-32 bg-brand-dark -z-10 shadow-2xl"></div>
+                <div class="absolute top-1/2 left-0 w-full h-[1px] bg-slate-100 -z-20"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- The Collection - Tech Grid -->
+    <section id="collection" class="py-32 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-6 mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+            <div class="max-w-xl">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-12 h-[1px] bg-brand-blue"></span>
+                    <span class="text-brand-blue font-black tracking-[0.3em] uppercase text-[10px]">Compound
+                        Catalog</span>
+                </div>
+                <h2 class="text-6xl font-black text-brand-dark uppercase tracking-tighter mb-4">Master Index</h2>
+                <p class="text-slate-500 font-medium">Browse our complete inventory of ultra-pure research formulations.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="flex gap-2 p-1 bg-white border border-slate-200 shadow-sm">
+                    <button class="w-10 h-10 flex items-center justify-center bg-brand-dark text-white">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    </button>
+                    <button
+                        class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-brand-dark transition-colors">
+                        <i data-lucide="list" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="h-10 w-[1px] bg-slate-200 hidden md:block"></div>
+                <div class="relative hidden md:block">
+                    <input type="text" placeholder="Search Compounds..."
+                        class="bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-brand-blue w-64 transition-all">
+                    <i data-lucide="search"
+                        class="w-3.5 h-3.5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID LAYOUT: Equal Sizes -->
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- PRODUCT CARD TEMPLATE -->
+            <!-- Item 1: AOD-9604 -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)AOD-9604.png" alt="AOD-9604"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+
+                    <!-- Tech Overlay -->
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 py-1 px-3 bg-brand-dark/5 text-brand-dark text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        In Stock
+                    </div>
+                </div>
+
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl">
+                        <i data-lucide="beaker" class="w-4 h-4 text-brand-cyan"></i>
+                    </div>
+
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        AOD-9604</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Lipolysis Protocol
+                    </p>
+
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Fragment 176-191 of Human Growth Hormone. Specifically researched for its ability to stimulate
+                        lipolysis (fat breakdown) without affecting blood sugar.
+                    </p>
+
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">5.0 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2: BPC-157 -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)BPC-157.png" alt="BPC-157"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="activity" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        BPC-157</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Recovery Agent</p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Body Protection Compound. Pentadecapeptide isolated from gastric juice, known for its potent
+                        cytoprotective and tissue-healing properties.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3: CJC-1295 -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)CJC-1295.png" alt="CJC-1295"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="dna" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        CJC-1295</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">GHRH Analog</p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Tetrasubstituted 30-amino acid peptide hormone. Promotes pulsatile GH release with an extended
+                        half-life compared to native GHRH.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">5.0 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4: IPAMORELIN -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)IPAMORELIN.png" alt="IPAMORELIN"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="Zap" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        IPAMORELIN</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Selective
+                        Secretagogue</p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        A selective GH-Secretagogue causing growth hormone release without significant impact on
+                        ACTH/cortisol or prolactin levels.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">5.0 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5: MOTS-C -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)MOTS-C.png" alt="MOTS-C"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="framer" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        MOTS-C</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Mitochondrial
+                        Derived</p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        A mitochondrial-derived peptide that regulates metabolic functions and supports cellular energy
+                        homeostasis.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6: NADS+ -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)NADS+.png" alt="NADS+"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="infinity" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        NADS+</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Cellular Vitality
+                    </p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Critical coenzyme found in all living cells. Essential for sirtuin activation, DNA repair, and
+                        energy metabolism.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">500 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 7: PTP-141 -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)PTP-141.png" alt="PTP-141"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="brain" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        PTP-141</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Neural Signaling
+                    </p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Bremelanotide. A melanocortin receptor agonist which acts centrally to improve libido and
+                        arousal in both sexes.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 8: TB-500 -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)TB500.png" alt="TB-500"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="shield" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        TB-500</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Tissue
+                        Regeneration</p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Synthetic fraction of Thymosin Beta-4. Promotes endothelial cell migration, angiogenesis, and
+                        reduced inflammation.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">5.0 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 9: TESAMORELIN -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)TESAMORELIN.png" alt="TESAMORELIN"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="trending-up" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        TESAMORELIN</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Metabolic Factor
+                    </p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        A stabilized growth hormone-releasing hormone (GHRH) analogue. Clinically shown to reduce
+                        visceral adipose tissue.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">2.0 MG / VIAL</span>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                            Lab Analysis <i data-lucide="arrow-right"
+                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- The Apex Standard - Lab Experience -->
+    <section id="science" class="py-40 bg-brand-dark text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-mesh opacity-10"></div>
+        <div class="absolute top-0 right-0 w-full h-1 bg-gradient-tech"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-32 items-center">
+                <div>
+                    <div class="flex items-center gap-3 mb-8">
+                        <span class="w-12 h-[1px] bg-brand-cyan"></span>
+                        <span class="text-brand-cyan font-black tracking-[0.3em] uppercase text-[10px]">Quality
+                            Assurance</span>
+                    </div>
+                    <h2 class="text-7xl font-black uppercase tracking-tighter mb-12 leading-tight">The <span
+                            class="text-transparent bg-clip-text bg-gradient-tech">Apex</span> <br>Standard</h2>
+
+                    <div class="space-y-16">
+                        <div class="group flex gap-8">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 border border-white/10 flex items-center justify-center text-brand-cyan font-black text-xl group-hover:bg-brand-cyan group-hover:text-brand-dark transition-all duration-500">
+                                01
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight">HPLC Verified Purity</h3>
+                                <p class="text-slate-400 font-medium leading-relaxed">
+                                    Every batch undergoes High-Performance Liquid Chromatography testing. We don't just
+                                    claim purity; we provide the data to prove it.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="group flex gap-8">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 border border-white/10 flex items-center justify-center text-brand-cyan font-black text-xl group-hover:bg-brand-cyan group-hover:text-brand-dark transition-all duration-500">
+                                02
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight">Cold-Chain Logistics</h3>
+                                <p class="text-slate-400 font-medium leading-relaxed">
+                                    Our lyophilized compounds are maintained in climate-controlled environments from
+                                    synthesis to dispatch, ensuring maximum stability.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="group flex gap-8">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 border border-white/10 flex items-center justify-center text-brand-cyan font-black text-xl group-hover:bg-brand-cyan group-hover:text-brand-dark transition-all duration-500">
+                                03
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight">Sterile Environment</h3>
+                                <p class="text-slate-400 font-medium leading-relaxed">
+                                    All synthesis and bottling occurs within ISO-certified cleanrooms, preventing
+                                    cross-contamination and ensuring research integrity.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute -inset-20 bg-brand-blue/20 blur-[150px] rounded-full"></div>
+                    <div class="relative bg-white/5 border border-white/10 p-12 backdrop-blur-3xl">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-24 h-24 rounded-full bg-gradient-tech p-[2px] mb-8">
+                                <div class="w-full h-full rounded-full bg-brand-dark flex items-center justify-center">
+                                    <i data-lucide="microscope" class="w-10 h-10 text-brand-cyan"></i>
+                                </div>
+                            </div>
+                            <p class="text-2xl font-heading italic text-white mb-10 leading-relaxed">
+                                "Apex Laboratories was founded on a simple principle: Research requires absolute
+                                precision. We remove the variables, so you can focus on the breakthrough."
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <span class="text-[10px] font-black tracking-[0.4em] text-brand-cyan uppercase">Chief
+                                    Scientific Officer</span>
+                                <div class="h-px w-20 bg-white/20 my-4"></div>
+                                <span class="text-sm font-bold tracking-widest uppercase">Dr. Adrian Sterling</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-40 bg-slate-50 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-24">
+                <span class="text-brand-blue font-black tracking-[0.4em] uppercase text-[10px] mb-4 block">Knowledge
+                    Base</span>
+                <h2 class="text-6xl font-black text-brand-dark uppercase tracking-tighter">Support & FAQ</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="group bg-white border border-slate-200">
+                    <button
+                        class="w-full p-8 text-left flex justify-between items-center group-hover:bg-slate-50 transition-colors">
+                        <span class="text-xs font-black uppercase tracking-widest text-brand-dark">How are your purity
+                            levels verified?</span>
+                        <i data-lucide="plus"
+                            class="w-4 h-4 text-brand-blue group-hover:rotate-90 transition-transform"></i>
+                    </button>
+                    <div class="px-8 pb-8 text-sm text-slate-500 font-medium leading-relaxed hidden">
+                        Every batch is tested via HPLC (High-Performance Liquid Chromatography) by independent
+                        third-party laboratories. You can download the specific COA for your batch by entering the REF
+                        number in our Secure Portal.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="group bg-white border border-slate-200">
+                    <button
+                        class="w-full p-8 text-left flex justify-between items-center group-hover:bg-slate-50 transition-colors">
+                        <span class="text-xs font-black uppercase tracking-widest text-brand-dark">What is your shipping
+                            & stability protocol?</span>
+                        <i data-lucide="plus"
+                            class="w-4 h-4 text-brand-blue group-hover:rotate-90 transition-transform"></i>
+                    </button>
+                    <div class="px-8 pb-8 text-sm text-slate-500 font-medium leading-relaxed hidden">
+                        We use vacuum-sealed, lyophilized packaging to ensure maximum stability during transit. Orders
+                        are processed within 24 hours and shipped via express couriers to minimize time outside of
+                        climate-controlled storage.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="group bg-white border border-slate-200">
+                    <button
+                        class="w-full p-8 text-left flex justify-between items-center group-hover:bg-slate-50 transition-colors">
+                        <span class="text-xs font-black uppercase tracking-widest text-brand-dark">Are these products
+                            intended for human use?</span>
+                        <i data-lucide="plus"
+                            class="w-4 h-4 text-brand-blue group-hover:rotate-90 transition-transform"></i>
+                    </button>
+                    <div class="px-8 pb-8 text-sm text-slate-500 font-medium leading-relaxed hidden">
+                        No. All products sold by Apex Laboratories are strictly for laboratory research and forensic
+                        applications only. They are not for human or animal consumption, nor for use in medical
+                        diagnostic procedures.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-40 bg-white relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
+            <h2 class="text-6xl md:text-8xl font-black text-brand-dark uppercase tracking-tighter mb-10">Ready for
+                <br><span class="text-brand-blue">Discovery?</span>
+            </h2>
+            <p class="text-xl text-slate-500 mb-16 max-w-2xl mx-auto font-medium">Join the thousands of independent
+                researchers choosing Apex for reliable, high-purity laboratory compounds.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-8">
+                <button
+                    class="px-12 py-6 bg-brand-dark text-white font-black uppercase text-xs tracking-[0.3em] shadow-2xl hover:bg-brand-blue transition-all">Register
+                    Lab Account</button>
+                <button
+                    class="px-12 py-6 bg-white border-2 border-slate-200 text-brand-dark font-black uppercase text-xs tracking-[0.3em] hover:border-brand-dark transition-all">Support
+                    Portal</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clinical Footer -->
+    <footer class="bg-brand-dark text-white pt-32 pb-16 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-20 mb-32">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-4 mb-10">
+                        <div class="w-10 h-10 bg-white flex items-center justify-center">
+                            <span class="text-brand-dark font-black text-xl brand-text">A</span>
+                        </div>
+                        <div class="flex flex-col leading-none">
+                            <span class="text-xl font-black tracking-tighter brand-text">APEX</span>
+                            <span class="text-[8px] font-bold tracking-[0.3em] text-brand-cyan">LABS</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-xs leading-relaxed uppercase tracking-widest font-bold">
+                        Ultra-Pure Peptide Synthesis <br>
+                        For Research Purposes Only.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan mb-10">Inventory</h4>
+                    <ul class="space-y-6 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
+                        <li><a href="#" class="hover:text-white transition-colors">Performance</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Regenerative</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Cognitive</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Longevity</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan mb-10">Verification
+                    </h4>
+                    <ul class="space-y-6 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
+                        <li><a href="#" class="hover:text-white transition-colors">Lab Reports</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">HPLC Database</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Security Check</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">COA Portal</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan mb-10">Intelligence
+                    </h4>
+                    <div class="flex items-center border-b border-white/10 pb-4">
+                        <input type="email" placeholder="EMAIL ADDRESS"
+                            class="bg-transparent border-none focus:ring-0 text-[10px] w-full placeholder-slate-700 text-white font-black tracking-widest">
+                        <button class="text-brand-cyan hover:text-white transition-colors">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em]">
+                <p>&copy; 2026 Apex Laboratories Research. Verified Secure.</p>
+                <div class="flex gap-10 mt-8 md:mt-0">
+                    <a href="#" class="hover:text-slate-300">Privacy</a>
+                    <a href="#" class="hover:text-slate-300">Terms</a>
+                    <a href="#" class="hover:text-slate-300">Shipping</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Simple FAQ Accordion Logic
+        document.querySelectorAll('.group button').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                const isHidden = content.classList.contains('hidden');
+
+                // Close all others
+                document.querySelectorAll('.group div').forEach(div => div.classList.add('hidden'));
+                document.querySelectorAll('.group i').forEach(i => i.setAttribute('data-lucide', 'plus'));
+
+                if (isHidden) {
+                    content.classList.remove('hidden');
+                    icon.style.transform = 'rotate(45deg)';
+                } else {
+                    content.classList.add('hidden');
+                    icon.style.transform = 'rotate(0deg)';
+                }
+                lucide.createIcons();
+            });
+        });
+    </script>
+</body>
+
+</html>
