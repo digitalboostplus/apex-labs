@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Overview | Apex Labs</title>
+    <meta name="description" content="Technical overview of Apex Labs peptide research protocols and program details.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#020617',
+                            navy: '#0F172A',
+                            blue: '#0052cc',
+                            cyan: '#00C2FF',
+                            slate: '#F8FAFC',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        heading: ['"Oswald"', 'sans-serif'],
+                        brand: ['"Montserrat"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-tech': 'linear-gradient(135deg, #00C2FF 0%, #0052cc 100%)',
+                        'gradient-dark': 'linear-gradient(180deg, #020617 0%, #0F172A 100%)',
+                        'mesh': "url('data:image/svg+xml,%3Csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"%230052cc\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"%3E%3Ccircle cx=\"3\" cy=\"3\" r=\"1\"/%3E%3C/g%3E%3C/svg%3E')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Animation Engines (GSAP) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 82, 204, 0.1);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 194, 255, 0.4);
+            background: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(0, 82, 204, 0.1);
+        }
+
+        .tech-gradient-text {
+            background: linear-gradient(135deg, #00C2FF 0%, #0052cc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .reveal-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .reveal-span {
+            display: block;
+        }
+
+        /* Custom Cursor Follower */
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 82, 204, 0.05);
+            border: 1px solid rgba(0, 82, 204, 0.2);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background 0.3s;
+            mix-blend-mode: multiply;
+            display: none;
+        }
+
+        @media (pointer: fine) {
+            .cursor-follower {
+                display: block;
+            }
+        }
+
+        .cursor-follower.active {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 82, 204, 0.03);
+        }
+
+        .magnetic-wrap {
+            display: inline-block;
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(0, 82, 204, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 82, 204, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .perspective-card {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        .glow-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--x) var(--y), rgba(0, 194, 255, 0.1) 0%, transparent 80%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .group:hover .glow-overlay {
+            opacity: 1;
+        }
+
+        /* Table Styling */
+        .protocol-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 2px solid #00C2FF;
+            font-family: 'Oswald', sans-serif;
+            color: #0F172A;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+        }
+
+        .protocol-table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid rgba(0, 82, 204, 0.05);
+            vertical-align: top;
+            color: #475569;
+        }
+
+        .protocol-table tr:hover {
+            background: rgba(0, 194, 255, 0.03);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            background: #00C2FF;
+            box-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body class="bg-brand-slate grid-bg">
+    <!-- Custom Cursor -->
+    <div class="cursor-follower" id="cursor"></div>
+
+    <!-- Navigation -->
+    <nav
+        class="fixed top-0 w-full z-50 transition-all duration-300 border-b border-slate-200/50 bg-white/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3 group text-brand-dark">
+                <div class="relative w-10 h-10 flex items-center justify-center bg-brand-dark transition-colors">
+                    <span class="text-white font-bold text-xl font-brand">A</span>
+                </div>
+                <span class="text-2xl font-brand font-extrabold tracking-tighter">APEX<span
+                        class="text-brand-blue">LABS</span></span>
+            </a>
+            <div
+                class="hidden md:flex items-center space-x-10 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+                <a href="index.html" class="hover:text-brand-blue transition-colors">Catalog</a>
+                <a href="program-overview.html" class="text-brand-blue border-b-2 border-brand-blue pb-1">Protocols</a>
+                <a href="pricing.html" class="hover:text-brand-blue transition-colors">Pricing</a>
+                <a href="#"
+                    class="px-8 py-3 bg-brand-dark text-white rounded-none hover:bg-brand-blue transition-all magnetic-wrap">
+                    Portal Access
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-48 pb-24 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col items-center text-center">
+                <div
+                    class="inline-flex items-center space-x-2 px-4 py-2 bg-slate-100 border-l-4 border-brand-cyan mb-10 shadow-sm text-brand-dark text-[10px] font-black uppercase tracking-[0.3em]">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-cyan opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-cyan"></span>
+                    </span>
+                    <span>Research Protocols v4.2</span>
+                </div>
+
+                <h1 class="text-5xl md:text-8xl mb-8 leading-tight text-brand-dark font-black tracking-tighter">
+                    <div class="reveal-container">
+                        <span class="reveal-span">The Research</span>
+                    </div>
+                    <div class="reveal-container">
+                        <span class="reveal-span tech-gradient-text">Matrix</span>
+                    </div>
+                </h1>
+
+                <p
+                    class="max-w-2xl text-slate-500 text-lg md:text-xl font-medium mb-12 leading-relaxed reveal-container">
+                    <span class="reveal-span">Comprehensive scientific overview of Apex Labs' primary research
+                        compounds, dosing protocols, and synthesis objectives.</span>
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-6">
+                    <div class="magnetic-wrap">
+                        <a href="#matrix"
+                            class="px-10 py-5 bg-brand-dark text-white font-black uppercase tracking-widest text-[10px] hover:bg-brand-blue transition-all shadow-xl">
+                            Explore Protocols
+                        </a>
+                    </div>
+                    <div class="magnetic-wrap">
+                        <a href="pricing.html"
+                            class="px-10 py-5 border-2 border-brand-dark text-brand-dark font-black uppercase tracking-widest text-[10px] hover:bg-brand-dark hover:text-white transition-all">
+                            Wholesale Tiers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Data Matrix Section -->
+    <section id="matrix" class="py-24 px-6 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <div>
+                    <h2 class="text-3xl md:text-5xl mb-4 text-brand-dark">Compound <span
+                            class="text-brand-blue">Library</span></h2>
+                    <p class="text-slate-500 max-w-xl font-medium">A complete directory of technical specifications for
+                        educational
+                        and laboratory reference.</p>
+                </div>
+                <div class="flex items-center space-x-4 bg-white p-2 border border-slate-200 shadow-sm">
+                    <span class="text-[9px] font-black text-slate-400 uppercase px-4">Filtration:</span>
+                    <button
+                        class="px-6 py-2 bg-brand-dark text-white text-[9px] font-black uppercase tracking-[0.2em]">All</button>
+                    <button
+                        class="px-6 py-2 text-slate-500 hover:text-brand-dark text-[9px] font-black uppercase tracking-[0.2em] transition-colors">Metabolic</button>
+                    <button
+                        class="px-6 py-2 text-slate-500 hover:text-brand-dark text-[9px] font-black uppercase tracking-[0.2em] transition-colors">Healing</button>
+                </div>
+            </div>
+
+            <div class="hidden lg:block overflow-x-auto glass-card p-6 shadow-2xl">
+                <table class="w-full protocol-table">
+                    <thead>
+                        <tr>
+                            <th>Peptide</th>
+                            <th>Vial Concentration</th>
+                            <th>Primary Research Purpose</th>
+                            <th>Frequency</th>
+                            <th>Dosing Protocol</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matrix-body">
+                        <!-- Data injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Grid View -->
+            <div class="lg:hidden grid grid-cols-1 gap-6" id="mobile-matrix">
+                <!-- Data injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-24 border-t border-slate-200 bg-white relative z-10 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-10">
+                        <div class="w-12 h-12 flex items-center justify-center bg-brand-dark transition-colors">
+                            <span class="text-white font-bold text-xl font-brand">A</span>
+                        </div>
+                        <div class="flex flex-col leading-tight text-brand-dark">
+                            <span class="text-2xl font-black tracking-tighter">APEX</span>
+                            <span
+                                class="text-[10px] font-bold tracking-[0.4em] text-brand-blue -mt-1">LABORATORIES</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 font-medium leading-relaxed max-w-sm mb-10">
+                        The pinnacle of scientific research in peptide synthesis. Our laboratory provides the highest
+                        purity compounds for academic and professional research.
+                    </p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-slate-400 hover:text-brand-blue transition-colors"><i
+                                data-lucide="twitter"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-brand-blue transition-colors"><i
+                                data-lucide="instagram"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-brand-blue transition-colors"><i
+                                data-lucide="linkedin"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-brand-dark text-[10px] font-black mb-10 uppercase tracking-[0.3em]">Scientific</h4>
+                    <ul class="space-y-6 text-slate-500 text-[11px] font-bold uppercase tracking-widest">
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Methods</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Batch Reports</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Synthesis</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Protocols</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-brand-dark text-[10px] font-black mb-10 uppercase tracking-[0.3em]">Resources</h4>
+                    <ul class="space-y-6 text-slate-500 text-[11px] font-bold uppercase tracking-widest">
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Research Guide</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Security</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Support</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+                    &copy; 2026 APEX LABORATORIES. RESEARCH USE ONLY.
+                </p>
+                <div class="flex space-x-10 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+                    <a href="#" class="hover:text-brand-blue transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Extraction from Image
+        const peptideData = [
+            { id: "reta", name: "RETA", conc: "10 mg", purpose: "Triple agonist (GLP-1), appetite suppression, whole-body fat loss, long-term metabolic improvement", freq: "Weekly", protocol: "Weeks 1–4: 1 mg/week. Weeks 5–8: 2 mg/week. Dose may be split into two weekly injections." },
+            { id: "tb-500", name: "TB-500", conc: "10 mg", purpose: "Tissue repair, joint, tendon, and ligament healing. Reduces inflammation and improves mobility.", freq: "2x Weekly", protocol: "Loading phase: 2 mg twice weekly for 4-6 weeks. Maintenance: 2 mg once weekly." },
+            { id: "tesamorelin", name: "Tesamorelin", conc: "10 mg", purpose: "Visceral fat reduction and metabolic support. Typically used in 3–6 month cycles.", freq: "Daily", protocol: "2 mg nightly before bed. Optional cycling: 3 months on, 1 month off." },
+            { id: "sermorelin", name: "Sermorelin", conc: "5 mg", purpose: "Stimulates natural growth hormone release. Supports sleep, recovery, and tissue repair.", freq: "Daily", protocol: "0.2 mg nightly on an empty stomach." },
+            { id: "cjc-1295", name: "CJC-1295", conc: "10 mg", purpose: "Lean mass support, recovery enhancement, and tissue repair.", freq: "Daily", protocol: "0.2 mg nightly before bed." },
+            { id: "bpc-157", name: "BPC-157", conc: "10 mg", purpose: "Supports tendon, ligament, and joint healing. Aids gut repair and reduces inflammation.", freq: "Daily", protocol: "0.5 mg daily." },
+            { id: "ghk-cu", name: "GHK-Cu", conc: "50 mg", purpose: "Improves skin quality, collagen production, hair growth, and wound healing.", freq: "Daily", protocol: "1 mg daily for 8-12 weeks." },
+            { id: "aod-9604", name: "AOD-9604", conc: "5 mg", purpose: "Fat loss and metabolic support.", freq: "Daily", protocol: "0.3 mg in the morning. May increase to 0.5 mg if needed." },
+            { id: "epitalon", name: "Epitalon", conc: "10 mg", purpose: "Anti-aging support, sleep regulation, and long-term cellular repair.", freq: "Daily", protocol: "1 mg nightly." },
+            { id: "nadplus", name: "NAD+", conc: "500 mg", purpose: "Supports cellular energy, mitochondrial function, brain health, and anti-aging.", freq: "2x Daily", protocol: "100 mg per dose, twice daily, five days per week (~1,000 mg weekly). Maintain hydration." },
+            { id: "mots-c", name: "MOTS-C", conc: "10 mg", purpose: "Enhances insulin sensitivity, fat metabolism, and mitochondrial function.", freq: "2–3x Weekly", protocol: "Morning while fasted. Start at 5 mg; increase to 10 mg after one week if tolerated." },
+            { id: "ipamorelin", name: "Ipamorelin", conc: "10 mg", purpose: "Supports growth hormone release, recovery, and sleep quality.", freq: "Daily", protocol: "Protocol not specified." },
+            { id: "pt-141", name: "PT-141", conc: "10 mg", purpose: "Supports libido and sexual function in men and women.", freq: "As Needed", protocol: "1.5–2 mg administered 30–60 minutes prior." }
+        ];
+
+        // Populate Table and Mobile View
+        const matrixBody = document.getElementById('matrix-body');
+        const mobileMatrix = document.getElementById('mobile-matrix');
+
+        peptideData.forEach(p => {
+            // Desk Table
+            const tr = document.createElement('tr');
+            tr.className = 'group hover:bg-slate-50 transition-colors cursor-pointer';
+            tr.onclick = (e) => {
+                if (!e.target.closest('a')) window.location.href = `pricing/${p.id}.html`;
+            };
+            tr.innerHTML = `
+                <td class="font-black text-brand-dark"><span class="status-dot"></span>${p.name}</td>
+                <td class="text-slate-500 font-mono text-xs">${p.conc}</td>
+                <td class="text-slate-500 text-sm leading-relaxed font-medium">${p.purpose}</td>
+                <td class="text-brand-blue text-[10px] font-black uppercase tracking-widest">${p.freq}</td>
+                <td class="text-slate-400 text-[10px] font-bold italic leading-relaxed">${p.protocol}</td>
+            `;
+            matrixBody.appendChild(tr);
+
+            // Mobile Cards
+            const card = document.createElement('div');
+            card.className = 'glass-card p-8 rounded-none relative group overflow-hidden opacity-0 shadow-lg cursor-pointer';
+            card.onclick = (e) => {
+                if (!e.target.closest('a')) window.location.href = `pricing/${p.id}.html`;
+            };
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-6">
+                    <h3 class="text-2xl font-black text-brand-dark tracking-tighter">${p.name}</h3>
+                    <span class="text-brand-blue text-xs font-mono font-bold">${p.conc}</span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6 font-medium line-clamp-2">${p.purpose}</p>
+                <div class="grid grid-cols-2 gap-4 pt-6 border-t border-slate-100 mb-6">
+                    <div>
+                        <span class="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Frequency</span>
+                        <span class="text-brand-blue text-[10px] font-black uppercase">${p.freq}</span>
+                    </div>
+                    <div>
+                        <span class="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Protocol</span>
+                        <span class="text-slate-500 text-[9px] font-bold truncate block">${p.protocol}</span>
+                    </div>
+                </div>
+                <a href="pricing/${p.id}.html" class="block w-full py-3 bg-brand-dark text-white text-[10px] font-black uppercase tracking-widest text-center hover:bg-brand-blue transition-colors">Check Pricing</a>
+            `;
+            mobileMatrix.appendChild(card);
+        });
+
+        // Initialize Lucide
+        lucide.createIcons();
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Reveal
+        gsap.from(".reveal-span", {
+            y: "110%",
+            duration: 1.2,
+            ease: "power4.out",
+            stagger: 0.1,
+            delay: 0.5
+        });
+
+        // Data Matrix Stagger
+        gsap.to("#matrix-body tr", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.05,
+            scrollTrigger: {
+                trigger: "#matrix",
+                start: "top 80%"
+            }
+        });
+
+        gsap.to("#mobile-matrix .glass-card", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: "#mobile-matrix",
+                start: "top 80%"
+            }
+        });
+
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            let lerp = 0.15;
+            cursorX += (mouseX - cursorX) * lerp;
+            cursorY += (mouseY - cursorY) * lerp;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.querySelectorAll('a, button, .glass-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Magnetic Effect
+        document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+            wrap.addEventListener('mousemove', e => {
+                const rect = wrap.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(wrap, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.6,
+                    ease: "power2.out"
+                });
+            });
+            wrap.addEventListener('mouseleave', () => {
+                gsap.to(wrap, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            });
+        });
+
+    </script>
+</body>
+
+</html>

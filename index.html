@@ -270,13 +270,18 @@
                     <span
                         class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
                 </a>
-                <a href="#science" class="hover:text-brand-blue transition-colors relative group">
-                    The Standard
+                <a href="program-overview.html" class="hover:text-brand-blue transition-colors relative group">
+                    Protocols
                     <span
                         class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
                 </a>
-                <a href="#about" class="hover:text-brand-blue transition-colors relative group">
-                    Research
+                <a href="pricing.html" class="hover:text-brand-blue transition-colors relative group">
+                    Pricing
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#science" class="hover:text-brand-blue transition-colors relative group">
+                    The Standard
                     <span
                         class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
                 </a>
@@ -764,11 +769,11 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">5.0 MG / VIAL</span>
                         </div>
-                        <button
+                        <a href="pricing/tb-500.html"
                             class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Lab Analysis <i data-lucide="arrow-right"
+                            Check Pricing <i data-lucide="arrow-right"
                                 class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -804,11 +809,11 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">2.0 MG / VIAL</span>
                         </div>
-                        <button
+                        <a href="pricing/tesamorelin.html"
                             class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Lab Analysis <i data-lucide="arrow-right"
+                            Check Pricing <i data-lucide="arrow-right"
                                 class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1206,6 +1211,21 @@
                 }
             });
         });
+    </script>
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7iFXBzJi5NIK8_CjkfDFbonPdL5Z_SS0",
+            authDomain: "apex-labs-18862.firebaseapp.com",
+            projectId: "apex-labs-18862",
+            storageBucket: "apex-labs-18862.firebasestorage.app",
+            messagingSenderId: "257864801015",
+            appId: "1:257864801015:web:cb0da3675c646c0f5ed1f2"
+        };
+
+        const app = initializeApp(firebaseConfig);
     </script>
 </body>
 

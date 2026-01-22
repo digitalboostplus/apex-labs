@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PT-141 Pricing | Apex Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 82, 204, 0.1);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+    <nav class="p-6 border-b border-slate-200/50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="../index.html" class="text-xl font-bold tracking-tighter text-brand-dark">APEX<span
+                    class="text-[#0052cc]">LABS</span></a>
+            <a href="../pricing.html"
+                class="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">&larr;
+                Back to Wholesale Matrix</a>
+        </div>
+    </nav>
+    <main class="flex-grow container mx-auto px-6 py-24">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            <div>
+                <div
+                    class="inline-block px-4 py-1 border border-[#00C2FF] text-[#0052cc] text-[10px] font-black uppercase tracking-widest mb-6">
+                    Research Compound ID: PT-141-09</div>
+                <h1 class="text-6xl md:text-8xl mb-8 leading-none font-black tracking-tighter">PT-141 <span
+                        class="text-[#00C2FF]">(PT-141)</span></h1>
+                <p class="text-slate-500 text-xl font-medium mb-12 leading-relaxed">Melanocortin receptor agonist
+                    researched for its effects on libido and sexual function in both men and women.</p>
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-6">
+                        <div
+                            class="w-12 h-12 rounded-full glass shadow-lg flex items-center justify-center text-[#00C2FF]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-brand-dark font-black uppercase text-sm tracking-widest">99.8% Purity</div>
+                            <div class="text-slate-500 text-xs font-bold">Validated via HPLC/MS testing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-8">
+                <div class="glass p-10 relative overflow-hidden group shadow-xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Research
+                            Tier</span>
+                        <span
+                            class="px-3 py-1 bg-slate-100 text-[10px] text-brand-dark font-black uppercase tracking-widest">Standard</span>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-6xl font-black text-brand-dark tracking-tighter">$60</span>
+                        <span class="text-slate-500 font-bold">/ 10mg Vial</span>
+                    </div>
+                    <button
+                        class="w-full mt-10 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em]">Order
+                        Sample</button>
+                </div>
+                <div class="glass p-12 border-[#00C2FF] relative overflow-hidden group shadow-2xl scale-105 z-10">
+                    <div
+                        class="absolute top-0 right-0 px-6 py-2 bg-[#00C2FF] text-brand-dark text-[10px] font-black uppercase tracking-widest">
+                        Wholesale Elite</div>
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[10px] text-[#0052cc] font-black uppercase tracking-widest">Tier 1
+                            Logistics</span>
+                        <span class="text-[10px] text-slate-400 font-bold">10+ Vials</span>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-7xl font-black text-[#00C2FF] tracking-tighter">$50</span>
+                        <span class="text-slate-500 font-bold">/ Unit</span>
+                    </div>
+                    <button
+                        class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em]">Secure
+                        Wholesale Lot</button>
+                </div>
+                <div class="glass p-10 opacity-60">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Tier 2
+                            Distribution</span>
+                        <span class="text-[10px] text-slate-400 font-bold">25+ Vials</span>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-5xl font-black text-slate-400 tracking-tighter">$40</span>
+                        <span class="text-slate-400 font-bold">/ Unit</span>
+                    </div>
+                    <button
+                        class="w-full mt-10 py-5 border border-slate-200 text-[10px] font-black uppercase tracking-widest cursor-not-allowed text-slate-300">Application
+                        Required</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="p-16 border-t border-slate-200 text-center mt-24">
+        <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.5em]">&copy; 2026 APEX LABORATORIES |
+            RESEARCH USE ONLY</p>
+    </footer>
+    <script>gsap.from("main > div", { opacity: 0, y: 30, duration: 1.5, ease: "power4.out" });</script>
+</body>
+
+</html>
