@@ -206,24 +206,66 @@
         class="fixed top-0 w-full z-50 transition-all duration-300 border-b border-slate-200/50 bg-white/80 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3 group text-brand-dark">
-                <div class="relative w-10 h-10 flex items-center justify-center bg-brand-dark transition-colors">
-                    <span class="text-white font-bold text-xl font-brand">A</span>
+                <div
+                    class="relative w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-brand-dark transition-colors">
+                    <span class="text-white font-bold text-lg md:text-xl font-brand">A</span>
                 </div>
-                <span class="text-2xl font-brand font-extrabold tracking-tighter">APEX<span
+                <span class="text-xl md:text-2xl font-brand font-extrabold tracking-tighter uppercase mb-0">APEX<span
                         class="text-brand-blue">LABS</span></span>
             </a>
             <div
-                class="hidden md:flex items-center space-x-10 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-                <a href="index.html" class="hover:text-brand-blue transition-colors">Catalog</a>
+                class="hidden lg:flex items-center space-x-10 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+                <a href="index.html" class="hover:text-brand-blue transition-colors relative group">
+                    Catalog
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
+                </a>
                 <a href="program-overview.html" class="text-brand-blue border-b-2 border-brand-blue pb-1">Protocols</a>
-                <a href="pricing.html" class="hover:text-brand-blue transition-colors">Pricing</a>
+                <a href="pricing.html" class="hover:text-brand-blue transition-colors relative group">
+                    Pricing
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
+                </a>
                 <a href="#"
                     class="px-8 py-3 bg-brand-dark text-white rounded-none hover:bg-brand-blue transition-all magnetic-wrap">
                     Portal Access
                 </a>
             </div>
+
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-toggle" class="lg:hidden p-2 text-brand-dark">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
         </div>
     </nav>
+
+    <!-- Mobile Nav Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-white z-[100] translate-x-full transition-transform duration-500 lg:hidden text-brand-dark"
+        style="background: white !important;">
+        <div class="p-6 flex justify-between items-center border-b border-slate-100">
+            <span class="text-xl font-black brand-text">NAV<span class="text-brand-blue">IGATION</span></span>
+            <button id="mobile-menu-close" class="p-2">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="p-10 flex flex-col gap-8 bg-white">
+            <a href="index.html"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Catalog</a>
+            <a href="program-overview.html"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Protocols</a>
+            <a href="pricing.html"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Pricing</a>
+
+            <div class="mt-10 pt-10 border-t border-slate-100">
+                <button
+                    class="w-full py-6 bg-brand-dark text-white font-black uppercase tracking-widest flex items-center justify-center gap-4">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-brand-cyan"></i>
+                    Portal Access
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <header class="pt-48 pb-24 px-6 relative overflow-hidden">
@@ -528,6 +570,26 @@
             });
         });
 
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('mobile-menu-toggle');
+        const menuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelectorAll('.mobile-nav-link');
+
+        if (menuToggle && menuClose && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.style.transform = 'translateX(0)';
+                document.body.style.overflow = 'hidden';
+            });
+
+            const closeMenu = () => {
+                mobileMenu.style.transform = 'translateX(100%)';
+                document.body.style.overflow = '';
+            };
+
+            menuClose.addEventListener('click', closeMenu);
+            navLinks.forEach(link => link.addEventListener('click', closeMenu));
+        }
     </script>
 </body>
 
