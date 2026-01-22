@@ -308,37 +308,38 @@
             </div>
         </div>
 
-        <!-- Mobile Nav Overlay -->
-        <div id="mobile-menu"
-            class="fixed inset-0 bg-white opacity-100 z-[100] translate-x-full transition-transform duration-500 lg:hidden text-brand-dark"
-            style="background-color: #ffffff;">
-            <div class="p-6 flex justify-between items-center border-b border-slate-100">
-                <span class="text-xl font-black brand-text">NAV<span class="text-brand-blue">IGATION</span></span>
-                <button id="mobile-menu-close" class="p-2">
-                    <i data-lucide="x" class="w-6 h-6"></i>
+    </nav>
+
+    <!-- Mobile Nav Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-white z-[100] translate-x-full transition-transform duration-500 lg:hidden text-brand-dark"
+        style="background: white !important;">
+        <div class="p-6 flex justify-between items-center border-b border-slate-100">
+            <span class="text-xl font-black brand-text">NAV<span class="text-brand-blue">IGATION</span></span>
+            <button id="mobile-menu-close" class="p-2">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="p-10 flex flex-col gap-8 bg-white">
+            <a href="#collection"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Catalog</a>
+            <a href="program-overview.html"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Protocols</a>
+            <a href="pricing.html"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Pricing</a>
+            <a href="#science"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">The
+                Standard</a>
+
+            <div class="mt-10 pt-10 border-t border-slate-100">
+                <button
+                    class="w-full py-6 bg-brand-dark text-white font-black uppercase tracking-widest flex items-center justify-center gap-4">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-brand-cyan"></i>
+                    Secure Portal
                 </button>
             </div>
-            <div class="p-10 flex flex-col gap-8">
-                <a href="#collection"
-                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Catalog</a>
-                <a href="program-overview.html"
-                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Protocols</a>
-                <a href="pricing.html"
-                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Pricing</a>
-                <a href="#science"
-                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">The
-                    Standard</a>
-
-                <div class="mt-10 pt-10 border-t border-slate-100">
-                    <button
-                        class="w-full py-6 bg-brand-dark text-white font-black uppercase tracking-widest flex items-center justify-center gap-4">
-                        <i data-lucide="shield-check" class="w-5 h-5 text-brand-cyan"></i>
-                        Secure Portal
-                    </button>
-                </div>
-            </div>
         </div>
-    </nav>
+    </div>
 
     <!-- Lab Hero Section -->
     <header class="relative pt-40 pb-32 lg:pt-56 lg:pb-48 bg-white overflow-hidden">
