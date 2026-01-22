@@ -243,28 +243,30 @@
     <!-- Tech Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-slate-200/50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="flex items-center gap-4 group cursor-pointer">
+            <a href="index.html" class="flex items-center gap-4 group cursor-pointer">
                 <!-- Logo Mark -->
                 <div class="relative">
                     <div
-                        class="w-12 h-12 bg-brand-dark flex items-center justify-center transform group-hover:rotate-90 transition-transform duration-500 shadow-xl overflow-hidden">
+                        class="w-10 h-10 md:w-12 md:h-12 bg-brand-dark flex items-center justify-center transform group-hover:rotate-90 transition-transform duration-500 shadow-xl overflow-hidden">
                         <div
                             class="absolute inset-0 bg-gradient-tech opacity-20 group-hover:opacity-40 transition-opacity">
                         </div>
-                        <span class="text-white font-black text-2xl brand-text relative z-10">A</span>
+                        <span class="text-white font-black text-xl md:text-2xl brand-text relative z-10">A</span>
                     </div>
-                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-brand-cyan rounded-full border-2 border-white">
+                    <div
+                        class="absolute -top-1 -right-1 w-2.5 h-2.5 md:w-3 md:h-3 bg-brand-cyan rounded-full border-2 border-white">
                     </div>
                 </div>
                 <div class="flex flex-col leading-tight">
-                    <span class="text-2xl font-black tracking-tighter brand-text text-brand-dark">APEX</span>
+                    <span class="text-xl md:text-2xl font-black tracking-tighter brand-text text-brand-dark">APEX</span>
                     <span
-                        class="text-[10px] font-bold tracking-[0.4em] brand-text text-brand-blue -mt-1">LABORATORIES</span>
+                        class="text-[8px] md:text-[10px] font-bold tracking-[0.4em] brand-text text-brand-blue -mt-1">LABORATORIES</span>
                 </div>
-            </div>
+            </a>
 
+            <!-- Desktop Nav -->
             <div
-                class="hidden md:flex items-center gap-12 font-bold text-[11px] uppercase tracking-[0.2em] text-slate-500">
+                class="hidden lg:flex items-center gap-12 font-bold text-[11px] uppercase tracking-[0.2em] text-slate-500">
                 <a href="#collection" class="hover:text-brand-blue transition-colors relative group">
                     Catalog
                     <span
@@ -287,16 +289,53 @@
                 </a>
             </div>
 
-            <button
-                class="group relative overflow-hidden bg-brand-dark px-8 py-3 rounded-none font-bold uppercase text-[10px] tracking-[0.2em] text-white shadow-2xl hover:shadow-brand-blue/20 transition-all duration-500">
-                <span class="relative z-10 flex items-center gap-3">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-brand-cyan"></i>
-                    Secure Portal
-                </span>
-                <div
-                    class="absolute inset-0 bg-brand-blue translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+            <div class="flex items-center gap-4">
+                <button
+                    class="hidden md:flex group relative overflow-hidden bg-brand-dark px-8 py-3 rounded-none font-bold uppercase text-[10px] tracking-[0.2em] text-white shadow-2xl hover:shadow-brand-blue/20 transition-all duration-500">
+                    <span class="relative z-10 flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-brand-cyan"></i>
+                        Secure Portal
+                    </span>
+                    <div
+                        class="absolute inset-0 bg-brand-blue translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                    </div>
+                </button>
+
+                <!-- Mobile Toggle -->
+                <button id="mobile-menu-toggle" class="lg:hidden p-2 text-brand-dark">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Overlay -->
+        <div id="mobile-menu"
+            class="fixed inset-0 bg-white z-[60] translate-x-full transition-transform duration-500 lg:hidden text-brand-dark">
+            <div class="p-6 flex justify-between items-center border-b border-slate-100">
+                <span class="text-xl font-black brand-text">NAV<span class="text-brand-blue">IGATION</span></span>
+                <button id="mobile-menu-close" class="p-2">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-10 flex flex-col gap-8">
+                <a href="#collection"
+                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Catalog</a>
+                <a href="program-overview.html"
+                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Protocols</a>
+                <a href="pricing.html"
+                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Pricing</a>
+                <a href="#science"
+                    class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">The
+                    Standard</a>
+
+                <div class="mt-10 pt-10 border-t border-slate-100">
+                    <button
+                        class="w-full py-6 bg-brand-dark text-white font-black uppercase tracking-widest flex items-center justify-center gap-4">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-brand-cyan"></i>
+                        Secure Portal
+                    </button>
                 </div>
-            </button>
+            </div>
         </div>
     </nav>
 
@@ -326,7 +365,7 @@
                 </div>
 
                 <h1
-                    class="text-7xl md:text-8xl lg:text-[110px] text-brand-dark mb-8 leading-[0.85] font-black tracking-tighter">
+                    class="text-5xl md:text-8xl lg:text-[110px] text-brand-dark mb-8 leading-[0.85] font-black tracking-tighter">
                     <span class="reveal-container"><span class="reveal-span">ELITE</span></span>
                     <span class="reveal-container">
                         <span
@@ -335,7 +374,7 @@
                 </h1>
 
                 <p
-                    class="text-slate-500 text-lg md:text-xl font-medium leading-relaxed mb-12 max-w-lg border-l border-slate-200 pl-8 reveal-item">
+                    class="text-slate-500 text-base md:text-xl font-medium leading-relaxed mb-12 max-w-lg border-l border-slate-200 pl-6 md:pl-8 reveal-item">
                     Advancing human potential through precision-engineered research peptides. Pure. Stable. Verified.
                 </p>
 
@@ -361,19 +400,22 @@
                 </div>
 
                 <!-- Trust Stats -->
-                <div class="mt-20 grid grid-cols-3 gap-8">
+                <div class="mt-12 md:mt-20 grid grid-cols-3 gap-4 md:gap-8">
                     <div>
-                        <div class="text-2xl font-black text-brand-dark">99.8%</div>
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Min Purity
+                        <div class="text-xl md:text-2xl font-black text-brand-dark">99.8%</div>
+                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                            Min Purity
                         </div>
                     </div>
                     <div>
-                        <div class="text-2xl font-black text-brand-dark">HPLC</div>
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Verified</div>
+                        <div class="text-xl md:text-2xl font-black text-brand-dark">HPLC</div>
+                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                            Verified</div>
                     </div>
                     <div>
-                        <div class="text-2xl font-black text-brand-dark">24H</div>
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Logistics</div>
+                        <div class="text-xl md:text-2xl font-black text-brand-dark">24H</div>
+                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                            Logistics</div>
                     </div>
                 </div>
             </div>
@@ -413,20 +455,23 @@
     </header>
 
     <!-- The Collection - Tech Grid -->
-    <section id="collection" class="py-32 bg-slate-50 relative">
-        <div class="max-w-7xl mx-auto px-6 mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+    <section id="collection" class="py-20 md:py-32 bg-slate-50 relative">
+        <div
+            class="max-w-7xl mx-auto px-6 mb-12 md:mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-8 md:gap-10">
             <div class="max-w-xl">
-                <div class="flex items-center gap-3 mb-6">
+                <div class="flex items-center gap-3 mb-4 md:mb-6">
                     <span class="w-12 h-[1px] bg-brand-blue"></span>
                     <span class="text-brand-blue font-black tracking-[0.3em] uppercase text-[10px]">Compound
                         Catalog</span>
                 </div>
-                <h2 class="text-6xl font-black text-brand-dark uppercase tracking-tighter mb-4">Master Index</h2>
-                <p class="text-slate-500 font-medium">Browse our complete inventory of ultra-pure research formulations.
+                <h2 class="text-4xl md:text-6xl font-black text-brand-dark uppercase tracking-tighter mb-4">Master Index
+                </h2>
+                <p class="text-slate-500 font-medium text-sm md:text-base">Browse our complete inventory of ultra-pure
+                    research formulations.
                 </p>
             </div>
 
-            <div class="flex items-center gap-6">
+            <div class="flex flex-wrap items-center gap-4 md:gap-6">
                 <div class="flex gap-2 p-1 bg-white border border-slate-200 shadow-sm">
                     <button class="w-10 h-10 flex items-center justify-center bg-brand-dark text-white">
                         <i data-lucide="layout-grid" class="w-4 h-4"></i>
@@ -437,9 +482,9 @@
                     </button>
                 </div>
                 <div class="h-10 w-[1px] bg-slate-200 hidden md:block"></div>
-                <div class="relative hidden md:block">
+                <div class="relative flex-grow md:flex-initial">
                     <input type="text" placeholder="Search Compounds..."
-                        class="bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-brand-blue w-64 transition-all">
+                        class="w-full md:w-64 bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-brand-blue transition-all">
                     <i data-lucide="search"
                         class="w-3.5 h-3.5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
                 </div>
@@ -1183,6 +1228,27 @@
         });
 
         // --- FAQ Accordion Logic ---
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('mobile-menu-toggle');
+        const menuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelectorAll('.mobile-nav-link');
+
+        if (menuToggle && menuClose && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.style.transform = 'translateX(0)';
+                document.body.style.overflow = 'hidden';
+            });
+
+            const closeMenu = () => {
+                mobileMenu.style.transform = 'translateX(100%)';
+                document.body.style.overflow = '';
+            };
+
+            menuClose.addEventListener('click', closeMenu);
+            navLinks.forEach(link => link.addEventListener('click', closeMenu));
+        }
+
         document.querySelectorAll('.group button').forEach(button => {
             button.addEventListener('click', () => {
                 const content = button.nextElementSibling;
