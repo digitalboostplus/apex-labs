@@ -235,7 +235,9 @@
             opacity: 1;
         }
     </style>
-    </style>
+    <link rel="stylesheet" href="css/design-system.css">
+    <script src="js/cart.js" defer></script>
+    <script src="js/app.js" defer></script>
 </head>
 
 <body class="antialiased selection:bg-brand-cyan selection:text-white overflow-x-hidden">
@@ -267,7 +269,7 @@
             <!-- Desktop Nav -->
             <div
                 class="hidden lg:flex items-center gap-12 font-bold text-[11px] uppercase tracking-[0.2em] text-slate-500">
-                <a href="#collection" class="hover:text-brand-blue transition-colors relative group">
+                <a href="peptides.html#collection" class="hover:text-brand-blue transition-colors relative group">
                     Catalog
                     <span
                         class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
@@ -282,30 +284,37 @@
                     <span
                         class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
                 </a>
-                <a href="#science" class="hover:text-brand-blue transition-colors relative group">
+                <a href="index.html#science" class="hover:text-brand-blue transition-colors relative group">
                     The Standard
                     <span
                         class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
                 </a>
             </div>
 
-            <div class="flex items-center gap-4">
-                <button
-                    class="hidden md:flex group relative overflow-hidden bg-brand-dark px-8 py-3 rounded-none font-bold uppercase text-[10px] tracking-[0.2em] text-white shadow-2xl hover:shadow-brand-blue/20 transition-all duration-500">
-                    <span class="relative z-10 flex items-center gap-3">
-                        <i data-lucide="shield-check" class="w-4 h-4 text-brand-cyan"></i>
-                        Secure Portal
-                    </span>
-                    <div
-                        class="absolute inset-0 bg-brand-blue translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                    </div>
-                </button>
+            <!-- Cart Trigger -->
+            <button onclick="toggleCart()"
+                class="relative p-3 text-slate-500 hover:text-brand-blue transition-colors cursor-pointer group">
+                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                <span id="cart-count"
+                    class="absolute top-1 right-1 bg-brand-cyan text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full scale-0 group-hover:scale-110 transition-transform">0</span>
+            </button>
 
-                <!-- Mobile Toggle -->
-                <button id="mobile-menu-toggle" class="lg:hidden p-2 text-brand-dark">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
-                </button>
-            </div>
+            <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
+                class="hidden md:flex group relative overflow-hidden bg-brand-dark px-8 py-3 rounded-none font-bold uppercase text-[10px] tracking-[0.2em] text-white shadow-2xl hover:shadow-brand-blue/20 transition-all duration-500">
+                <span class="relative z-10 flex items-center gap-3">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-brand-cyan"></i>
+                    Secure Portal
+                </span>
+                <div
+                    class="absolute inset-0 bg-brand-blue translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                </div>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-toggle" class="lg:hidden p-2 text-brand-dark">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
         </div>
 
     </nav>
@@ -321,22 +330,22 @@
             </button>
         </div>
         <div class="p-10 flex flex-col gap-8 bg-white">
-            <a href="#collection"
+            <a href="peptides.html#collection"
                 class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Catalog</a>
             <a href="program-overview.html"
                 class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Protocols</a>
             <a href="pricing.html"
                 class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Pricing</a>
-            <a href="#science"
+            <a href="index.html#science"
                 class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">The
                 Standard</a>
 
             <div class="mt-10 pt-10 border-t border-slate-100">
-                <button
+                <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
                     class="w-full py-6 bg-brand-dark text-white font-black uppercase tracking-widest flex items-center justify-center gap-4">
                     <i data-lucide="shield-check" class="w-5 h-5 text-brand-cyan"></i>
                     Secure Portal
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -538,11 +547,17 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">5.0 MG / VIAL</span>
                         </div>
-                        <a href="pricing/aod-9604.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="pricing/aod-9604.html"
+                                class="py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2">
+                                Details
+                            </a>
+                            <button
+                                onclick="window.cartManager.addItem({id: 'aod-9604', priceId: 'price_1Sss8ERVAF7KW3dT9ph8bjXy', name: 'AOD-9604', price: 75, image: 'assets/APEX LABS(VIAL STICKER)AOD-9604.png'}); toggleCart();"
+                                class="py-4 bg-brand-dark text-white font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2 cursor-pointer hover:bg-brand-blue">
+                                Add to Cart
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -577,11 +592,17 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <a href="pricing/bpc-157.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="pricing/bpc-157.html"
+                                class="py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2">
+                                Details
+                            </a>
+                            <button
+                                onclick="window.cartManager.addItem({id: 'bpc-157', priceId: 'price_1Sss8ERVAF7KW3dTb1aGjwG0', name: 'BPC-157', price: 65, image: 'assets/APEX LABS(VIAL STICKER)BPC-157.png'}); toggleCart();"
+                                class="py-4 bg-brand-dark text-white font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2 cursor-pointer hover:bg-brand-blue">
+                                Add to Cart
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1058,10 +1079,10 @@
                 <div>
                     <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan mb-10">Inventory</h4>
                     <ul class="space-y-6 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                        <li><a href="#" class="hover:text-white transition-colors">Performance</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Regenerative</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Cognitive</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Longevity</a></li>
+                        <li><a href="pricing/ipamorelin.html" class="hover:text-white transition-colors">Performance</a></li>
+                        <li><a href="pricing/bpc-157.html" class="hover:text-white transition-colors">Regenerative</a></li>
+                        <li><a href="pricing/pt-141.html" class="hover:text-white transition-colors">Cognitive</a></li>
+                        <li><a href="pricing/nadplus.html" class="hover:text-white transition-colors">Longevity</a></li>
                     </ul>
                 </div>
 
@@ -1069,10 +1090,10 @@
                     <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan mb-10">Verification
                     </h4>
                     <ul class="space-y-6 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                        <li><a href="#" class="hover:text-white transition-colors">Lab Reports</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">HPLC Database</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Security Check</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">COA Portal</a></li>
+                        <li><a href="program-overview.html#matrix" class="hover:text-white transition-colors">Lab Reports</a></li>
+                        <li><a href="index.html#science" class="hover:text-white transition-colors">HPLC Database</a></li>
+                        <li><a href="program-overview.html#matrix" class="hover:text-white transition-colors">Security Check</a></li>
+                        <li><a href="mailto:qc@apexlabs.com?subject=COA%20Request" class="hover:text-white transition-colors">COA Portal</a></li>
                     </ul>
                 </div>
 
@@ -1093,9 +1114,9 @@
                 class="flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em]">
                 <p>&copy; 2026 Apex Laboratories Research. Verified Secure.</p>
                 <div class="flex gap-10 mt-8 md:mt-0">
-                    <a href="#" class="hover:text-slate-300">Privacy</a>
-                    <a href="#" class="hover:text-slate-300">Terms</a>
-                    <a href="#" class="hover:text-slate-300">Shipping</a>
+                    <a href="https://apexlabs.com/privacy" class="hover:text-slate-300">Privacy</a>
+                    <a href="https://apexlabs.com/terms" class="hover:text-slate-300">Terms</a>
+                    <a href="https://apexlabs.com/shipping" class="hover:text-slate-300">Shipping</a>
                 </div>
             </div>
         </div>
@@ -1230,26 +1251,6 @@
         });
 
         // --- FAQ Accordion Logic ---
-        // Mobile Menu Logic
-        const menuToggle = document.getElementById('mobile-menu-toggle');
-        const menuClose = document.getElementById('mobile-menu-close');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const navLinks = document.querySelectorAll('.mobile-nav-link');
-
-        if (menuToggle && menuClose && mobileMenu) {
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.style.transform = 'translateX(0)';
-                document.body.style.overflow = 'hidden';
-            });
-
-            const closeMenu = () => {
-                mobileMenu.style.transform = 'translateX(100%)';
-                document.body.style.overflow = '';
-            };
-
-            menuClose.addEventListener('click', closeMenu);
-            navLinks.forEach(link => link.addEventListener('click', closeMenu));
-        }
 
         document.querySelectorAll('.group button').forEach(button => {
             button.addEventListener('click', () => {
@@ -1295,6 +1296,8 @@
 
         const app = initializeApp(firebaseConfig);
     </script>
+    <!-- Dynamic Cart Components -->
+    <div id="cart-container"></div>
 </body>
 
 </html>

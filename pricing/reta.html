@@ -9,6 +9,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap"
         rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Cart Manager -->
+    <script src="../js/cart.js"></script>
     <style>
         body {
             background: #F8FAFC;
@@ -33,17 +37,27 @@
             background: linear-gradient(135deg, #00C2FF 0%, #0052cc 100%);
         }
     </style>
-</head>
+<script src='../js/app.js' defer></script></head>
 
 <body class="flex flex-col min-h-screen">
-    <nav class="p-6 border-b border-slate-200/50">
+    <nav class="p-6 border-b border-slate-200/50 relative z-50">
         <div class="container mx-auto flex justify-between items-center">
             <a href="../index.html" class="text-xl font-bold tracking-tighter text-brand-dark">APEX<span
                     class="text-[#0052cc]">LABS</span></a>
-            <a href="../pricing.html"
-                class="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">&larr;
-                Back
-                to Wholesale Matrix</a>
+
+            <div class="flex items-center gap-8">
+                <a href="../pricing.html"
+                    class="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">&larr;
+                    Back to Wholesale Matrix</a>
+
+                <!-- Cart Icon -->
+                <a href="../cart.html"
+                    class="relative p-2 text-brand-dark hover:text-brand-blue transition-colors group">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span
+                        class="cart-counter absolute -top-1 -right-1 bg-brand-blue text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden">0</span>
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -92,8 +106,11 @@
                         <span class="text-slate-500 font-bold">/ 10mg Vial</span>
                     </div>
                     <button
-                        class="w-full mt-10 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em]">Order
-                        Sample</button>
+                        onclick="CartManager.addItem({priceId: 'price_1Sss8JRVAF7KW3dTReta0001', id: 'reta', name: 'Retatrutide (RETA)', price: 120, image: 'assets/RETA VIAL MOCKUP.png', category: 'Advanced Metabolic'})"
+                        class="w-full mt-10 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3">
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                        Add to Cart
+                    </button>
                 </div>
 
                 <div class="glass p-12 border-[#00C2FF] relative overflow-hidden group shadow-2xl scale-105 z-10">
@@ -110,8 +127,11 @@
                         <span class="text-slate-500 font-bold">/ Unit</span>
                     </div>
                     <button
-                        class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em]">Secure
-                        Wholesale Lot</button>
+                        onclick="CartManager.addItem({priceId: 'price_1Sss8JRVAF7KW3dTReta0001', id: 'reta-wholesale', name: 'Retatrutide (Wholesale 10+)', price: 105, image: 'assets/RETA VIAL MOCKUP.png', category: 'Advanced Metabolic'})"
+                        class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        Add Wholesale Lot
+                    </button>
                 </div>
 
                 <div class="glass p-10 opacity-60">
@@ -141,6 +161,6 @@
     <script>
         gsap.from("main > div", { opacity: 0, y: 30, duration: 1.5, ease: "power4.out" });
     </script>
-</body>
+<div id='cart-container'></div></body>
 
 </html>

@@ -59,24 +59,21 @@
         h1,
         h2,
         h3,
-        h4 {
+        h4,
+        h5 {
             font-family: 'Oswald', sans-serif;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
         }
 
-        .pricing-card {
-            background: rgba(255, 255, 255, 0.9);
+        .font-brand {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 82, 204, 0.1);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pricing-card:hover {
-            border-color: rgba(0, 194, 255, 0.3);
-            transform: translateY(-5px);
+            border: 1px solid rgba(0, 82, 204, 0.05);
             box-shadow: 0 20px 40px -20px rgba(0, 82, 204, 0.1);
         }
 
@@ -182,6 +179,8 @@
             mix-blend-mode: multiply;
         }
     </style>
+    <script src="js/cart.js" defer></script>
+    <script src="js/app.js" defer></script>
 </head>
 
 <body class="bg-brand-slate">
@@ -199,12 +198,13 @@
             </a>
             <div
                 class="hidden lg:flex items-center space-x-10 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-                <a href="index.html" class="hover:text-brand-blue transition-colors">Catalog</a>
+                <a href="peptides.html#collection" class="hover:text-brand-blue transition-colors">Catalog</a>
                 <a href="program-overview.html" class="hover:text-brand-blue transition-colors">Protocols</a>
                 <a href="pricing.html" class="text-brand-blue border-b-2 border-brand-blue pb-1">Pricing</a>
-                <a href="#"
-                    class="px-8 py-3 bg-brand-dark text-white rounded-none hover:bg-brand-blue transition-all">Wholesale
-                    App</a>
+                <a href="index.html#science" class="hover:text-brand-blue transition-colors">The Standard</a>
+                <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
+                    class="px-8 py-3 bg-brand-dark text-white rounded-none hover:bg-brand-blue transition-all">Portal
+                    Access</a>
             </div>
 
             <!-- Mobile Toggle -->
@@ -226,19 +226,22 @@
             </button>
         </div>
         <div class="p-10 flex flex-col gap-8 bg-white">
-            <a href="index.html"
+            <a href="peptides.html#collection"
                 class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Catalog</a>
             <a href="program-overview.html"
                 class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Protocols</a>
             <a href="pricing.html"
                 class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">Pricing</a>
+            <a href="index.html#science"
+                class="mobile-nav-link text-4xl font-black tracking-tighter text-brand-dark uppercase">The
+                Standard</a>
 
             <div class="mt-10 pt-10 border-t border-slate-100">
-                <button
+                <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
                     class="w-full py-6 bg-brand-dark text-white font-black uppercase tracking-widest flex items-center justify-center gap-4">
                     <i data-lucide="shield-check" class="w-5 h-5 text-brand-cyan"></i>
-                    Wholesale App
-                </button>
+                    Portal Access
+                </a>
             </div>
         </div>
     </div>
@@ -249,107 +252,51 @@
             <div class="max-w-2xl">
                 <div class="text-brand-blue text-[10px] font-black uppercase tracking-[0.5em] mb-4">Wholesale Division
                 </div>
-                <h1 class="text-5xl md:text-8xl mb-6 text-brand-dark font-black tracking-tighter leading-tight">Volume
-                    <span class="text-brand-blue">Matrix</span>
-                </h1>
-                <p class="text-slate-500 text-base md:text-xl font-medium leading-relaxed">Tiered distribution pricing
-                    for
-                    institutional and
-                    laboratory research partners. High-purity synthesis at scale.</p>
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 leading-[0.85]">MASTER
+                    <span class="text-brand-blue">MATRIX</span></h1>
+                <p class="text-slate-500 text-lg md:text-xl font-medium border-l border-slate-200 pl-8 max-w-lg">Access
+                    enterprise-level tier distributions for high-throughput research facilities and clinical trials.</p>
             </div>
-            <div class="flex flex-col items-start md:items-end w-full md:w-auto">
-                <div class="bg-white border border-slate-200 p-6 md:p-8 shadow-xl w-full md:w-auto">
-                    <div class="text-[9px] text-slate-400 uppercase font-black tracking-[0.3em] mb-2">Sheet Update</div>
-                    <div class="text-brand-dark font-mono text-xl md:text-2xl font-black">2026.04.12.v2</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Matrix Dashboard -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- Stats/Filters Sidebar -->
-            <div class="lg:col-span-1 space-y-6">
-                <div class="pricing-card p-6">
-                    <h3 class="text-xs font-black tracking-widest text-slate-500 mb-6 uppercase">Quick Filters</h3>
-                    <div class="space-y-3">
-                        <button
-                            class="w-full text-left px-4 py-3 bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-bold uppercase tracking-widest">All
-                            Compounds</button>
-                        <button
-                            class="w-full text-left px-4 py-3 border border-white/5 text-slate-400 text-xs font-bold uppercase tracking-widest hover:border-white/20 transition-colors">Weight
-                            Loss</button>
-                        <button
-                            class="w-full text-left px-4 py-3 border border-white/5 text-slate-400 text-xs font-bold uppercase tracking-widest hover:border-white/20 transition-colors">Healing</button>
-                        <button
-                            class="w-full text-left px-4 py-3 border border-white/5 text-slate-400 text-xs font-bold uppercase tracking-widest hover:border-white/20 transition-colors">Cognitive</button>
-                    </div>
-                </div>
-
-                <!-- Tiers Explanation -->
-                <div class="pricing-card p-6 bg-brand-navy">
-                    <h3 class="text-xs font-black tracking-widest text-white mb-6 uppercase">Tier Hierarchy</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-[10px] text-brand-cyan uppercase font-black">Wholesale Tier 1</span>
-                                <span class="text-[10px] text-slate-500">10+ Vials</span>
-                            </div>
-                            <div class="h-1 bg-white/5 overflow-hidden">
-                                <div class="h-full bg-brand-cyan w-[60%]"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-[10px] text-brand-cyan uppercase font-black">Wholesale Tier 2</span>
-                                <span class="text-[10px] text-slate-500">25+ Vials</span>
-                            </div>
-                            <div class="h-1 bg-white/5 overflow-hidden">
-                                <div class="h-full bg-brand-cyan w-[100%]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Table Area -->
-            <div class="lg:col-span-3">
-                <div class="pricing-card overflow-x-auto min-h-[600px]">
-                    <div class="p-8 border-b border-white/5 flex justify-between items-center">
-                        <h2 class="text-xl">Inventory <span class="text-brand-cyan">Quotation</span></h2>
-                        <div class="flex items-center space-x-2">
-                            <i data-lucide="info" class="w-4 h-4 text-slate-500"></i>
-                            <span class="text-[10px] text-slate-500 uppercase tracking-widest">Research Use Only</span>
-                        </div>
-                    </div>
-                    <table class="w-full tech-table">
-                        <thead>
-                            <tr>
-                                <th>Compound</th>
-                                <th>Unit Size</th>
-                                <th>Retail (MSRP)</th>
-                                <th>Tier 1 (Wholesale)</th>
-                                <th>Tier 2 (Wholesale)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pricing-body">
-                            <!-- Injected by JS -->
-                        </tbody>
-                    </table>
+            <div class="w-full md:w-auto glass-panel p-8 flex flex-col items-center text-center">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4">Pricing Matrix Update
+                    24-01-2026</span>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-emerald-500 text-[10px] font-black uppercase tracking-widest">Global Supply
+                        Active</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <footer class="py-24 bg-white border-t border-slate-200">
-        <div class="container mx-auto px-6 text-center">
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.5em] mb-10">Apex Laboratories &copy;
-                2026</p>
-            <div class="flex justify-center space-x-16">
-                <a href="#"
-                    class="text-slate-400 hover:text-brand-blue transition-colors text-[10px] font-black uppercase tracking-widest">Logistics</a>
-                <a href="#"
+    <!-- Pricing Section -->
+    <main class="container mx-auto px-6 mb-32 overflow-x-auto">
+        <div class="glass-panel overflow-hidden">
+            <table class="tech-table w-full">
+                <thead>
+                    <tr>
+                        <th>Research Compound</th>
+                        <th>Standard Unit</th>
+                        <th>Retail Basis</th>
+                        <th>Tier 1 (10+)</th>
+                        <th>Tier 2 (25+)</th>
+                    </tr>
+                </thead>
+                <tbody id="pricing-body">
+                    <!-- Data Injected Here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="p-20 border-t border-slate-200 bg-white">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-10 text-center">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.5em]">&copy; 2026 APEX LABORATORIES |
+                LOGISTICS HUB v2.0</p>
+            <div class="flex space-x-10">
+                <a href="https://apexlabs.com/terms"
                     class="text-slate-400 hover:text-brand-blue transition-colors text-[10px] font-black uppercase tracking-widest">Terms</a>
-                <a href="#"
+                <a href="index.html#science"
                     class="text-slate-400 hover:text-brand-blue transition-colors text-[10px] font-black uppercase tracking-widest">Safety</a>
             </div>
         </div>
@@ -396,37 +343,13 @@
             tbody.appendChild(tr);
         });
 
-        // Mobile Menu Logic
-        const menuToggle = document.getElementById('mobile-menu-toggle');
-        const menuClose = document.getElementById('mobile-menu-close');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const navLinks = document.querySelectorAll('.mobile-nav-link');
-
-        if (menuToggle && menuClose && mobileMenu) {
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.style.transform = 'translateX(0)';
-                document.body.style.overflow = 'hidden';
-            });
-
-            const closeMenu = () => {
-                mobileMenu.style.transform = 'translateX(100%)';
-                document.body.style.overflow = '';
-            };
-
-            menuClose.addEventListener('click', closeMenu);
-            navLinks.forEach(link => link.addEventListener('click', closeMenu));
-        }
-
-        // Initialize Lucide
-        lucide.createIcons();
-
         // GSAP Animations
-        gsap.to(".pricing-card", {
+        gsap.to("tr", {
             opacity: 1,
             y: 0,
-            duration: 1,
-            stagger: 0.1,
-            ease: "power4.out"
+            duration: 0.8,
+            stagger: 0.05,
+            ease: "power2.out"
         });
 
         // Cursor
@@ -439,6 +362,8 @@
             });
         });
     </script>
+    <!-- Dynamic Cart Components -->
+    <div id="cart-container"></div>
 </body>
 
 </html>

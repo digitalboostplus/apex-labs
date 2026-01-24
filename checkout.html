@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Apex Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/design-system.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/cart.js" defer></script>
+</head>
+
+<body class="bg-gray-50 antialiased">
+    <div class="max-w-4xl mx-auto px-6 py-12 md:py-24">
+        <div class="mb-12">
+            <a href="index.html"
+                class="inline-flex items-center gap-2 text-slate-500 hover:text-brand-blue transition-colors font-bold uppercase text-[10px] tracking-widest mb-6">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                Back to Lab
+            </a>
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">Review Order</h1>
+            <p class="text-slate-500 mt-2 font-medium">Verify your selection before finalizing the research proposal.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Order Summary -->
+            <div class="lg:col-span-7">
+                <div id="order-items" class="space-y-4">
+                    <!-- Items injected here -->
+                </div>
+            </div>
+
+            <!-- Total Panel -->
+            <div class="lg:col-span-5">
+                <div class="glass-panel p-8 sticky top-24">
+                    <h2
+                        class="text-lg font-bold text-slate-900 mb-6 uppercase tracking-widest border-b border-slate-200 pb-4">
+                        Order Summary</h2>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Subtotal</span>
+                            <span id="subtotal" class="font-bold text-slate-900">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Shipping</span>
+                            <span class="text-emerald-600 font-bold uppercase text-[10px]">Complimentary</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Tax</span>
+                            <span class="font-bold text-slate-900">$0.00</span>
+                        </div>
+                        <div class="pt-4 border-t border-slate-200 flex justify-between items-center">
+                            <span class="text-xl font-black text-slate-900 uppercase">Total</span>
+                            <span id="final-total" class="text-3xl font-black text-brand-dark">$0.00</span>
+                        </div>
+                    </div>
+
+                    <button id="finalize-order"
+                        class="w-full py-5 bg-black text-white font-black uppercase tracking-[0.2em] text-xs hover:bg-brand-blue transition-all shadow-xl active:scale-[0.98] cursor-pointer">
+                        Finalize Proposal
+                    </button>
+
+                    <div class="mt-6 flex items-center justify-center gap-3 text-slate-400">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Secure 256-bit Encryption</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) window.lucide.createIcons();
+
+            const finalizeBtn = document.getElementById('finalize-order');
+
+            function updateUI(cart) {
+                const list = document.getElementById('order-items');
+                const subtotalEl = document.getElementById('subtotal');
+                const finalTotalEl = document.getElementById('final-total');
+
+                if (cart.length === 0) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                list.innerHTML = cart.map(item => `
+                    <div class="flex gap-6 p-6 bg-white border border-slate-200 rounded-xl">
+                        <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-contain bg-slate-50 rounded-lg">
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-900 uppercase tracking-tight">${item.name}</h3>
+                                    <p class="text-slate-400 text-xs font-bold uppercase mt-1">Research Compound</p>
+                                </div>
+                                <span class="text-xl font-black text-slate-900">$${(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                            <div class="flex items-center gap-4 mt-4">
+                                <span class="text-sm font-medium text-slate-500">Qty: ${item.quantity}</span>
+                                <span class="text-slate-200">|</span>
+                                <span class="text-sm font-medium text-slate-500">$${item.price.toFixed(2)} / unit</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                const total = window.cartManager.getTotal();
+                subtotalEl.textContent = '$' + total.toFixed(2);
+                finalTotalEl.textContent = '$' + total.toFixed(2);
+            }
+
+            window.cartManager.subscribe(updateUI);
+
+            finalizeBtn.addEventListener('click', async () => {
+                finalizeBtn.disabled = true;
+                finalizeBtn.textContent = 'Processing...';
+
+                // Simulating Stripe Checkout Session Creation
+                console.log('Finalizing order for:', window.cartManager.cart);
+
+                // In a real implementation, you would:
+                // const res = await fetch('/api/create-checkout-session', { ... });
+                // const { url } = await res.json();
+                // window.location.href = url;
+
+                setTimeout(() => {
+                    window.cartManager.clearCart();
+                    window.location.href = 'order-confirmation.html';
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+
+</html>

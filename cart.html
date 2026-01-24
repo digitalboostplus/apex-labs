@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | Apex Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="js/cart.js" defer></script>
+    <style>
+        body {
+            background: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 82, 204, 0.1);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+    <!-- Navigation -->
+    <nav class="p-6 border-b border-slate-200/50 relative z-50 bg-white">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold tracking-tighter text-brand-dark">APEX<span
+                    class="text-[#0052cc]">LABS</span></a>
+
+            <div class="flex items-center gap-8">
+                <a href="peptides.html"
+                    class="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">Continue
+                    Shopping</a>
+
+                <!-- Cart Icon -->
+                <a href="cart.html" class="relative p-2 text-brand-dark hover:text-brand-blue transition-colors group">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span
+                        class="cart-counter absolute -top-1 -right-1 bg-brand-blue text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-6 py-12 md:py-24 max-w-5xl">
+        <div class="flex items-center gap-4 mb-12">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter">Your <span class="text-[#00C2FF]">Cart</span>
+            </h1>
+            <span
+                class="px-3 py-1 bg-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-500 rounded-full mt-2"
+                id="cart-count-badge">0 Items</span>
+        </div>
+
+        <div id="cart-container" class="grid lg:grid-cols-3 gap-12">
+            <!-- Cart Items -->
+            <div class="lg:col-span-2 space-y-6" id="cart-items">
+                <!-- Items will be injected here -->
+                <div id="empty-cart-message" class="hidden py-20 text-center glass rounded-2xl">
+                    <i data-lucide="shopping-bag" class="w-16 h-16 mx-auto text-slate-200 mb-6"></i>
+                    <p class="text-slate-500 font-medium mb-8">Your cart is currently empty.</p>
+                    <a href="peptides.html"
+                        class="inline-block px-8 py-4 bg-brand-dark text-white font-black uppercase text-xs tracking-widest hover:bg-brand-blue transition-colors">Browse
+                        Products</a>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div id="order-summary" class="space-y-6">
+                <div class="glass p-8 rounded-2xl sticky top-32">
+                    <h2 class="text-xl font-black mb-6 tracking-tight">Order Summary</h2>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500 font-medium">Subtotal</span>
+                            <span class="text-brand-dark font-bold font-mono" id="subtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500 font-medium">Shipping</span>
+                            <span class="text-brand-dark font-bold font-mono">Calculated at next step</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-6 mb-8">
+                        <div class="flex justify-between items-end">
+                            <span class="text-slate-500 font-medium pb-1">Total Due</span>
+                            <span class="text-3xl font-black text-brand-dark tracking-tighter font-mono"
+                                id="total-price">$0.00</span>
+                        </div>
+                    </div>
+
+                    <a href="checkout.html" id="checkout-btn"
+                        class="w-full py-5 bg-brand-dark text-white text-center font-black uppercase text-xs tracking-[0.2em] hover:bg-brand-blue transition-all flex items-center justify-center gap-3">
+                        Proceed to Checkout
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="p-16 border-t border-slate-200 text-center mt-24">
+        <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.5em]">&copy; 2026 APEX LABORATORIES |
+            RESEARCH USE ONLY</p>
+    </footer>
+
+    <script>
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('total-price');
+            const badgeEl = document.getElementById('cart-count-badge');
+            const summaryEl = document.getElementById('order-summary');
+            const emptyEl = document.getElementById('empty-cart-message');
+
+            const cart = CartManager.cart;
+
+            // Update badge
+            const count = CartManager.getItemCount();
+            badgeEl.textContent = `${count} ${count === 1 ? 'Item' : 'Items'}`;
+
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                container.appendChild(emptyEl);
+                emptyEl.classList.remove('hidden');
+                summaryEl.classList.add('opacity-50', 'pointer-events-none');
+                return;
+            }
+
+            emptyEl.classList.add('hidden');
+            summaryEl.classList.remove('opacity-50', 'pointer-events-none');
+
+            container.innerHTML = cart.map(item => `
+                <div class="glass p-6 md:p-8 rounded-2xl flex flex-col md:flex-row gap-8 items-center group">
+                    <div class="w-32 h-32 md:w-40 md:h-40 bg-slate-50 p-4 rounded-xl flex items-center justify-center shrink-0">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    
+                    <div class="flex-grow text-center md:text-left">
+                        <div class="text-[10px] font-black text-[#00C2FF] uppercase tracking-widest mb-1">${item.category}</div>
+                        <h3 class="text-2xl font-black text-brand-dark mb-4 tracking-tight uppercase">${item.name}</h3>
+                        
+                        <div class="flex flex-col md:flex-row items-center gap-8">
+                            <div class="flex items-center gap-4 bg-slate-100 p-1 rounded-lg">
+                                <button onclick="CartManager.updateQuantity('${item.priceId || item.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
+                                    <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <span class="w-8 text-center font-bold text-sm">${item.quantity}</span>
+                                <button onclick="CartManager.updateQuantity('${item.priceId || item.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="text-xl font-black text-brand-dark font-mono">$${(item.price * item.quantity).toFixed(2)}</div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="CartManager.removeItem('${item.priceId || item.id}')" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            subtotalEl.textContent = `$${CartManager.getCartTotal().toFixed(2)}`;
+            totalEl.textContent = `$${CartManager.getCartTotal().toFixed(2)}`;
+
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+
+        window.addEventListener('cartUpdated', renderCart);
+        document.addEventListener('DOMContentLoaded', renderCart);
+    </script>
+</body>
+
+</html>
+
