@@ -126,10 +126,10 @@
             const summaryEl = document.getElementById('order-summary');
             const emptyEl = document.getElementById('empty-cart-message');
 
-            const cart = CartManager.cart;
+            const cart = window.cartManager.cart;
 
             // Update badge
-            const count = CartManager.getItemCount();
+            const count = window.cartManager.getItemCount();
             badgeEl.textContent = `${count} ${count === 1 ? 'Item' : 'Items'}`;
 
             if (cart.length === 0) {
@@ -155,11 +155,11 @@
                         
                         <div class="flex flex-col md:flex-row items-center gap-8">
                             <div class="flex items-center gap-4 bg-slate-100 p-1 rounded-lg">
-                                <button onclick="CartManager.updateQuantity('${item.priceId || item.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
+                                <button onclick="window.cartManager.updateQuantity('${item.priceId || item.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
                                     <i data-lucide="minus" class="w-3.5 h-3.5"></i>
                                 </button>
                                 <span class="w-8 text-center font-bold text-sm">${item.quantity}</span>
-                                <button onclick="CartManager.updateQuantity('${item.priceId || item.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
+                                <button onclick="window.cartManager.updateQuantity('${item.priceId || item.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
                                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                                 </button>
                             </div>
@@ -168,14 +168,14 @@
                         </div>
                     </div>
                     
-                    <button onclick="CartManager.removeItem('${item.priceId || item.id}')" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                    <button onclick="window.cartManager.removeItem('${item.priceId || item.id}')" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
                         <i data-lucide="trash-2" class="w-5 h-5"></i>
                     </button>
                 </div>
             `).join('');
 
-            subtotalEl.textContent = `$${CartManager.getCartTotal().toFixed(2)}`;
-            totalEl.textContent = `$${CartManager.getCartTotal().toFixed(2)}`;
+            subtotalEl.textContent = `$${window.cartManager.getCartTotal().toFixed(2)}`;
+            totalEl.textContent = `$${window.cartManager.getCartTotal().toFixed(2)}`;
 
             if (window.lucide) {
                 window.lucide.createIcons();
@@ -188,4 +188,5 @@
 </body>
 
 </html>
+
 

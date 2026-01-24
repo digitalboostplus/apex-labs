@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist | Apex Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../js/cart.js" defer></script>
+    <script src="../../js/firebase-init.js" defer></script>
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/wishlist.js" defer></script>
+</head>
+
+<body class="bg-gray-50 antialiased">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-100 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../../index.html" class="flex items-center gap-2">
+                    <span class="text-xl font-black text-slate-900 tracking-tight">APEX LABS</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="../../peptides.html" class="text-sm font-medium text-slate-600 hover:text-slate-900">Shop</a>
+                    <button onclick="toggleCart()" class="relative p-2 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid lg:grid-cols-12 gap-8">
+            <!-- Sidebar -->
+            <aside class="lg:col-span-3">
+                <div class="bg-white rounded-xl border border-slate-100 p-6 sticky top-24">
+                    <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+                        <div id="sidebar-avatar" class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-lg"></div>
+                        <div>
+                            <p id="sidebar-name" class="font-bold text-slate-900">Loading...</p>
+                            <p id="sidebar-email" class="text-sm text-slate-500 truncate max-w-[150px]"></p>
+                        </div>
+                    </div>
+
+                    <nav class="space-y-1">
+                        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                            Dashboard
+                        </a>
+                        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                            <i data-lucide="package" class="w-5 h-5"></i>
+                            Orders
+                        </a>
+                        <a href="wishlist.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 text-amber-700 font-medium">
+                            <i data-lucide="heart" class="w-5 h-5"></i>
+                            Wishlist
+                        </a>
+                        <a href="addresses.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            Addresses
+                        </a>
+                    </nav>
+
+                    <button onclick="handleSignOut()" class="w-full mt-6 pt-6 border-t border-slate-100 flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                        Sign Out
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:col-span-9">
+                <div class="mb-8 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-slate-900">Wishlist</h1>
+                        <p class="text-slate-500 mt-1">Items you've saved for later.</p>
+                    </div>
+                    <button id="add-all-btn" onclick="addAllToCart()" class="hidden px-4 py-2 bg-amber-600 text-white font-bold rounded-lg hover:bg-amber-700 transition-colors cursor-pointer text-sm">
+                        Add All to Cart
+                    </button>
+                </div>
+
+                <!-- Wishlist Grid -->
+                <div id="wishlist-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Items will be inserted here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden text-center py-16 bg-white rounded-xl border border-slate-100">
+                    <i data-lucide="heart" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">Your wishlist is empty</h2>
+                    <p class="text-slate-500 mb-6">Save items you love for later.</p>
+                    <a href="../../peptides.html" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-colors">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        Browse Products
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Cart Container -->
+    <div id="cart-container"></div>
+
+    <script src="../../js/app.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) window.lucide.createIcons();
+
+            window.handleSignOut = async function() {
+                await window.authManager?.signOut();
+                window.location.href = '../../index.html';
+            };
+
+            function updateSidebar(user) {
+                const avatar = document.getElementById('sidebar-avatar');
+                const name = document.getElementById('sidebar-name');
+                const email = document.getElementById('sidebar-email');
+
+                if (!user) {
+                    name.textContent = 'Guest';
+                    email.textContent = 'Sign in to sync';
+                    return;
+                }
+
+                const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+
+                if (avatar) {
+                    if (user.photoURL) {
+                        avatar.innerHTML = `<img src="${user.photoURL}" class="w-full h-full rounded-full object-cover">`;
+                    } else {
+                        avatar.textContent = displayName[0].toUpperCase();
+                    }
+                }
+                if (name) name.textContent = displayName;
+                if (email) email.textContent = user.email;
+            }
+
+            function renderWishlist(items) {
+                const grid = document.getElementById('wishlist-grid');
+                const emptyState = document.getElementById('empty-state');
+                const addAllBtn = document.getElementById('add-all-btn');
+
+                if (!items || items.length === 0) {
+                    grid.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    addAllBtn.classList.add('hidden');
+                    return;
+                }
+
+                grid.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                addAllBtn.classList.remove('hidden');
+
+                grid.innerHTML = items.map(item => `
+                    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden group">
+                        <div class="relative">
+                            <a href="../../pricing/${item.id}.html" class="block aspect-square bg-slate-50 p-6">
+                                <img src="${item.image || '../../assets/placeholder.png'}" alt="${item.name}" class="w-full h-full object-contain">
+                            </a>
+                            <button onclick="removeFromWishlist('${item.id}')"
+                                class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors cursor-pointer opacity-0 group-hover:opacity-100">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-1">${item.category || 'Peptide'}</p>
+                            <h3 class="font-bold text-slate-900">${item.name}</h3>
+                            <div class="flex items-center justify-between mt-3">
+                                <span class="text-lg font-bold text-slate-900">$${(item.price || 0).toFixed(2)}</span>
+                                <button onclick="moveToCart('${item.id}')"
+                                    class="px-3 py-2 bg-amber-600 text-white text-sm font-bold rounded-lg hover:bg-amber-700 transition-colors cursor-pointer">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Re-initialize icons
+                if (window.lucide) window.lucide.createIcons();
+            }
+
+            // Remove item from wishlist
+            window.removeFromWishlist = async function(productId) {
+                if (window.wishlistManager) {
+                    await window.wishlistManager.remove(productId);
+                }
+            };
+
+            // Move item to cart
+            window.moveToCart = async function(productId) {
+                if (window.wishlistManager) {
+                    await window.wishlistManager.moveToCart(productId);
+                }
+            };
+
+            // Add all items to cart
+            window.addAllToCart = async function() {
+                if (window.wishlistManager) {
+                    await window.wishlistManager.moveAllToCart();
+                }
+            };
+
+            // Subscribe to wishlist changes
+            function initWishlist() {
+                if (window.wishlistManager) {
+                    window.wishlistManager.subscribe((event, items) => {
+                        if (event === 'initialized' || event === 'merged') {
+                            renderWishlist(items);
+                        } else {
+                            renderWishlist(window.wishlistManager.getAll());
+                        }
+                    });
+                } else {
+                    setTimeout(initWishlist, 100);
+                }
+            }
+
+            // Subscribe to auth changes
+            if (window.authManager) {
+                window.authManager.subscribe((event, user) => {
+                    if (event === 'authStateChanged') {
+                        updateSidebar(user);
+                    }
+                });
+            }
+
+            initWishlist();
+        });
+    </script>
+</body>
+
+</html>

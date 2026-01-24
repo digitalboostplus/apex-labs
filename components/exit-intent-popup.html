@@ -1,0 +1,245 @@
+<!-- Exit Intent Popup Component -->
+<div id="exit-intent-popup" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeExitPopup()"></div>
+
+    <!-- Popup Content -->
+    <div class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg pointer-events-auto transform transition-all scale-95 opacity-0"
+            id="exit-popup-content">
+            <!-- Close Button -->
+            <button onclick="closeExitPopup()"
+                class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors cursor-pointer z-10">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Header with Gradient -->
+            <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-t-2xl px-8 py-6 text-white">
+                <h2 class="text-2xl font-bold mb-1">Wait! Don't Leave Empty-Handed</h2>
+                <p class="text-amber-100 text-sm">You have items waiting in your cart</p>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="p-6 space-y-4">
+                <!-- Mini Cart Items -->
+                <div id="exit-popup-items" class="space-y-3 max-h-48 overflow-y-auto">
+                    <!-- Items will be dynamically inserted -->
+                </div>
+
+                <!-- Total -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                    <span class="font-medium text-slate-600">Cart Total</span>
+                    <span id="exit-popup-total" class="text-xl font-bold text-slate-900">$0.00</span>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="space-y-3 pt-2">
+                    <button onclick="completeCheckout()"
+                        class="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-amber-600/20 active:scale-[0.98] cursor-pointer">
+                        Complete Your Order
+                    </button>
+
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-slate-200"></div>
+                        </div>
+                        <div class="relative flex justify-center text-xs">
+                            <span class="px-3 bg-white text-slate-400">or</span>
+                        </div>
+                    </div>
+
+                    <!-- Email Cart Form -->
+                    <form id="email-cart-form" class="flex gap-2">
+                        <input type="email" id="email-cart-input" placeholder="Enter your email" required
+                            class="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors text-sm">
+                        <button type="submit"
+                            class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors cursor-pointer text-sm whitespace-nowrap">
+                            Save Cart
+                        </button>
+                    </form>
+
+                    <p class="text-xs text-slate-400 text-center">
+                        We'll email you a link to complete your purchase later
+                    </p>
+                </div>
+
+                <!-- Trust Signals -->
+                <div class="flex items-center justify-center gap-4 pt-4 text-xs text-slate-500">
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                            </path>
+                        </svg>
+                        Secure Checkout
+                    </span>
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                            </path>
+                        </svg>
+                        30-Day Guarantee
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const STORAGE_KEY = 'apex_labs_exit_shown';
+        let hasShown = false;
+
+        // Check if popup was already shown this session
+        function wasShownThisSession() {
+            return sessionStorage.getItem(STORAGE_KEY) === 'true';
+        }
+
+        // Mark as shown
+        function markAsShown() {
+            sessionStorage.setItem(STORAGE_KEY, 'true');
+            hasShown = true;
+        }
+
+        // Update popup content with cart items
+        function updatePopupContent() {
+            const itemsContainer = document.getElementById('exit-popup-items');
+            const totalEl = document.getElementById('exit-popup-total');
+
+            if (!window.cartManager) return;
+
+            const cart = window.cartManager.getCart ? window.cartManager.getCart() : [];
+            const total = window.cartManager.getTotal();
+
+            if (itemsContainer) {
+                itemsContainer.innerHTML = cart.map(item => `
+                    <div class="flex items-center gap-3 p-2 bg-slate-50 rounded-lg">
+                        <div class="w-12 h-12 bg-white rounded-lg border border-slate-100 p-1 flex items-center justify-center">
+                            <img src="${item.image || 'assets/placeholder.png'}" alt="${item.name}" class="max-w-full max-h-full object-contain">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-sm text-slate-900 truncate">${item.name}</p>
+                            <p class="text-xs text-slate-500">Qty: ${item.quantity}</p>
+                        </div>
+                        <p class="font-bold text-slate-900">$${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                `).join('');
+            }
+
+            if (totalEl) {
+                totalEl.textContent = '$' + total.toFixed(2);
+            }
+        }
+
+        // Show popup
+        window.showExitPopup = function () {
+            if (hasShown || wasShownThisSession()) return;
+
+            // Check if cart has items
+            if (!window.cartManager || window.cartManager.getItemCount() === 0) return;
+
+            const popup = document.getElementById('exit-intent-popup');
+            const content = document.getElementById('exit-popup-content');
+
+            if (popup && content) {
+                updatePopupContent();
+                popup.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                // Animate in
+                requestAnimationFrame(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                });
+
+                markAsShown();
+            }
+        };
+
+        // Close popup
+        window.closeExitPopup = function () {
+            const popup = document.getElementById('exit-intent-popup');
+            const content = document.getElementById('exit-popup-content');
+
+            if (popup && content) {
+                content.classList.add('scale-95', 'opacity-0');
+                content.classList.remove('scale-100', 'opacity-100');
+
+                setTimeout(() => {
+                    popup.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 200);
+            }
+        };
+
+        // Complete checkout
+        window.completeCheckout = function () {
+            closeExitPopup();
+            window.location.href = 'checkout.html';
+        };
+
+        // Handle email cart form
+        document.getElementById('email-cart-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email-cart-input').value;
+            const cart = window.cartManager?.getCart ? window.cartManager.getCart() : [];
+
+            // In a real implementation, this would send to a backend
+            console.log('Saving cart for:', email, cart);
+
+            // Show success message
+            const form = e.target;
+            const originalHTML = form.innerHTML;
+            form.innerHTML = `
+                <div class="w-full py-3 bg-green-50 text-green-700 rounded-xl text-sm text-center font-medium">
+                    Cart saved! Check your email.
+                </div>
+            `;
+
+            setTimeout(() => {
+                closeExitPopup();
+                form.innerHTML = originalHTML;
+            }, 2000);
+        });
+
+        // Exit intent detection
+        function setupExitIntent() {
+            // Mouse leave detection (desktop)
+            document.addEventListener('mouseout', (e) => {
+                // Check if mouse is leaving the viewport from the top
+                if (e.clientY <= 0 && e.relatedTarget === null) {
+                    showExitPopup();
+                }
+            });
+
+            // Back button detection (mobile) - history manipulation
+            // This is a fallback for mobile devices
+
+            // Close on escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeExitPopup();
+                }
+            });
+        }
+
+        // Initialize
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupExitIntent);
+        } else {
+            setupExitIntent();
+        }
+    })();
+</script>
+
+<style>
+    #exit-popup-content {
+        transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+    }
+</style>

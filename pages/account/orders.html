@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History | Apex Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../js/cart.js" defer></script>
+    <script src="../../js/firebase-init.js" defer></script>
+    <script src="../../js/auth.js" defer></script>
+</head>
+
+<body class="bg-gray-50 antialiased">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-100 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../../index.html" class="flex items-center gap-2">
+                    <span class="text-xl font-black text-slate-900 tracking-tight">APEX LABS</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="../../peptides.html" class="text-sm font-medium text-slate-600 hover:text-slate-900">Shop</a>
+                    <button onclick="toggleCart()" class="relative p-2 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid lg:grid-cols-12 gap-8">
+            <!-- Sidebar -->
+            <aside class="lg:col-span-3">
+                <div class="bg-white rounded-xl border border-slate-100 p-6 sticky top-24">
+                    <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+                        <div id="sidebar-avatar" class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-lg"></div>
+                        <div>
+                            <p id="sidebar-name" class="font-bold text-slate-900">Loading...</p>
+                            <p id="sidebar-email" class="text-sm text-slate-500 truncate max-w-[150px]"></p>
+                        </div>
+                    </div>
+
+                    <nav class="space-y-1">
+                        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                            Dashboard
+                        </a>
+                        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 text-amber-700 font-medium">
+                            <i data-lucide="package" class="w-5 h-5"></i>
+                            Orders
+                        </a>
+                        <a href="wishlist.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                            <i data-lucide="heart" class="w-5 h-5"></i>
+                            Wishlist
+                        </a>
+                        <a href="addresses.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            Addresses
+                        </a>
+                    </nav>
+
+                    <button onclick="handleSignOut()" class="w-full mt-6 pt-6 border-t border-slate-100 flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                        Sign Out
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:col-span-9">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-slate-900">Order History</h1>
+                    <p class="text-slate-500 mt-1">View and track all your past orders.</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="text-center py-12">
+                    <div class="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    <p class="text-slate-500 mt-4">Loading orders...</p>
+                </div>
+
+                <!-- Orders List -->
+                <div id="orders-list" class="hidden space-y-4">
+                    <!-- Orders will be inserted here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden text-center py-16 bg-white rounded-xl border border-slate-100">
+                    <i data-lucide="package" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">No orders yet</h2>
+                    <p class="text-slate-500 mb-6">Start shopping to see your orders here.</p>
+                    <a href="../../peptides.html" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-colors">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        Browse Products
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Cart Container -->
+    <div id="cart-container"></div>
+
+    <script src="../../js/app.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) window.lucide.createIcons();
+
+            window.handleSignOut = async function() {
+                await window.authManager?.signOut();
+                window.location.href = '../../index.html';
+            };
+
+            function updateSidebar(user) {
+                const avatar = document.getElementById('sidebar-avatar');
+                const name = document.getElementById('sidebar-name');
+                const email = document.getElementById('sidebar-email');
+
+                const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+
+                if (avatar) {
+                    if (user.photoURL) {
+                        avatar.innerHTML = `<img src="${user.photoURL}" class="w-full h-full rounded-full object-cover">`;
+                    } else {
+                        avatar.textContent = displayName[0].toUpperCase();
+                    }
+                }
+                if (name) name.textContent = displayName;
+                if (email) email.textContent = user.email;
+            }
+
+            function getStatusBadge(status) {
+                const statusConfig = {
+                    'paid': { bg: 'bg-green-100', text: 'text-green-700', label: 'Paid' },
+                    'pending': { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Pending' },
+                    'shipped': { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Shipped' },
+                    'delivered': { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Delivered' },
+                    'refunded': { bg: 'bg-red-100', text: 'text-red-700', label: 'Refunded' },
+                    'expired': { bg: 'bg-slate-100', text: 'text-slate-700', label: 'Expired' }
+                };
+
+                const config = statusConfig[status] || statusConfig['pending'];
+                return `<span class="px-2 py-1 text-xs font-bold ${config.bg} ${config.text} rounded-full">${config.label}</span>`;
+            }
+
+            async function loadOrders(userId) {
+                const loadingState = document.getElementById('loading-state');
+                const ordersList = document.getElementById('orders-list');
+                const emptyState = document.getElementById('empty-state');
+
+                const db = window.firebaseServices?.getFirestore();
+                if (!db || !userId) {
+                    loadingState.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const snapshot = await db
+                        .collection('users')
+                        .doc(userId)
+                        .collection('orders')
+                        .orderBy('createdAt', 'desc')
+                        .get();
+
+                    loadingState.classList.add('hidden');
+
+                    if (snapshot.empty) {
+                        emptyState.classList.remove('hidden');
+                        return;
+                    }
+
+                    ordersList.classList.remove('hidden');
+                    ordersList.innerHTML = snapshot.docs.map(doc => {
+                        const order = doc.data();
+                        const orderId = doc.id.slice(-8).toUpperCase();
+                        const date = order.createdAt?.toDate?.()?.toLocaleDateString() || 'N/A';
+
+                        return `
+                            <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+                                <div class="p-6 border-b border-slate-50 flex flex-wrap items-center justify-between gap-4">
+                                    <div>
+                                        <div class="flex items-center gap-3">
+                                            <h3 class="font-bold text-slate-900">Order #${orderId}</h3>
+                                            ${getStatusBadge(order.status)}
+                                        </div>
+                                        <p class="text-sm text-slate-500 mt-1">Placed on ${date}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-2xl font-bold text-slate-900">$${(order.amountTotal || 0).toFixed(2)}</p>
+                                    </div>
+                                </div>
+                                ${order.items ? `
+                                    <div class="p-6 bg-slate-50 space-y-3">
+                                        ${order.items.slice(0, 3).map(item => `
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-12 h-12 bg-white rounded-lg p-1 border border-slate-100">
+                                                    <img src="${item.image || '../../assets/placeholder.png'}" alt="${item.name}" class="w-full h-full object-contain">
+                                                </div>
+                                                <div class="flex-1">
+                                                    <p class="font-medium text-slate-900">${item.name}</p>
+                                                    <p class="text-sm text-slate-500">Qty: ${item.quantity}</p>
+                                                </div>
+                                                <p class="font-medium text-slate-900">$${(item.price * item.quantity).toFixed(2)}</p>
+                                            </div>
+                                        `).join('')}
+                                        ${order.items.length > 3 ? `<p class="text-sm text-slate-500 text-center">+ ${order.items.length - 3} more items</p>` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('');
+
+                } catch (error) {
+                    console.error('Error loading orders:', error);
+                    loadingState.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                }
+            }
+
+            // Subscribe to auth changes
+            if (window.authManager) {
+                window.authManager.subscribe((event, user) => {
+                    if (event === 'authStateChanged') {
+                        if (user) {
+                            updateSidebar(user);
+                            loadOrders(user.uid);
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -62,74 +62,83 @@
         border: 1px solid #f1f5f9;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
-
-    .cart-item img {
-        width: 4rem;
-        height: 4rem;
-        object-fit: cover;
-        border-radius: 8px;
-    }
 </style>
 
 <script>
-    // UI Update Logic
-    // Update cart count badge
-    window.cartManager.subscribe((cart) => {
-        const list = document.getElementById('cart-items');
-        const totalEl = document.getElementById('cart-total');
-        const checkoutBtn = document.getElementById('checkout-btn');
+    (function () {
+        const updateUI = (cart) => {
+            const list = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
 
-        if (!list || !totalEl) return;
+            if (!list || !totalEl) return;
 
-        if (cart.length === 0) {
-            list.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-48 text-slate-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    <p>Your cart is empty</p>
-                </div>
-            `;
-            if (checkoutBtn) {
-                checkoutBtn.disabled = true;
-                checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            }
-        } else {
-            list.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <img src="${item.image || 'https://via.placeholder.com/100'}" alt="${item.name}">
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-slate-800">${item.name}</h3>
-                            <button onclick="window.cartManager.removeItem('${item.priceId}')" class="text-slate-400 hover:text-red-500 transition-colors cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-64 text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <p class="font-bold uppercase tracking-widest text-xs">Your research cart is empty</p>
+                    </div>
+                `;
+                if (checkoutBtn) {
+                    checkoutBtn.disabled = true;
+                    checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            } else {
+                list.innerHTML = cart.map(item => {
+                    const price = Number(item.price) || 0;
+                    const id = item.priceId || item.id;
+                    return `
+                    <div class="cart-item border border-slate-100 rounded-xl p-4 bg-white flex gap-4">
+                        <div class="w-16 h-16 flex-shrink-0 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center justify-center">
+                            <img src="${item.image || 'assets/placeholder.png'}" alt="${item.name}" class="max-w-full max-h-full object-contain">
                         </div>
-                        <p class="text-amber-600 font-semibold mt-1">$${item.price.toFixed(2)}</p>
-                        <div class="flex items-center gap-3 mt-3">
-                            <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden">
-                                <button onclick="window.cartManager.updateQuantity('${item.priceId}', -1)" class="px-2 py-1 hover:bg-slate-50 text-slate-600 cursor-pointer">-</button>
-                                <span class="px-3 py-1 text-sm font-bold text-slate-700">${item.quantity}</span>
-                                <button onclick="window.cartManager.updateQuantity('${item.priceId}', 1)" class="px-2 py-1 hover:bg-slate-50 text-slate-600 cursor-pointer">+</button>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-slate-900 leading-tight">${item.name || 'Unknown Compound'}</h3>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">${item.category || 'Compound'}</p>
+                                </div>
+                                <button onclick="window.cartManager.removeItem('${id}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <div class="flex items-center border border-slate-100 bg-slate-50 rounded-lg overflow-hidden">
+                                    <button onclick="window.cartManager.updateQuantity('${id}', -1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">-</button>
+                                    <span class="px-3 py-1 text-xs font-black text-slate-700 min-w-[2rem] text-center">${item.quantity}</span>
+                                    <button onclick="window.cartManager.updateQuantity('${id}', 1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">+</button>
+                                </div>
+                                <p class="text-brand-blue font-black">$${price.toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
-            if (checkoutBtn) {
-                checkoutBtn.disabled = false;
-                checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                `}).join('');
+                if (checkoutBtn) {
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
             }
-        }
 
-        if (totalEl) totalEl.textContent = '$' + window.cartManager.getTotal().toFixed(2);
-    });
+            if (totalEl) totalEl.textContent = '$' + window.cartManager.getTotal().toFixed(2);
+        };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('checkout-btn')?.addEventListener('click', () => {
-            window.location.href = 'checkout.html';
-        });
-    });
+        const initCart = () => {
+            if (window.cartManager) {
+                window.cartManager.subscribe(updateUI);
+                const btn = document.getElementById('checkout-btn');
+                if (btn) {
+                    btn.onclick = () => window.location.href = 'checkout.html';
+                }
+            } else {
+                setTimeout(initCart, 100);
+            }
+        };
+
+        initCart();
+    })();
 </script>

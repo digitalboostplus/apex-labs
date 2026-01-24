@@ -9,39 +9,117 @@
     <link rel="stylesheet" href="css/design-system.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/cart.js" defer></script>
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
 </head>
 
 <body class="bg-gray-50 antialiased">
-    <div class="max-w-4xl mx-auto px-6 py-12 md:py-24">
-        <div class="mb-12">
-            <a href="index.html"
+    <!-- Checkout Stepper -->
+    <div id="checkout-stepper-container"></div>
+
+    <div class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+        <!-- Header -->
+        <div class="mb-10">
+            <a href="cart.html"
                 class="inline-flex items-center gap-2 text-slate-500 hover:text-brand-blue transition-colors font-bold uppercase text-[10px] tracking-widest mb-6">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                Back to Lab
+                Back to Cart
             </a>
-            <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">Review Order</h1>
-            <p class="text-slate-500 mt-2 font-medium">Verify your selection before finalizing the research proposal.
-            </p>
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">Checkout</h1>
+            <p class="text-slate-500 mt-2 font-medium">Complete your order details below.</p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <!-- Order Summary -->
-            <div class="lg:col-span-7">
-                <div id="order-items" class="space-y-4">
-                    <!-- Items injected here -->
+        <!-- Canceled Order Alert -->
+        <div id="canceled-alert" class="hidden mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            <div class="flex items-center gap-3">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600"></i>
+                <div>
+                    <p class="font-medium text-amber-800">Your checkout was canceled</p>
+                    <p class="text-sm text-amber-600">Your cart items have been saved. Complete your purchase when ready.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <!-- Customer Details Form -->
+            <div class="lg:col-span-7 space-y-8">
+                <!-- Contact Information -->
+                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="mail" class="w-5 h-5 text-amber-600"></i>
+                        Contact Information
+                    </h2>
+
+                    <div id="logged-in-user" class="hidden mb-4 p-4 bg-slate-50 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div id="user-avatar-checkout" class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-sm"></div>
+                                <div>
+                                    <p id="user-name-checkout" class="font-medium text-slate-900"></p>
+                                    <p id="user-email-display" class="text-sm text-slate-500"></p>
+                                </div>
+                            </div>
+                            <button type="button" onclick="useGuestCheckout()" class="text-sm text-amber-600 hover:text-amber-700 font-medium cursor-pointer">
+                                Use Different Email
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="guest-email-form">
+                        <label for="customer-email" class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
+                        <input type="email" id="customer-email" required
+                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+                            placeholder="you@example.com">
+                        <p class="text-xs text-slate-500 mt-2">We'll send your order confirmation and updates here.</p>
+
+                        <div class="mt-4">
+                            <button type="button" onclick="openAuthModal()"
+                                class="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1 cursor-pointer">
+                                <i data-lucide="log-in" class="w-4 h-4"></i>
+                                Sign in for faster checkout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="package" class="w-5 h-5 text-amber-600"></i>
+                        Order Items
+                    </h2>
+                    <div id="order-items" class="space-y-4">
+                        <!-- Items injected here -->
+                    </div>
+                </div>
+
+                <!-- Shipping Note -->
+                <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="truck" class="w-5 h-5 text-emerald-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Free Priority Shipping</h3>
+                            <p class="text-sm text-slate-600 mt-1">
+                                Orders ship within 24-48 hours. You'll receive tracking information at checkout.
+                                Shipping address will be collected on the secure payment page.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Total Panel -->
+            <!-- Order Summary Panel -->
             <div class="lg:col-span-5">
-                <div class="glass-panel p-8 sticky top-24">
-                    <h2
-                        class="text-lg font-bold text-slate-900 mb-6 uppercase tracking-widest border-b border-slate-200 pb-4">
-                        Order Summary</h2>
+                <div class="glass-panel p-6 sticky top-24">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6 uppercase tracking-widest border-b border-slate-200 pb-4">
+                        Order Summary
+                    </h2>
 
-                    <div class="space-y-4 mb-8">
+                    <div class="space-y-4 mb-6">
                         <div class="flex justify-between text-slate-600">
-                            <span>Subtotal</span>
+                            <span>Subtotal (<span id="item-count">0</span> items)</span>
                             <span id="subtotal" class="font-bold text-slate-900">$0.00</span>
                         </div>
                         <div class="flex justify-between text-slate-600">
@@ -50,7 +128,7 @@
                         </div>
                         <div class="flex justify-between text-slate-600">
                             <span>Tax</span>
-                            <span class="font-bold text-slate-900">$0.00</span>
+                            <span class="text-slate-400 text-sm">Calculated at payment</span>
                         </div>
                         <div class="pt-4 border-t border-slate-200 flex justify-between items-center">
                             <span class="text-xl font-black text-slate-900 uppercase">Total</span>
@@ -58,80 +136,252 @@
                         </div>
                     </div>
 
-                    <button id="finalize-order"
-                        class="w-full py-5 bg-black text-white font-black uppercase tracking-[0.2em] text-xs hover:bg-brand-blue transition-all shadow-xl active:scale-[0.98] cursor-pointer">
-                        Finalize Proposal
+                    <!-- Checkout Button -->
+                    <button id="checkout-btn"
+                        class="w-full py-5 bg-black text-white font-black uppercase tracking-[0.2em] text-xs hover:bg-brand-blue transition-all shadow-xl active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
+                        <span id="btn-text">Proceed to Payment</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 btn-icon"></i>
+                        <svg id="btn-spinner" class="hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </button>
 
-                    <div class="mt-6 flex items-center justify-center gap-3 text-slate-400">
-                        <i data-lucide="shield-check" class="w-5 h-5"></i>
-                        <span class="text-[10px] font-bold uppercase tracking-widest">Secure 256-bit Encryption</span>
+                    <p class="text-xs text-slate-500 text-center mt-4">
+                        You'll be redirected to our secure payment partner (Stripe) to complete your order.
+                    </p>
+
+                    <!-- Trust Badges -->
+                    <div class="mt-6 pt-6 border-t border-slate-100">
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="flex flex-col items-center gap-1">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-green-600"></i>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">256-bit SSL</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <i data-lucide="credit-card" class="w-5 h-5 text-slate-600"></i>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">Stripe Secure</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <i data-lucide="refresh-cw" class="w-5 h-5 text-amber-600"></i>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">30-Day Returns</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <i data-lucide="flask-conical" class="w-5 h-5 text-purple-600"></i>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">99.8% Pure</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Auth Modal Container -->
+    <div id="auth-modal-container"></div>
+
+    <!-- Cart Container (for drawer functionality) -->
+    <div id="cart-container"></div>
+
+    <script src="js/app.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) window.lucide.createIcons();
 
-            const finalizeBtn = document.getElementById('finalize-order');
+            // Check for canceled checkout
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('canceled') === 'true') {
+                document.getElementById('canceled-alert').classList.remove('hidden');
+            }
 
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const emailInput = document.getElementById('customer-email');
+            const guestForm = document.getElementById('guest-email-form');
+            const loggedInUser = document.getElementById('logged-in-user');
+
+            // Update UI based on auth state
+            function updateAuthUI(user) {
+                if (user) {
+                    guestForm.classList.add('hidden');
+                    loggedInUser.classList.remove('hidden');
+
+                    const avatar = document.getElementById('user-avatar-checkout');
+                    const name = document.getElementById('user-name-checkout');
+                    const email = document.getElementById('user-email-display');
+
+                    if (avatar) {
+                        if (user.photoURL) {
+                            avatar.innerHTML = `<img src="${user.photoURL}" alt="" class="w-full h-full rounded-full object-cover">`;
+                        } else {
+                            avatar.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
+                        }
+                    }
+                    if (name) name.textContent = user.displayName || 'Welcome back';
+                    if (email) email.textContent = user.email;
+                } else {
+                    guestForm.classList.remove('hidden');
+                    loggedInUser.classList.add('hidden');
+                }
+            }
+
+            // Subscribe to auth changes
+            if (window.authManager) {
+                window.authManager.subscribe((event, user) => {
+                    if (event === 'authStateChanged') {
+                        updateAuthUI(user);
+                    }
+                });
+            }
+
+            // Use guest checkout
+            window.useGuestCheckout = function() {
+                guestForm.classList.remove('hidden');
+                loggedInUser.classList.add('hidden');
+                emailInput.focus();
+            };
+
+            // Update order UI
             function updateUI(cart) {
                 const list = document.getElementById('order-items');
                 const subtotalEl = document.getElementById('subtotal');
                 const finalTotalEl = document.getElementById('final-total');
+                const itemCountEl = document.getElementById('item-count');
 
                 if (cart.length === 0) {
-                    window.location.href = 'index.html';
+                    window.location.href = 'cart.html';
                     return;
                 }
 
                 list.innerHTML = cart.map(item => `
-                    <div class="flex gap-6 p-6 bg-white border border-slate-200 rounded-xl">
-                        <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-contain bg-slate-50 rounded-lg">
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-start">
+                    <div class="flex gap-4 p-4 bg-slate-50 rounded-xl">
+                        <div class="w-16 h-16 bg-white rounded-lg border border-slate-100 p-2 flex items-center justify-center flex-shrink-0">
+                            <img src="${item.image}" alt="${item.name}" class="max-w-full max-h-full object-contain">
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <div class="flex justify-between items-start gap-2">
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900 uppercase tracking-tight">${item.name}</h3>
-                                    <p class="text-slate-400 text-xs font-bold uppercase mt-1">Research Compound</p>
+                                    <h3 class="font-bold text-slate-900">${item.name}</h3>
+                                    <p class="text-xs text-slate-500">Qty: ${item.quantity} x $${item.price.toFixed(2)}</p>
                                 </div>
-                                <span class="text-xl font-black text-slate-900">$${(item.price * item.quantity).toFixed(2)}</span>
-                            </div>
-                            <div class="flex items-center gap-4 mt-4">
-                                <span class="text-sm font-medium text-slate-500">Qty: ${item.quantity}</span>
-                                <span class="text-slate-200">|</span>
-                                <span class="text-sm font-medium text-slate-500">$${item.price.toFixed(2)} / unit</span>
+                                <span class="font-bold text-slate-900 whitespace-nowrap">$${(item.price * item.quantity).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
                 `).join('');
 
                 const total = window.cartManager.getTotal();
+                const itemCount = window.cartManager.getItemCount();
+
                 subtotalEl.textContent = '$' + total.toFixed(2);
                 finalTotalEl.textContent = '$' + total.toFixed(2);
+                itemCountEl.textContent = itemCount;
             }
 
             window.cartManager.subscribe(updateUI);
 
-            finalizeBtn.addEventListener('click', async () => {
-                finalizeBtn.disabled = true;
-                finalizeBtn.textContent = 'Processing...';
+            // Handle checkout button click
+            checkoutBtn.addEventListener('click', async () => {
+                // Get email
+                let customerEmail;
+                const user = window.authManager?.getCurrentUser();
 
-                // Simulating Stripe Checkout Session Creation
-                console.log('Finalizing order for:', window.cartManager.cart);
+                if (user && !guestForm.classList.contains('hidden') === false) {
+                    customerEmail = user.email;
+                } else {
+                    customerEmail = emailInput.value.trim();
+                    if (!customerEmail || !customerEmail.includes('@')) {
+                        emailInput.focus();
+                        emailInput.classList.add('ring-2', 'ring-red-500', 'border-red-500');
+                        return;
+                    }
+                }
 
-                // In a real implementation, you would:
-                // const res = await fetch('/api/create-checkout-session', { ... });
-                // const { url } = await res.json();
-                // window.location.href = url;
+                // Prepare cart items
+                const cart = window.cartManager.cart || [];
+                if (cart.length === 0) {
+                    window.location.href = 'cart.html';
+                    return;
+                }
 
-                setTimeout(() => {
-                    window.cartManager.clearCart();
-                    window.location.href = 'order-confirmation.html';
-                }, 1500);
+                // Show loading state
+                checkoutBtn.disabled = true;
+                document.getElementById('btn-text').textContent = 'Processing...';
+                document.querySelector('.btn-icon')?.classList.add('hidden');
+                document.getElementById('btn-spinner').classList.remove('hidden');
+
+                try {
+                    // Create checkout session
+                    const response = await fetch('/api/create-checkout-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            items: cart.map(item => ({
+                                id: item.id,
+                                priceId: item.priceId,
+                                name: item.name,
+                                price: item.price,
+                                quantity: item.quantity,
+                                image: item.image
+                            })),
+                            customerEmail: customerEmail,
+                            userId: user?.uid || null
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || 'Failed to create checkout session');
+                    }
+
+                    const { sessionUrl, orderId } = await response.json();
+
+                    // Store order ID for confirmation page
+                    sessionStorage.setItem('apex_labs_order_id', orderId);
+
+                    // Redirect to Stripe Checkout
+                    window.location.href = sessionUrl;
+
+                } catch (error) {
+                    console.error('Checkout error:', error);
+
+                    // Show error state
+                    checkoutBtn.disabled = false;
+                    document.getElementById('btn-text').textContent = 'Try Again';
+                    document.querySelector('.btn-icon')?.classList.remove('hidden');
+                    document.getElementById('btn-spinner').classList.add('hidden');
+
+                    // Show error message
+                    alert('There was an error processing your checkout. Please try again.');
+                }
             });
+
+            // Remove error styling on email input
+            emailInput.addEventListener('input', () => {
+                emailInput.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
+            });
+
+            // Load auth modal component
+            fetch('components/auth-modal.html')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('auth-modal-container').innerHTML = html;
+                })
+                .catch(console.error);
+
+            // Load checkout stepper
+            fetch('components/checkout-stepper.html')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('checkout-stepper-container').innerHTML = html;
+                    // Set current step
+                    if (window.setCheckoutStep) {
+                        window.setCheckoutStep('details');
+                    }
+                })
+                .catch(console.error);
         });
     </script>
 </body>

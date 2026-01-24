@@ -1,0 +1,200 @@
+<!-- User Menu Component -->
+<div id="user-menu-container" class="relative">
+    <!-- Guest State: Sign In Button -->
+    <button id="auth-btn-guest" onclick="openAuthModal()"
+        class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-lg shadow-lg shadow-amber-500/20 hover:from-amber-600 hover:to-amber-700 transition-all active:scale-[0.98] cursor-pointer text-sm hidden">
+        Sign In
+    </button>
+
+    <!-- Authenticated State: User Menu -->
+    <div id="user-menu" class="relative hidden">
+        <button id="user-menu-btn" onclick="toggleUserMenu()"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+            <div id="user-avatar"
+                class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-sm">
+            </div>
+            <span id="user-name" class="text-sm font-medium text-slate-700 hidden md:inline"></span>
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div id="user-dropdown"
+            class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 py-2 hidden z-50">
+            <!-- User Info -->
+            <div class="px-4 py-3 border-b border-slate-100">
+                <p id="dropdown-name" class="text-sm font-semibold text-slate-900"></p>
+                <p id="dropdown-email" class="text-xs text-slate-500 truncate"></p>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="py-2">
+                <a href="pages/account/index.html"
+                    class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    My Account
+                </a>
+                <a href="pages/account/orders.html"
+                    class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                        </path>
+                    </svg>
+                    Order History
+                </a>
+                <a href="pages/account/wishlist.html"
+                    class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                        </path>
+                    </svg>
+                    Wishlist
+                    <span id="wishlist-badge"
+                        class="ml-auto px-2 py-0.5 text-xs font-bold bg-amber-100 text-amber-700 rounded-full hidden">0</span>
+                </a>
+                <a href="pages/account/addresses.html"
+                    class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Addresses
+                </a>
+            </div>
+
+            <!-- Sign Out -->
+            <div class="border-t border-slate-100 pt-2">
+                <button onclick="handleSignOut()"
+                    class="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        let menuOpen = false;
+
+        // Toggle user menu dropdown
+        window.toggleUserMenu = function () {
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown) {
+                menuOpen = !menuOpen;
+                dropdown.classList.toggle('hidden', !menuOpen);
+            }
+        };
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const userMenu = document.getElementById('user-menu');
+            const dropdown = document.getElementById('user-dropdown');
+            if (userMenu && dropdown && !userMenu.contains(e.target)) {
+                menuOpen = false;
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Handle sign out
+        window.handleSignOut = async function () {
+            try {
+                await window.authManager.signOut();
+                window.location.reload();
+            } catch (error) {
+                console.error('Sign out error:', error);
+            }
+        };
+
+        // Update UI based on auth state
+        function updateUserMenuUI(user) {
+            const guestBtn = document.getElementById('auth-btn-guest');
+            const userMenu = document.getElementById('user-menu');
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            const dropdownName = document.getElementById('dropdown-name');
+            const dropdownEmail = document.getElementById('dropdown-email');
+
+            if (user) {
+                // User is signed in
+                guestBtn?.classList.add('hidden');
+                userMenu?.classList.remove('hidden');
+
+                // Set avatar (initial or photo)
+                if (user.photoURL) {
+                    userAvatar.innerHTML = `<img src="${user.photoURL}" alt="" class="w-full h-full rounded-full object-cover">`;
+                } else {
+                    const initial = (user.displayName || user.email || 'U')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                }
+
+                // Set name
+                const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                if (userName) userName.textContent = displayName;
+                if (dropdownName) dropdownName.textContent = displayName;
+                if (dropdownEmail) dropdownEmail.textContent = user.email || '';
+            } else {
+                // User is signed out
+                guestBtn?.classList.remove('hidden');
+                userMenu?.classList.add('hidden');
+            }
+        }
+
+        // Update wishlist badge
+        function updateWishlistBadge(count) {
+            const badge = document.getElementById('wishlist-badge');
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        }
+
+        // Initialize
+        function init() {
+            // Subscribe to auth changes
+            if (window.authManager) {
+                window.authManager.subscribe((event, user) => {
+                    if (event === 'authStateChanged') {
+                        updateUserMenuUI(user);
+                    }
+                });
+            } else {
+                // Show guest button by default
+                document.getElementById('auth-btn-guest')?.classList.remove('hidden');
+            }
+
+            // Subscribe to wishlist changes
+            if (window.wishlistManager) {
+                window.wishlistManager.subscribe((event, items) => {
+                    const count = Array.isArray(items) ? items.length : window.wishlistManager.getCount();
+                    updateWishlistBadge(count);
+                });
+            }
+        }
+
+        // Wait for auth manager
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+</script>

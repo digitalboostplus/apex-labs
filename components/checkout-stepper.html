@@ -1,0 +1,145 @@
+<!-- Checkout Stepper Component -->
+<div id="checkout-stepper" class="bg-white border-b border-slate-100 sticky top-0 z-30">
+    <div class="max-w-3xl mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+            <!-- Step 1: Cart -->
+            <div class="flex items-center" data-step="cart">
+                <div
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors step-circle bg-amber-600 text-white">
+                    <svg class="w-4 h-4 hidden step-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7">
+                        </path>
+                    </svg>
+                    <span class="step-number">1</span>
+                </div>
+                <span class="ml-2 text-sm font-medium text-slate-900 hidden sm:inline step-label">Cart</span>
+            </div>
+
+            <!-- Connector -->
+            <div class="flex-1 h-0.5 mx-2 sm:mx-4 bg-slate-200 step-connector" data-after="cart">
+                <div class="h-full bg-amber-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Step 2: Details -->
+            <div class="flex items-center" data-step="details">
+                <div
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors step-circle bg-slate-200 text-slate-500">
+                    <svg class="w-4 h-4 hidden step-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7">
+                        </path>
+                    </svg>
+                    <span class="step-number">2</span>
+                </div>
+                <span class="ml-2 text-sm font-medium text-slate-400 hidden sm:inline step-label">Details</span>
+            </div>
+
+            <!-- Connector -->
+            <div class="flex-1 h-0.5 mx-2 sm:mx-4 bg-slate-200 step-connector" data-after="details">
+                <div class="h-full bg-amber-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Step 3: Payment -->
+            <div class="flex items-center" data-step="payment">
+                <div
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors step-circle bg-slate-200 text-slate-500">
+                    <svg class="w-4 h-4 hidden step-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7">
+                        </path>
+                    </svg>
+                    <span class="step-number">3</span>
+                </div>
+                <span class="ml-2 text-sm font-medium text-slate-400 hidden sm:inline step-label">Payment</span>
+            </div>
+
+            <!-- Connector -->
+            <div class="flex-1 h-0.5 mx-2 sm:mx-4 bg-slate-200 step-connector" data-after="payment">
+                <div class="h-full bg-amber-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Step 4: Confirm -->
+            <div class="flex items-center" data-step="confirm">
+                <div
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors step-circle bg-slate-200 text-slate-500">
+                    <svg class="w-4 h-4 hidden step-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7">
+                        </path>
+                    </svg>
+                    <span class="step-number">4</span>
+                </div>
+                <span class="ml-2 text-sm font-medium text-slate-400 hidden sm:inline step-label">Confirm</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const steps = ['cart', 'details', 'payment', 'confirm'];
+
+        // Set the current step
+        window.setCheckoutStep = function (currentStep) {
+            const currentIndex = steps.indexOf(currentStep);
+            if (currentIndex === -1) return;
+
+            steps.forEach((step, index) => {
+                const stepEl = document.querySelector(`[data-step="${step}"]`);
+                const circle = stepEl?.querySelector('.step-circle');
+                const label = stepEl?.querySelector('.step-label');
+                const check = stepEl?.querySelector('.step-check');
+                const number = stepEl?.querySelector('.step-number');
+                const connectorAfter = document.querySelector(`[data-after="${step}"] > div`);
+
+                if (!stepEl || !circle || !label) return;
+
+                if (index < currentIndex) {
+                    // Completed step
+                    circle.classList.remove('bg-slate-200', 'text-slate-500', 'bg-amber-600');
+                    circle.classList.add('bg-green-500', 'text-white');
+                    label.classList.remove('text-slate-400');
+                    label.classList.add('text-green-600');
+                    if (check) check.classList.remove('hidden');
+                    if (number) number.classList.add('hidden');
+                    if (connectorAfter) connectorAfter.style.width = '100%';
+                } else if (index === currentIndex) {
+                    // Current step
+                    circle.classList.remove('bg-slate-200', 'text-slate-500', 'bg-green-500');
+                    circle.classList.add('bg-amber-600', 'text-white');
+                    label.classList.remove('text-slate-400', 'text-green-600');
+                    label.classList.add('text-slate-900');
+                    if (check) check.classList.add('hidden');
+                    if (number) number.classList.remove('hidden');
+                    if (connectorAfter) connectorAfter.style.width = '0%';
+                } else {
+                    // Future step
+                    circle.classList.remove('bg-amber-600', 'text-white', 'bg-green-500');
+                    circle.classList.add('bg-slate-200', 'text-slate-500');
+                    label.classList.remove('text-slate-900', 'text-green-600');
+                    label.classList.add('text-slate-400');
+                    if (check) check.classList.add('hidden');
+                    if (number) number.classList.remove('hidden');
+                    if (connectorAfter) connectorAfter.style.width = '0%';
+                }
+            });
+        };
+
+        // Auto-detect step from URL
+        function detectCurrentStep() {
+            const path = window.location.pathname;
+
+            if (path.includes('order-confirmation')) {
+                setCheckoutStep('confirm');
+            } else if (path.includes('checkout')) {
+                setCheckoutStep('details');
+            } else if (path.includes('cart')) {
+                setCheckoutStep('cart');
+            }
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', detectCurrentStep);
+        } else {
+            detectCurrentStep();
+        }
+    })();
+</script>

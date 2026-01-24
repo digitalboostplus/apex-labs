@@ -1,0 +1,217 @@
+<!-- Reviews Section Component -->
+<section id="reviews-section" class="py-12 bg-slate-50 rounded-2xl">
+    <div class="max-w-4xl mx-auto px-6">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-slate-900 mb-2">Research Community Feedback</h3>
+            <div class="flex items-center justify-center gap-2 text-sm text-slate-600">
+                <div class="flex items-center gap-1">
+                    <!-- 5 stars -->
+                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                        </path>
+                    </svg>
+                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                        </path>
+                    </svg>
+                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                        </path>
+                    </svg>
+                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                        </path>
+                    </svg>
+                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                        </path>
+                    </svg>
+                </div>
+                <span class="font-semibold">4.9</span>
+                <span class="text-slate-400">|</span>
+                <span>Based on 127 verified reviews</span>
+            </div>
+        </div>
+
+        <!-- Reviews Grid -->
+        <div id="reviews-container" class="grid md:grid-cols-2 gap-6">
+            <!-- Reviews will be dynamically inserted here -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-8">
+            <button id="load-more-reviews"
+                class="px-6 py-3 border-2 border-slate-200 rounded-xl text-slate-600 font-semibold hover:bg-white hover:border-slate-300 transition-colors cursor-pointer">
+                Load More Reviews
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+    (function () {
+        // Static review data (curated testimonials)
+        const reviews = [
+            {
+                id: 1,
+                name: "Dr. Michael R.",
+                role: "Research Director",
+                verified: true,
+                rating: 5,
+                date: "2 weeks ago",
+                product: "BPC-157",
+                title: "Exceptional Purity Standards",
+                content: "The HPLC documentation provided with each batch gives us complete confidence in our research protocols. Consistency across orders has been remarkable."
+            },
+            {
+                id: 2,
+                name: "Sarah K.",
+                role: "Clinical Researcher",
+                verified: true,
+                rating: 5,
+                date: "1 month ago",
+                product: "NAD+",
+                title: "Outstanding Quality Control",
+                content: "We've tested multiple suppliers and Apex Labs consistently delivers the highest purity compounds. The 500mg NAD+ vials are perfect for our longevity research."
+            },
+            {
+                id: 3,
+                name: "James T.",
+                role: "Laboratory Manager",
+                verified: true,
+                rating: 5,
+                date: "3 weeks ago",
+                product: "TB-500",
+                title: "Reliable Source for Research",
+                content: "Fast shipping, proper cold chain handling, and excellent documentation. Exactly what we need for reproducible research results."
+            },
+            {
+                id: 4,
+                name: "Dr. Emily W.",
+                role: "Biochemist",
+                verified: true,
+                rating: 5,
+                date: "1 month ago",
+                product: "Ipamorelin",
+                title: "Professional Grade Materials",
+                content: "The wholesale program makes our lab's budget go further without compromising on quality. Highly recommend for institutional buyers."
+            },
+            {
+                id: 5,
+                name: "Robert M.",
+                role: "Research Associate",
+                verified: true,
+                rating: 4,
+                date: "2 months ago",
+                product: "CJC-1295",
+                title: "Solid Product, Fast Delivery",
+                content: "Good experience overall. Product arrived quickly and met specifications. Would appreciate more detailed reconstitution guidelines."
+            },
+            {
+                id: 6,
+                name: "Dr. Lisa C.",
+                role: "Endocrinologist",
+                verified: true,
+                rating: 5,
+                date: "3 weeks ago",
+                product: "MOTS-C",
+                title: "Cutting-Edge Compounds",
+                content: "Impressed by the selection of mitochondrial peptides. The MOTS-C has been essential for our metabolic research studies."
+            }
+        ];
+
+        let displayedCount = 4;
+
+        // Render star rating
+        function renderStars(rating) {
+            return Array(5).fill(0).map((_, i) => `
+                <svg class="w-4 h-4 ${i < rating ? 'text-amber-400' : 'text-slate-200'}" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+            `).join('');
+        }
+
+        // Render a single review
+        function renderReview(review) {
+            return `
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-600 font-bold">
+                                ${review.name.charAt(0)}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold text-slate-900">${review.name}</span>
+                                    ${review.verified ? '<span class="px-1.5 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold uppercase rounded">Verified</span>' : ''}
+                                </div>
+                                <p class="text-xs text-slate-500">${review.role}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="flex items-center gap-0.5">${renderStars(review.rating)}</div>
+                            <p class="text-xs text-slate-400 mt-1">${review.date}</p>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-xs text-amber-600 font-medium">${review.product}</span>
+                    </div>
+                    <h4 class="font-bold text-slate-900 mb-2">${review.title}</h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">${review.content}</p>
+                </div>
+            `;
+        }
+
+        // Render reviews
+        function renderReviews() {
+            const container = document.getElementById('reviews-container');
+            const loadMoreBtn = document.getElementById('load-more-reviews');
+            if (!container) return;
+
+            const reviewsToShow = reviews.slice(0, displayedCount);
+            container.innerHTML = reviewsToShow.map(renderReview).join('');
+
+            // Toggle load more button
+            if (loadMoreBtn) {
+                if (displayedCount >= reviews.length) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'inline-flex';
+                }
+            }
+        }
+
+        // Load more handler
+        document.getElementById('load-more-reviews')?.addEventListener('click', () => {
+            displayedCount += 2;
+            renderReviews();
+        });
+
+        // Initial render
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderReviews);
+        } else {
+            renderReviews();
+        }
+
+        // Expose for product-specific filtering
+        window.filterReviewsByProduct = function (productId) {
+            const container = document.getElementById('reviews-container');
+            if (!container) return;
+
+            const filtered = reviews.filter(r =>
+                r.product.toLowerCase().replace(/-/g, '') === productId.toLowerCase().replace(/-/g, '')
+            );
+
+            if (filtered.length > 0) {
+                container.innerHTML = filtered.map(renderReview).join('');
+            }
+        };
+    })();
+</script>

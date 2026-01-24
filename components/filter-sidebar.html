@@ -1,0 +1,258 @@
+<!-- Filter Sidebar Component -->
+<aside id="filter-sidebar" class="w-full lg:w-64 space-y-6">
+    <!-- Search -->
+    <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+        <label class="block text-sm font-semibold text-slate-700 mb-2">Search</label>
+        <div class="relative">
+            <input type="text" id="product-search" placeholder="Search peptides..."
+                class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors text-sm">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+        <h3 class="text-sm font-semibold text-slate-700 mb-3">Categories</h3>
+        <div id="category-filters" class="space-y-2">
+            <!-- Categories will be dynamically populated -->
+        </div>
+    </div>
+
+    <!-- Price Range -->
+    <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+        <h3 class="text-sm font-semibold text-slate-700 mb-3">Price Range</h3>
+        <div class="space-y-3">
+            <div class="flex items-center gap-2">
+                <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                    <input type="number" id="price-min" placeholder="0" min="0"
+                        class="w-full pl-7 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <span class="text-slate-400">-</span>
+                <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                    <input type="number" id="price-max" placeholder="200" min="0"
+                        class="w-full pl-7 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Availability -->
+    <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+        <h3 class="text-sm font-semibold text-slate-700 mb-3">Availability</h3>
+        <div class="space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="filter-in-stock" checked
+                    class="w-4 h-4 text-amber-600 border-slate-300 rounded focus:ring-amber-500">
+                <span class="text-sm text-slate-600">In Stock</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="filter-featured"
+                    class="w-4 h-4 text-amber-600 border-slate-300 rounded focus:ring-amber-500">
+                <span class="text-sm text-slate-600">Featured Only</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Sort By -->
+    <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+        <h3 class="text-sm font-semibold text-slate-700 mb-3">Sort By</h3>
+        <select id="sort-select"
+            class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 cursor-pointer">
+            <option value="name-az">Name: A-Z</option>
+            <option value="name-za">Name: Z-A</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+        </select>
+    </div>
+
+    <!-- Clear Filters -->
+    <button id="clear-filters"
+        class="w-full py-2.5 text-sm font-medium text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer">
+        Clear All Filters
+    </button>
+
+    <!-- Active Filters Summary -->
+    <div id="active-filters" class="hidden">
+        <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs text-slate-500">Active:</span>
+            <!-- Active filter tags will be inserted here -->
+        </div>
+    </div>
+</aside>
+
+<script>
+    (function () {
+        let debounceTimer;
+        let currentFilters = {
+            query: '',
+            categories: [],
+            minPrice: null,
+            maxPrice: null,
+            inStock: true,
+            featured: false,
+            sortBy: 'name-az'
+        };
+
+        // Populate categories from products
+        async function populateCategories() {
+            const container = document.getElementById('category-filters');
+            if (!container) return;
+
+            // Wait for search manager to be ready
+            if (!window.searchManager?.initialized) {
+                await window.searchManager?.init();
+            }
+
+            const categories = window.searchManager?.getCategories() || [];
+
+            container.innerHTML = categories.map(category => `
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" value="${category}"
+                        class="category-checkbox w-4 h-4 text-amber-600 border-slate-300 rounded focus:ring-amber-500">
+                    <span class="text-sm text-slate-600 group-hover:text-slate-800">${category}</span>
+                </label>
+            `).join('');
+
+            // Add event listeners
+            container.querySelectorAll('.category-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', handleFilterChange);
+            });
+        }
+
+        // Get current filter state
+        function getFilterState() {
+            const selectedCategories = [];
+            document.querySelectorAll('.category-checkbox:checked').forEach(cb => {
+                selectedCategories.push(cb.value);
+            });
+
+            return {
+                query: document.getElementById('product-search')?.value || '',
+                categories: selectedCategories,
+                minPrice: parseFloat(document.getElementById('price-min')?.value) || null,
+                maxPrice: parseFloat(document.getElementById('price-max')?.value) || null,
+                inStock: document.getElementById('filter-in-stock')?.checked,
+                featured: document.getElementById('filter-featured')?.checked,
+                sortBy: document.getElementById('sort-select')?.value || 'name-az'
+            };
+        }
+
+        // Apply filters and notify
+        function applyFilters() {
+            currentFilters = getFilterState();
+
+            // Dispatch custom event with filter state
+            window.dispatchEvent(new CustomEvent('filters-changed', {
+                detail: currentFilters
+            }));
+
+            // Update active filters display
+            updateActiveFiltersDisplay();
+        }
+
+        // Debounced filter change handler
+        function handleFilterChange() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(applyFilters, 150);
+        }
+
+        // Update active filters display
+        function updateActiveFiltersDisplay() {
+            const container = document.getElementById('active-filters');
+            if (!container) return;
+
+            const tags = [];
+
+            if (currentFilters.query) {
+                tags.push(`Search: "${currentFilters.query}"`);
+            }
+
+            currentFilters.categories.forEach(cat => {
+                tags.push(cat);
+            });
+
+            if (currentFilters.minPrice) {
+                tags.push(`Min: $${currentFilters.minPrice}`);
+            }
+
+            if (currentFilters.maxPrice) {
+                tags.push(`Max: $${currentFilters.maxPrice}`);
+            }
+
+            if (currentFilters.featured) {
+                tags.push('Featured');
+            }
+
+            if (tags.length > 0) {
+                container.classList.remove('hidden');
+                container.innerHTML = `
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xs text-slate-500">Active:</span>
+                        ${tags.map(tag => `
+                            <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full">${tag}</span>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        // Clear all filters
+        function clearFilters() {
+            document.getElementById('product-search').value = '';
+            document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
+            document.getElementById('price-min').value = '';
+            document.getElementById('price-max').value = '';
+            document.getElementById('filter-in-stock').checked = true;
+            document.getElementById('filter-featured').checked = false;
+            document.getElementById('sort-select').value = 'name-az';
+
+            applyFilters();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Search input
+            document.getElementById('product-search')?.addEventListener('input', handleFilterChange);
+
+            // Price inputs
+            document.getElementById('price-min')?.addEventListener('input', handleFilterChange);
+            document.getElementById('price-max')?.addEventListener('input', handleFilterChange);
+
+            // Checkboxes
+            document.getElementById('filter-in-stock')?.addEventListener('change', handleFilterChange);
+            document.getElementById('filter-featured')?.addEventListener('change', handleFilterChange);
+
+            // Sort select
+            document.getElementById('sort-select')?.addEventListener('change', handleFilterChange);
+
+            // Clear button
+            document.getElementById('clear-filters')?.addEventListener('click', clearFilters);
+        }
+
+        // Expose for external use
+        window.productFilters = {
+            getState: () => currentFilters,
+            apply: applyFilters,
+            clear: clearFilters
+        };
+
+        // Initialize
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                populateCategories();
+                setupEventListeners();
+            });
+        } else {
+            populateCategories();
+            setupEventListeners();
+        }
+    })();
+</script>
