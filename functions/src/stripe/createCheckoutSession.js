@@ -8,10 +8,16 @@ const admin = require('firebase-admin');
 const Stripe = require('stripe');
 const cors = require('cors')({ origin: true });
 
-// Initialize Stripe with secret key from environment
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || functions.config().stripe?.secret_key, {
-    apiVersion: '2023-10-16'
-});
+// Initialize Stripe lazily to prevent build-time failures
+let stripe;
+function getStripe() {
+    if (!stripe) {
+        stripe = new Stripe(process.env.STRIPE_SECRET_KEY || functions.config().stripe?.secret_key, {
+            apiVersion: '2023-10-16'
+        });
+    }
+    return stripe;
+}
 
 const db = admin.firestore();
 
@@ -26,7 +32,7 @@ async function validateAndBuildLineItems(items) {
     for (const item of items) {
         // Validate the price ID exists in Stripe
         try {
-            const price = await stripe.prices.retrieve(item.priceId);
+            const price = await getStripe().prices.retrieve(item.priceId);
 
             if (!price.active) {
                 throw new Error(`Price ${item.priceId} is not active`);
@@ -138,7 +144,7 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
             }
 
             // Create the Stripe session
-            const session = await stripe.checkout.sessions.create(sessionParams);
+            const session = await getStripe().checkout.sessions.create(sessionParams);
 
             // Store pending order in Firestore
             const orderId = await createPendingOrder({

@@ -7,10 +7,16 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const Stripe = require('stripe');
 
-// Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || functions.config().stripe?.secret_key, {
-    apiVersion: '2023-10-16'
-});
+// Initialize Stripe lazily to prevent build-time failures
+let stripe;
+function getStripe() {
+    if (!stripe) {
+        stripe = new Stripe(process.env.STRIPE_SECRET_KEY || functions.config().stripe?.secret_key, {
+            apiVersion: '2023-10-16'
+        });
+    }
+    return stripe;
+}
 
 const db = admin.firestore();
 
@@ -169,7 +175,7 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
 
     try {
         // Verify webhook signature
-        event = stripe.webhooks.constructEvent(
+        event = getStripe().webhooks.constructEvent(
             req.rawBody,
             sig,
             endpointSecret
