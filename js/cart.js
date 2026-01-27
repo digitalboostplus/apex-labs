@@ -5,7 +5,7 @@
 
 const CART_STORAGE_KEY = 'apex_labs_cart';
 
-class CartManager {
+class Cart {
     constructor() {
         this.cart = this.loadCart();
         this.listeners = [];
@@ -13,7 +13,12 @@ class CartManager {
 
     loadCart() {
         const saved = localStorage.getItem(CART_STORAGE_KEY);
-        return saved ? JSON.parse(saved) : [];
+        try {
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error('Error parsing cart from localStorage:', e);
+            return [];
+        }
     }
 
     saveCart() {
@@ -23,13 +28,31 @@ class CartManager {
 
     addItem(product) {
         // product: { id, priceId, name, price, image }
-        const existing = this.cart.find(item => item.priceId === product.priceId || item.id === product.id);
+        if (!product || (!product.id && !product.priceId)) {
+            console.error('Invalid product added to cart:', product);
+            return;
+        }
+
+        const existing = this.cart.find(item =>
+            (product.priceId && item.priceId === product.priceId) ||
+            (product.id && item.id === product.id)
+        );
+
         if (existing) {
             existing.quantity += 1;
         } else {
             this.cart.push({ ...product, quantity: 1 });
         }
+
         this.saveCart();
+
+        // Visual feedback: open the cart drawer if it's not already open
+        const drawer = document.getElementById('cart-drawer');
+        if (drawer && drawer.classList.contains('translate-x-full')) {
+            if (typeof window.toggleCart === 'function') {
+                window.toggleCart();
+            }
+        }
     }
 
     removeItem(priceId) {
@@ -55,7 +78,7 @@ class CartManager {
     }
 
     getTotal() {
-        return this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        return this.cart.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
     }
 
     getItemCount() {
@@ -68,15 +91,25 @@ class CartManager {
     }
 
     notifyListeners() {
-        this.listeners.forEach(callback => callback(this.cart));
+        this.listeners.forEach(callback => {
+            try {
+                callback(this.cart);
+            } catch (e) {
+                console.error('Error in cart listener:', e);
+            }
+        });
+
+        // Backward compatibility for components listening to window event
+        window.dispatchEvent(new CustomEvent('cartUpdated', { detail: this.cart }));
     }
 }
 
-const cartManager = new CartManager();
+// Initialize the instance
+const cartInstance = new Cart();
 
 // Global access for UI components
-window.cartManager = cartManager;
-window.CartManager = cartManager; // Expose as class name for existing peptides.html code
+window.cartManager = cartInstance;
+window.CartManager = cartInstance;
 
 // UI Initialization helper
 window.toggleCart = function () {
@@ -90,3 +123,4 @@ window.toggleCart = function () {
         overlay.classList.toggle('hidden');
     }
 };
+

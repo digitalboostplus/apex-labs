@@ -6,8 +6,79 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Detect path context for asset resolution
     const isInSubdir = window.location.pathname.includes('/pricing/') ||
-                       window.location.pathname.includes('/pages/');
+        window.location.pathname.includes('/pages/');
     const basePath = isInSubdir ? '..' : '.';
+
+    // --- Cart Drawer Logic ---
+    window.updateCartDrawerUI = (cart) => {
+        console.log('Updating cart drawer UI, items:', cart.length);
+        const list = document.getElementById('cart-items');
+        const totalEl = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        if (!list || !totalEl || !window.cartManager) return;
+
+        if (cart.length === 0) {
+            list.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-64 text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <p class="font-bold uppercase tracking-widest text-xs text-center">Your research cart is empty</p>
+                </div>
+            `;
+            if (checkoutBtn) {
+                checkoutBtn.disabled = true;
+                checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        } else {
+            list.innerHTML = cart.map(item => {
+                const price = Number(item.price) || 0;
+                const id = item.priceId || item.id;
+
+                // Fix image path for subdirectories
+                const itemImage = (item.image && (item.image.startsWith('http') || item.image.startsWith('/') || item.image.startsWith('..')))
+                    ? item.image
+                    : `${basePath}/${item.image || 'assets/placeholder.png'}`;
+
+                return `
+                <div class="cart-item border border-slate-100 rounded-xl p-4 bg-white flex gap-4">
+                    <div class="w-16 h-16 flex-shrink-0 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center justify-center">
+                        <img src="${itemImage}" alt="${item.name}" class="max-w-full max-h-full object-contain">
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-slate-900 leading-tight">${item.name || 'Unknown Item'}</h3>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">${item.category || 'Compound'}</p>
+                            </div>
+                            <button onclick="window.cartManager.removeItem('${id}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 cursor-pointer">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="flex items-center border border-slate-100 bg-slate-50 rounded-lg overflow-hidden">
+                                <button onclick="window.cartManager.updateQuantity('${id}', -1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">-</button>
+                                <span class="px-3 py-1 text-xs font-black text-slate-700 min-w-[2rem] text-center">${item.quantity}</span>
+                                <button onclick="window.cartManager.updateQuantity('${id}', 1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">+</button>
+                            </div>
+                            <p class="text-brand-blue font-black">$${price.toFixed(2)}</p>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+
+            if (checkoutBtn) {
+                checkoutBtn.disabled = false;
+                checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+
+            // Re-init Lucide for new items
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        totalEl.textContent = '$' + window.cartManager.getTotal().toFixed(2);
+    };
 
     // Initialize Lucide Icons
     if (window.lucide) {
@@ -36,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Toggle Cart Function (global) ---
-    window.toggleCart = function() {
+    window.toggleCart = function () {
         const drawer = document.getElementById('cart-drawer');
         const overlay = document.getElementById('cart-overlay');
 
@@ -57,8 +128,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Dynamic Component Injection ---
 
-    // Cart Drawer
+    // --- Cart Badge Update Function ---
+    function updateCartBadges() {
+        const countEls = document.querySelectorAll('#cart-count, .cart-counter');
+        const count = window.cartManager ? window.cartManager.getItemCount() : 0;
+
+        countEls.forEach(el => {
+            el.textContent = count;
+            if (el.id === 'cart-count') {
+                if (count > 0) {
+                    el.classList.remove('scale-0', 'hidden');
+                    el.classList.add('scale-100');
+                } else {
+                    el.classList.add('scale-0', 'hidden');
+                    el.classList.remove('scale-100');
+                }
+            } else {
+                el.classList.toggle('hidden', count === 0);
+            }
+        });
+    }
+
+    // Subscribe to cart updates globally as soon as cartManager is available
+    if (window.cartManager) {
+        window.cartManager.subscribe((cart) => {
+            updateCartBadges();
+        });
+    }
+
+    // Cart Drawer injection
     const cartContainer = document.getElementById('cart-container');
+    console.log('Cart container found:', !!cartContainer);
     if (cartContainer) {
         const componentPath = `${basePath}/components/cart-drawer.html`;
 
@@ -71,13 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartContainer.innerHTML = html;
                 if (window.lucide) window.lucide.createIcons();
 
-                // Subscribe to cart updates for the badge
+                // Initialize drawer interactions after injection
                 if (window.cartManager) {
-                    window.cartManager.subscribe((cart) => {
-                        updateCartBadges();
-                    });
-                    // Initial update
-                    updateCartBadges();
+                    window.cartManager.subscribe(window.updateCartDrawerUI);
+                    const checkoutBtn = document.getElementById('checkout-btn');
+                    if (checkoutBtn) {
+                        checkoutBtn.addEventListener('click', () => {
+                            window.location.href = 'checkout.html';
+                        });
+                    }
                 }
             })
             .catch(err => console.error('Error loading cart drawer:', err));
@@ -94,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (window.lucide) window.lucide.createIcons();
                 }
             })
-            .catch(() => {}); // Silently fail if component doesn't exist
+            .catch(() => { }); // Silently fail if component doesn't exist
     }
 
     // User Menu (if container exists)
@@ -108,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (window.lucide) window.lucide.createIcons();
                 }
             })
-            .catch(() => {});
+            .catch(() => { });
     }
 
     // Exit Intent Popup (delayed load for non-checkout pages)
@@ -130,26 +232,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         container.innerHTML = html;
                     }
                 })
-                .catch(() => {});
+                .catch(() => { });
         }, 2000);
     }
 
-    // --- Cart Badge Update Function ---
-    function updateCartBadges() {
-        const countEls = document.querySelectorAll('#cart-count, .cart-counter');
-        const count = window.cartManager ? window.cartManager.getItemCount() : 0;
-
-        countEls.forEach(el => {
-            el.textContent = count;
-            if (el.id === 'cart-count') {
-                el.classList.toggle('scale-0', count === 0);
-                el.classList.toggle('scale-100', count > 0);
-                el.classList.toggle('hidden', count === 0);
-            } else {
-                el.classList.toggle('hidden', count === 0);
-            }
-        });
-    }
 
     // --- Magnetic Effects (if GSAP is present) ---
     if (window.gsap) {
@@ -177,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Add to Cart Animation ---
-    window.animateAddToCart = function(buttonEl, productImage) {
+    window.animateAddToCart = function (buttonEl, productImage) {
         if (!buttonEl) return;
 
         const originalText = buttonEl.innerHTML;
@@ -214,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Wishlist Heart Toggle ---
-    window.toggleWishlistHeart = function(buttonEl, productId, product) {
+    window.toggleWishlistHeart = function (buttonEl, productId, product) {
         if (!buttonEl || !window.wishlistManager) return;
 
         const isInWishlist = window.wishlistManager.contains(productId);
