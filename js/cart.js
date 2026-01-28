@@ -9,6 +9,24 @@ class Cart {
     constructor() {
         this.cart = this.loadCart();
         this.listeners = [];
+        this.productData = null;
+        this.initProductData();
+    }
+
+    async initProductData() {
+        try {
+            // Detect path context for products.json
+            const isInSubdir = window.location.pathname.includes('/pricing/') ||
+                window.location.pathname.includes('/pages/');
+            const jsonPath = isInSubdir ? '../data/products.json' : 'data/products.json';
+
+            const response = await fetch(jsonPath);
+            const data = await response.json();
+            this.productData = data.products;
+            this.notifyListeners(); // Refresh UI once data is loaded
+        } catch (e) {
+            console.error('Error loading product data for cart:', e);
+        }
     }
 
     loadCart() {
@@ -26,27 +44,51 @@ class Cart {
         this.notifyListeners();
     }
 
-    addItem(product) {
-        // product: { id, priceId, name, price, image }
-        if (!product || (!product.id && !product.priceId)) {
-            console.error('Invalid product added to cart:', product);
-            return;
-        }
+    getItemPrice(productId, quantity) {
+        if (!this.productData) return null;
+        const product = this.productData.find(p => p.id === productId);
+        if (!product) return null;
 
-        const existing = this.cart.find(item =>
-            (product.priceId && item.priceId === product.priceId) ||
-            (product.id && item.id === product.id)
-        );
+        if (quantity >= 25) return product.wholesale2Price || product.wholesale1Price || product.price;
+        if (quantity >= 10) return product.wholesale1Price || product.price;
+        return product.price;
+    }
+
+    addItem(product, quantity = 1) {
+        // Unify product IDs (remove '-wholesale' suffix if present)
+        const baseId = product.id.replace('-wholesale', '');
+
+        // Lookup full product info to ensure we have the correct priceId and base price
+        const productInfo = this.productData ? this.productData.find(p => p.id === baseId) : null;
+
+        const existing = this.cart.find(item => item.id === baseId);
 
         if (existing) {
-            existing.quantity += 1;
+            existing.quantity += quantity;
+            // Refresh info in case it changed
+            if (productInfo) {
+                existing.priceId = productInfo.priceId;
+                existing.price = productInfo.price;
+            }
         } else {
-            this.cart.push({ ...product, quantity: 1 });
+            // Store with base ID and ensure priceId is attached
+            const newItem = {
+                ...product,
+                id: baseId,
+                quantity: quantity
+            };
+
+            if (productInfo) {
+                newItem.priceId = productInfo.priceId;
+                newItem.price = productInfo.price;
+            }
+
+            this.cart.push(newItem);
         }
 
         this.saveCart();
 
-        // Visual feedback: open the cart drawer if it's not already open
+        // Visual feedback
         const drawer = document.getElementById('cart-drawer');
         if (drawer && drawer.classList.contains('translate-x-full')) {
             if (typeof window.toggleCart === 'function') {
@@ -55,17 +97,17 @@ class Cart {
         }
     }
 
-    removeItem(priceId) {
-        this.cart = this.cart.filter(item => item.priceId !== priceId && item.id !== priceId);
+    removeItem(id) {
+        this.cart = this.cart.filter(item => item.id !== id && item.priceId !== id);
         this.saveCart();
     }
 
-    updateQuantity(priceId, delta) {
-        const item = this.cart.find(item => item.priceId === priceId || item.id === priceId);
+    updateQuantity(id, delta) {
+        const item = this.cart.find(item => item.id === id || item.priceId === id);
         if (item) {
             item.quantity += delta;
             if (item.quantity <= 0) {
-                this.removeItem(priceId);
+                this.removeItem(id);
             } else {
                 this.saveCart();
             }
@@ -78,7 +120,10 @@ class Cart {
     }
 
     getTotal() {
-        return this.cart.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
+        return this.cart.reduce((sum, item) => {
+            const unitPrice = this.getItemPrice(item.id, item.quantity) || Number(item.price);
+            return sum + (unitPrice * item.quantity);
+        }, 0);
     }
 
     getItemCount() {
@@ -87,7 +132,7 @@ class Cart {
 
     subscribe(callback) {
         this.listeners.push(callback);
-        callback(this.cart); // Initial call
+        callback(this.cart);
     }
 
     notifyListeners() {
@@ -95,11 +140,9 @@ class Cart {
             try {
                 callback(this.cart);
             } catch (e) {
-                console.error('Error in cart listener:', e);
+                // Silently handle if UI component is not ready
             }
         });
-
-        // Backward compatibility for components listening to window event
         window.dispatchEvent(new CustomEvent('cartUpdated', { detail: this.cart }));
     }
 }

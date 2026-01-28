@@ -33,7 +33,8 @@
             border: 1px solid rgba(0, 82, 204, 0.1);
         }
     </style>
-<script src='../js/app.js' defer></script></head>
+    <script src='../js/app.js' defer></script>
+</head>
 
 <body class="flex flex-col min-h-screen">
     <nav class="p-6 border-b border-slate-200/50 relative z-50">
@@ -99,7 +100,7 @@
                         <span class="text-slate-500 font-bold">/ 10mg Vial</span>
                     </div>
                     <button
-                        onclick="cartManager.addItem({priceId: 'price_1Sss8GRVAF7KW3dTVrwVTbTh', id: 'tb-500', name: 'TB-500', price: 80, image: 'assets/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'})"
+                        onclick="cartManager.addItem({id: 'tb-500', name: 'TB-500', price: 80, image: 'assets/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'}, 1)"
                         class="w-full mt-10 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         Add to Cart
@@ -119,7 +120,7 @@
                         <span class="text-slate-500 font-bold">/ Unit</span>
                     </div>
                     <button
-                        onclick="cartManager.addItem({priceId: 'price_1Sss8GRVAF7KW3dTVrwVTbTh', id: 'tb-500-wholesale', name: 'TB-500 (Wholesale 10+)', price: 65, image: 'assets/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'})"
+                        onclick="cartManager.addItem({id: 'tb-500', name: 'TB-500', price: 65, image: 'assets/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'}, 10)"
                         class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         Add Wholesale Lot
@@ -136,8 +137,11 @@
                         <span class="text-slate-400 font-bold">/ Unit</span>
                     </div>
                     <button
-                        class="w-full mt-10 py-5 border border-slate-200 text-[10px] font-black uppercase tracking-widest cursor-not-allowed text-slate-300">Application
-                        Required</button>
+                        onclick="cartManager.addItem({id: 'tb-500', name: 'TB-500', price: 55, image: 'assets/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'}, 25)"
+                        class="w-full mt-10 py-5 bg-brand-blue text-white hover:bg-brand-dark transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                        Add Distribution Lot
+                    </button>
                 </div>
             </div>
         </div>
@@ -147,6 +151,7 @@
             RESEARCH USE ONLY</p>
     </footer>
     <script>gsap.from("main > div", { opacity: 0, y: 30, duration: 1.5, ease: "power4.out" });</script>
-<div id='cart-container'></div></body>
+    <div id='cart-container'></div>
+</body>
 
 </html>

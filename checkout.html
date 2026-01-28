@@ -35,7 +35,8 @@
                 <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600"></i>
                 <div>
                     <p class="font-medium text-amber-800">Your checkout was canceled</p>
-                    <p class="text-sm text-amber-600">Your cart items have been saved. Complete your purchase when ready.</p>
+                    <p class="text-sm text-amber-600">Your cart items have been saved. Complete your purchase when
+                        ready.</p>
                 </div>
             </div>
         </div>
@@ -53,20 +54,24 @@
                     <div id="logged-in-user" class="hidden mb-4 p-4 bg-slate-50 rounded-lg">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div id="user-avatar-checkout" class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-sm"></div>
+                                <div id="user-avatar-checkout"
+                                    class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-sm">
+                                </div>
                                 <div>
                                     <p id="user-name-checkout" class="font-medium text-slate-900"></p>
                                     <p id="user-email-display" class="text-sm text-slate-500"></p>
                                 </div>
                             </div>
-                            <button type="button" onclick="useGuestCheckout()" class="text-sm text-amber-600 hover:text-amber-700 font-medium cursor-pointer">
+                            <button type="button" onclick="useGuestCheckout()"
+                                class="text-sm text-amber-600 hover:text-amber-700 font-medium cursor-pointer">
                                 Use Different Email
                             </button>
                         </div>
                     </div>
 
                     <div id="guest-email-form">
-                        <label for="customer-email" class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
+                        <label for="customer-email" class="block text-sm font-medium text-slate-700 mb-1">Email
+                            Address</label>
                         <input type="email" id="customer-email" required
                             class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                             placeholder="you@example.com">
@@ -96,7 +101,8 @@
                 <!-- Shipping Note -->
                 <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
                     <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                        <div
+                            class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
                             <i data-lucide="truck" class="w-5 h-5 text-emerald-600"></i>
                         </div>
                         <div>
@@ -113,7 +119,8 @@
             <!-- Order Summary Panel -->
             <div class="lg:col-span-5">
                 <div class="glass-panel p-6 sticky top-24">
-                    <h2 class="text-lg font-bold text-slate-900 mb-6 uppercase tracking-widest border-b border-slate-200 pb-4">
+                    <h2
+                        class="text-lg font-bold text-slate-900 mb-6 uppercase tracking-widest border-b border-slate-200 pb-4">
                         Order Summary
                     </h2>
 
@@ -142,8 +149,11 @@
                         <span id="btn-text">Proceed to Payment</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 btn-icon"></i>
                         <svg id="btn-spinner" class="hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
                         </svg>
                     </button>
 
@@ -156,19 +166,23 @@
                         <div class="grid grid-cols-2 gap-4 text-center">
                             <div class="flex flex-col items-center gap-1">
                                 <i data-lucide="shield-check" class="w-5 h-5 text-green-600"></i>
-                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">256-bit SSL</span>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">256-bit
+                                    SSL</span>
                             </div>
                             <div class="flex flex-col items-center gap-1">
                                 <i data-lucide="credit-card" class="w-5 h-5 text-slate-600"></i>
-                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">Stripe Secure</span>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">Stripe
+                                    Secure</span>
                             </div>
                             <div class="flex flex-col items-center gap-1">
                                 <i data-lucide="refresh-cw" class="w-5 h-5 text-amber-600"></i>
-                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">30-Day Returns</span>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">30-Day
+                                    Returns</span>
                             </div>
                             <div class="flex flex-col items-center gap-1">
                                 <i data-lucide="flask-conical" class="w-5 h-5 text-purple-600"></i>
-                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">99.8% Pure</span>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">99.8%
+                                    Pure</span>
                             </div>
                         </div>
                     </div>
@@ -235,7 +249,7 @@
             }
 
             // Use guest checkout
-            window.useGuestCheckout = function() {
+            window.useGuestCheckout = function () {
                 guestForm.classList.remove('hidden');
                 loggedInUser.classList.add('hidden');
                 emailInput.focus();
@@ -253,7 +267,9 @@
                     return;
                 }
 
-                list.innerHTML = cart.map(item => `
+                list.innerHTML = cart.map(item => {
+                    const tieredPrice = window.cartManager.getItemPrice(item.id, item.quantity) || item.price;
+                    return `
                     <div class="flex gap-4 p-4 bg-slate-50 rounded-xl">
                         <div class="w-16 h-16 bg-white rounded-lg border border-slate-100 p-2 flex items-center justify-center flex-shrink-0">
                             <img src="${item.image}" alt="${item.name}" class="max-w-full max-h-full object-contain">
@@ -262,13 +278,14 @@
                             <div class="flex justify-between items-start gap-2">
                                 <div>
                                     <h3 class="font-bold text-slate-900">${item.name}</h3>
-                                    <p class="text-xs text-slate-500">Qty: ${item.quantity} x $${item.price.toFixed(2)}</p>
+                                    <p class="text-xs text-slate-500">Qty: ${item.quantity} x $${tieredPrice.toFixed(2)}</p>
+                                    ${item.quantity >= 10 ? `<p class="text-[9px] font-bold text-emerald-600 uppercase">Tier Discount Applied</p>` : ''}
                                 </div>
-                                <span class="font-bold text-slate-900 whitespace-nowrap">$${(item.price * item.quantity).toFixed(2)}</span>
+                                <span class="font-bold text-slate-900 whitespace-nowrap">$${(tieredPrice * item.quantity).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
 
                 const total = window.cartManager.getTotal();
                 const itemCount = window.cartManager.getItemCount();
@@ -363,25 +380,31 @@
                 emailInput.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
             });
 
-            // Load auth modal component
-            fetch('components/auth-modal.html')
-                .then(res => res.text())
-                .then(html => {
-                    document.getElementById('auth-modal-container').innerHTML = html;
-                })
-                .catch(console.error);
+            // Helper for script-safe injection
+            function injectComponent(id, path, callback) {
+                fetch(path)
+                    .then(res => res.text())
+                    .then(html => {
+                        const container = document.getElementById(id);
+                        if (container) {
+                            const range = document.createRange();
+                            const fragment = range.createContextualFragment(html);
+                            container.innerHTML = '';
+                            container.appendChild(fragment);
+                            if (window.lucide) window.lucide.createIcons();
+                            if (callback) callback();
+                        }
+                    })
+                    .catch(console.error);
+            }
 
-            // Load checkout stepper
-            fetch('components/checkout-stepper.html')
-                .then(res => res.text())
-                .then(html => {
-                    document.getElementById('checkout-stepper-container').innerHTML = html;
-                    // Set current step
-                    if (window.setCheckoutStep) {
-                        window.setCheckoutStep('details');
-                    }
-                })
-                .catch(console.error);
+            // Load components
+            injectComponent('auth-modal-container', 'components/auth-modal.html');
+            injectComponent('checkout-stepper-container', 'components/checkout-stepper.html', () => {
+                if (window.setCheckoutStep) {
+                    window.setCheckoutStep('details');
+                }
+            });
         });
     </script>
 </body>

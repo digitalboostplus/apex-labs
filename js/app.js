@@ -33,8 +33,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             list.innerHTML = cart.map(item => {
-                const price = Number(item.price) || 0;
-                const id = item.priceId || item.id;
+                const id = item.id || item.priceId;
+                const price = window.cartManager.getItemPrice(id, item.quantity) || Number(item.price);
+
+                // Determine if a tier discount is active
+                const isTier1 = item.quantity >= 10 && item.quantity < 25;
+                const isTier2 = item.quantity >= 25;
+                let tierBadge = '';
+                if (isTier2) {
+                    tierBadge = '<span class="ml-2 px-1.5 py-0.5 bg-brand-cyan/10 text-brand-blue text-[8px] font-black uppercase rounded">Tier 2 Labs</span>';
+                } else if (isTier1) {
+                    tierBadge = '<span class="ml-2 px-1.5 py-0.5 bg-brand-blue/10 text-brand-blue text-[8px] font-black uppercase rounded">Tier 1 Elite</span>';
+                }
 
                 // Fix image path for subdirectories
                 const itemImage = (item.image && (item.image.startsWith('http') || item.image.startsWith('/') || item.image.startsWith('..')))
@@ -62,7 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="px-3 py-1 text-xs font-black text-slate-700 min-w-[2rem] text-center">${item.quantity}</span>
                                 <button onclick="window.cartManager.updateQuantity('${id}', 1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">+</button>
                             </div>
-                            <p class="text-brand-blue font-black">$${price.toFixed(2)}</p>
+                            <div class="text-right">
+                                <p class="text-brand-blue font-black">$${price.toFixed(2)}${tierBadge}</p>
+                                <p class="text-[9px] text-slate-400 font-bold uppercase">per vial</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,61 +169,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Cart Drawer injection
-    const cartContainer = document.getElementById('cart-container');
-    console.log('Cart container found:', !!cartContainer);
-    if (cartContainer) {
-        const componentPath = `${basePath}/components/cart-drawer.html`;
+    // --- Dynamic Component Injection ---
+    function injectComponent(containerId, path, callback) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
 
-        fetch(componentPath)
+        fetch(path)
             .then(res => {
-                if (!res.ok) throw new Error('Component not found');
+                if (!res.ok) throw new Error(`Component not found: ${path}`);
                 return res.text();
             })
             .then(html => {
-                cartContainer.innerHTML = html;
+                const range = document.createRange();
+                const fragment = range.createContextualFragment(html);
+                container.innerHTML = ''; // Clear container
+                container.appendChild(fragment);
+
                 if (window.lucide) window.lucide.createIcons();
-
-                // Initialize drawer interactions after injection
-                if (window.cartManager) {
-                    window.cartManager.subscribe(window.updateCartDrawerUI);
-                    const checkoutBtn = document.getElementById('checkout-btn');
-                    if (checkoutBtn) {
-                        checkoutBtn.addEventListener('click', () => {
-                            window.location.href = 'checkout.html';
-                        });
-                    }
-                }
+                if (callback) callback();
             })
-            .catch(err => console.error('Error loading cart drawer:', err));
+            .catch(err => console.error(`Error loading component ${path}:`, err));
     }
 
-    // Auth Modal (if container exists)
+    // Cart Drawer injection
+    const cartContainer = document.getElementById('cart-container');
+    if (cartContainer) {
+        injectComponent('cart-container', `${basePath}/components/cart-drawer.html`, () => {
+            if (window.cartManager) {
+                window.cartManager.subscribe(window.updateCartDrawerUI);
+                const checkoutBtn = document.getElementById('checkout-btn');
+                if (checkoutBtn) {
+                    checkoutBtn.addEventListener('click', () => {
+                        window.location.href = 'checkout.html';
+                    });
+                }
+            }
+        });
+    }
+
+    // Auth Modal injection
     const authModalContainer = document.getElementById('auth-modal-container');
-    if (authModalContainer && authModalContainer.innerHTML.trim() === '') {
-        fetch(`${basePath}/components/auth-modal.html`)
-            .then(res => res.ok ? res.text() : '')
-            .then(html => {
-                if (html) {
-                    authModalContainer.innerHTML = html;
-                    if (window.lucide) window.lucide.createIcons();
-                }
-            })
-            .catch(() => { }); // Silently fail if component doesn't exist
+    if (authModalContainer) {
+        injectComponent('auth-modal-container', `${basePath}/components/auth-modal.html`);
     }
 
-    // User Menu (if container exists)
+    // User Menu injection
     const userMenuContainer = document.getElementById('user-menu-container');
-    if (userMenuContainer && userMenuContainer.innerHTML.trim() === '') {
-        fetch(`${basePath}/components/user-menu.html`)
-            .then(res => res.ok ? res.text() : '')
-            .then(html => {
-                if (html) {
-                    userMenuContainer.innerHTML = html;
-                    if (window.lucide) window.lucide.createIcons();
-                }
-            })
-            .catch(() => { });
+    if (userMenuContainer) {
+        injectComponent('user-menu-container', `${basePath}/components/user-menu.html`);
     }
 
     // Exit Intent Popup (delayed load for non-checkout pages)
