@@ -32,8 +32,9 @@ async function validateAndBuildLineItems(items) {
 
         // Custom logic for specific products if needed (e.g., NAD+ is $150)
         if (item.id === 'nadplus' || item.name.includes('NAD+')) {
-            if (item.quantity >= 25) unitAmount = 10000;
-            else if (item.quantity >= 10) unitAmount = 12000;
+            // NAD+ tiers: $150 / $135 / $125
+            if (item.quantity >= 25) unitAmount = 12500;
+            else if (item.quantity >= 10) unitAmount = 13500;
             else unitAmount = 15000;
         } else if (item.id === 'reta' || item.name.includes('RETA')) {
             // RETA tiers: $120 / $105 / $95
@@ -50,10 +51,15 @@ async function validateAndBuildLineItems(items) {
             if (item.quantity >= 25) unitAmount = 4000;
             else if (item.quantity >= 10) unitAmount = 5000;
             else unitAmount = 6000;
-        } else {
-            // Standard $75/$65/$50 tiers (BPC, AOD, CJC, Ipamorelin, TB-500, Tesamorelin)
-            if (item.quantity >= 25) unitAmount = 5000;
+        } else if (item.id === 'ipamorelin' || item.id === 'tb-500' || item.id === 'tesamorelin') {
+            // Premium tiers: $80 / $65 / $55
+            if (item.quantity >= 25) unitAmount = 5500;
             else if (item.quantity >= 10) unitAmount = 6500;
+            else unitAmount = 8000;
+        } else {
+            // Standard tiers (BPC, AOD, CJC, GHK-Cu): $75 / $60 / $50
+            if (item.quantity >= 25) unitAmount = 5000;
+            else if (item.quantity >= 10) unitAmount = 6000;
             else unitAmount = 7500;
         }
 

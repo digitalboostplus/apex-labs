@@ -166,6 +166,7 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
 
     } catch (err) {
         console.error('Webhook error:', err.message);
+        console.error('Stack trace:', err.stack);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 });
