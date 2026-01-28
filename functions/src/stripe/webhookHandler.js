@@ -3,15 +3,18 @@
  * Processes Stripe events and updates order status in Firestore
  */
 
-const functions = require('firebase-functions');
+const { onRequest } = require('firebase-functions/v2/https');
+const { log, error: logError } = require('firebase-functions/logger');
 const admin = require('firebase-admin');
+const functions = require('firebase-functions');
 const Stripe = require('stripe');
 
 // Initialize Stripe lazily to prevent build-time failures
 let stripe;
 function getStripe() {
     if (!stripe) {
-        stripe = new Stripe(process.env.STRIPE_SECRET_KEY || functions.config().stripe?.secret_key, {
+        const secretKey = process.env.STRIPE_SECRET_KEY || (functions.config().stripe?.secret_key);
+        stripe = new Stripe(secretKey, {
             apiVersion: '2023-10-16'
         });
     }
@@ -21,7 +24,7 @@ function getStripe() {
 const db = admin.firestore();
 
 // Webhook signing secret
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || functions.config().stripe?.webhook_secret;
+const getEndpointSecret = () => process.env.STRIPE_WEBHOOK_SECRET || (functions.config().stripe?.webhook_secret);
 
 /**
  * Update order status in Firestore
@@ -33,7 +36,7 @@ async function updateOrderBySessionId(sessionId, updates) {
     const snapshot = await ordersRef.where('stripeSessionId', '==', sessionId).limit(1).get();
 
     if (snapshot.empty) {
-        console.warn(`No order found for session: ${sessionId}`);
+        log(`No order found for session: ${sessionId}`);
         return null;
     }
 
@@ -51,7 +54,7 @@ async function updateOrderBySessionId(sessionId, updates) {
  * @param {Object} session - Stripe checkout session
  */
 async function handleCheckoutComplete(session) {
-    console.log('Processing checkout.session.completed:', session.id);
+    log(`Processing checkout.session.completed: ${session.id}`);
 
     // Extract customer and shipping details
     const customerDetails = session.customer_details || {};
@@ -76,7 +79,7 @@ async function handleCheckoutComplete(session) {
     const orderId = await updateOrderBySessionId(session.id, updates);
 
     if (orderId) {
-        console.log(`Order ${orderId} marked as paid`);
+        log(`Order ${orderId} marked as paid`);
 
         // If user is logged in, add order to their orders subcollection
         const orderDoc = await db.collection('orders').doc(orderId).get();
@@ -102,7 +105,7 @@ async function handleCheckoutComplete(session) {
  * @param {Object} session - Stripe checkout session
  */
 async function handleCheckoutExpired(session) {
-    console.log('Processing checkout.session.expired:', session.id);
+    log(`Processing checkout.session.expired: ${session.id}`);
 
     await updateOrderBySessionId(session.id, {
         status: 'expired'
@@ -114,7 +117,7 @@ async function handleCheckoutExpired(session) {
  * @param {Object} paymentIntent - Stripe payment intent
  */
 async function handlePaymentFailed(paymentIntent) {
-    console.log('Processing payment_intent.payment_failed:', paymentIntent.id);
+    log(`Processing payment_intent.payment_failed: ${paymentIntent.id}`);
 
     // Find order by payment intent ID
     const ordersRef = db.collection('orders');
@@ -137,7 +140,7 @@ async function handlePaymentFailed(paymentIntent) {
  * @param {Object} charge - Stripe charge
  */
 async function handleChargeRefunded(charge) {
-    console.log('Processing charge.refunded:', charge.id);
+    log(`Processing charge.refunded: ${charge.id}`);
 
     const paymentIntentId = charge.payment_intent;
 
@@ -162,7 +165,10 @@ async function handleChargeRefunded(charge) {
 /**
  * Main webhook handler
  */
-exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+exports.stripeWebhook = onRequest({
+    maxInstances: 10,
+    cors: true
+}, async (req, res) => {
     // Only allow POST requests
     if (req.method !== 'POST') {
         res.status(405).send('Method not allowed');
@@ -170,6 +176,7 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
     }
 
     const sig = req.headers['stripe-signature'];
+    const endpointSecret = getEndpointSecret();
 
     let event;
 
@@ -180,38 +187,31 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
             sig,
             endpointSecret
         );
-    } catch (err) {
-        console.error('Webhook signature verification failed:', err.message);
-        res.status(400).send(`Webhook Error: ${err.message}`);
-        return;
-    }
 
-    // Handle the event
-    try {
+        log(`Processing Stripe event: ${event.type} (${event.id})`);
+
+        // Handle the event
         switch (event.type) {
             case 'checkout.session.completed':
                 await handleCheckoutComplete(event.data.object);
                 break;
-
             case 'checkout.session.expired':
                 await handleCheckoutExpired(event.data.object);
                 break;
-
             case 'payment_intent.payment_failed':
                 await handlePaymentFailed(event.data.object);
                 break;
-
             case 'charge.refunded':
                 await handleChargeRefunded(event.data.object);
                 break;
-
             default:
-                console.log(`Unhandled event type: ${event.type}`);
+                log(`Unhandled event type: ${event.type}`);
         }
 
         res.status(200).json({ received: true });
-    } catch (error) {
-        console.error('Error processing webhook:', error);
-        res.status(500).json({ error: 'Webhook processing failed' });
+
+    } catch (err) {
+        logError('Webhook error:', err.message);
+        res.status(400).send(`Webhook Error: ${err.message}`);
     }
 });

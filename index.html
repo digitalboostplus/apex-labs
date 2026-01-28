@@ -1079,8 +1079,10 @@
                 <div>
                     <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan mb-10">Inventory</h4>
                     <ul class="space-y-6 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                        <li><a href="pricing/ipamorelin.html" class="hover:text-white transition-colors">Performance</a></li>
-                        <li><a href="pricing/bpc-157.html" class="hover:text-white transition-colors">Regenerative</a></li>
+                        <li><a href="pricing/ipamorelin.html" class="hover:text-white transition-colors">Performance</a>
+                        </li>
+                        <li><a href="pricing/bpc-157.html" class="hover:text-white transition-colors">Regenerative</a>
+                        </li>
                         <li><a href="pricing/pt-141.html" class="hover:text-white transition-colors">Cognitive</a></li>
                         <li><a href="pricing/nadplus.html" class="hover:text-white transition-colors">Longevity</a></li>
                     </ul>
@@ -1090,10 +1092,14 @@
                     <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan mb-10">Verification
                     </h4>
                     <ul class="space-y-6 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                        <li><a href="program-overview.html#matrix" class="hover:text-white transition-colors">Lab Reports</a></li>
-                        <li><a href="index.html#science" class="hover:text-white transition-colors">HPLC Database</a></li>
-                        <li><a href="program-overview.html#matrix" class="hover:text-white transition-colors">Security Check</a></li>
-                        <li><a href="mailto:qc@apexlabs.com?subject=COA%20Request" class="hover:text-white transition-colors">COA Portal</a></li>
+                        <li><a href="program-overview.html#matrix" class="hover:text-white transition-colors">Lab
+                                Reports</a></li>
+                        <li><a href="index.html#science" class="hover:text-white transition-colors">HPLC Database</a>
+                        </li>
+                        <li><a href="program-overview.html#matrix" class="hover:text-white transition-colors">Security
+                                Check</a></li>
+                        <li><a href="mailto:qc@apexlabs.com?subject=COA%20Request"
+                                class="hover:text-white transition-colors">COA Portal</a></li>
                     </ul>
                 </div>
 
@@ -1281,21 +1287,11 @@
             });
         });
     </script>
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD7iFXBzJi5NIK8_CjkfDFbonPdL5Z_SS0",
-            authDomain: "apex-labs-18862.firebaseapp.com",
-            projectId: "apex-labs-18862",
-            storageBucket: "apex-labs-18862.firebasestorage.app",
-            messagingSenderId: "257864801015",
-            appId: "1:257864801015:web:cb0da3675c646c0f5ed1f2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-    </script>
+    <!-- Firebase SDK Compat (Latest) -->
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-init.js"></script>
     <!-- Dynamic Cart Components -->
     <div id="cart-container"></div>
 </body>
