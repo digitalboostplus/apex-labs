@@ -1,0 +1,182 @@
+{
+    "labProvider": {
+        "name": "Janoshik",
+        "website": "www.janoshik.com",
+        "email": "info@janoshik.com",
+        "verificationUrl": "https://www.janoshik.com/verify/"
+    },
+    "client": "GB-SLO/US",
+    "testingPeriod": {
+        "ordered": "2026-01-20",
+        "received": "2026-01-26",
+        "conducted": "2026-01-28"
+    },
+    "products": [
+        {
+            "id": "bpc-157",
+            "name": "BPC-157",
+            "taskNumber": "#101115",
+            "sampleLabel": "BPC",
+            "testRequested": "BPC-157 analysis",
+            "results": {
+                "compound": "BPC-157",
+                "quantity": 10.89,
+                "unit": "mg",
+                "purity": 99.751,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "1UGJHZ51HQVR",
+            "reportImage": "BPC-157.png"
+        },
+        {
+            "id": "cjc-1295",
+            "name": "CJC-1295",
+            "taskNumber": "#101119",
+            "sampleLabel": "CJC",
+            "testRequested": "CJC-1295 no DAC (MOD GRF 1-29) analysis",
+            "results": {
+                "compound": "CJC-1295 (mod GRF 1-29)",
+                "quantity": 9.87,
+                "unit": "mg",
+                "purity": 81.190,
+                "purityUnit": "%"
+            },
+            "comments": "Sample contaminated with a different peptide closely related to CJC-1295 DAC which is too similar for HPLC separation.",
+            "verificationKey": "8GTM1W65B3SS1",
+            "reportImage": "CJC-1295.png"
+        },
+        {
+            "id": "ghk-cu",
+            "name": "GHK-Cu",
+            "taskNumber": "#101116",
+            "sampleLabel": "GHK",
+            "testRequested": "GHK (or GHK-Cu) analysis",
+            "results": {
+                "compound": "GHK-Cu",
+                "quantity": 105.33,
+                "unit": "mg",
+                "purity": 99.572,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "B1VRPP7ERFZ4",
+            "reportImage": "GHK-Cu.png"
+        },
+        {
+            "id": "ipamorelin",
+            "name": "Ipamorelin",
+            "taskNumber": "#101120",
+            "sampleLabel": "IPA",
+            "testRequested": "Ipamorelin analysis",
+            "results": {
+                "compound": "Ipamorelin",
+                "quantity": 12.66,
+                "unit": "mg",
+                "purity": 99.817,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "7T9TPLF4JU3C",
+            "reportImage": "Ipamorelin.png"
+        },
+        {
+            "id": "mots-c",
+            "name": "MOTS-C",
+            "taskNumber": "#101121",
+            "sampleLabel": "MOTS",
+            "testRequested": "MOTS-c analysis",
+            "results": {
+                "compound": "MOTS-C",
+                "quantity": 55.63,
+                "unit": "mg",
+                "purity": 99.563,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "ASNSWEEFAZ79",
+            "reportImage": "MOTS-C.png"
+        },
+        {
+            "id": "pt-141",
+            "name": "PT-141",
+            "taskNumber": "#101122",
+            "sampleLabel": "PT",
+            "testRequested": "PT-141 analysis",
+            "results": {
+                "compound": "PT-141",
+                "quantity": 12.38,
+                "unit": "mg",
+                "purity": 99.861,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "DH49ZZ3CM4MI",
+            "reportImage": "PT-141.png"
+        },
+        {
+            "id": "reta",
+            "name": "Retatrutide",
+            "taskNumber": "#101113",
+            "sampleLabel": "Reta",
+            "testRequested": "Common GLP-1 peptide blind test (Semaglutide, Tirzepatide and Retatrutide)",
+            "results": {
+                "compound": "Retatrutide",
+                "quantity": 11.79,
+                "unit": "mg",
+                "purity": 99.788,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "7LXBJJWNAP83",
+            "reportImage": "Retatrutide.png"
+        },
+        {
+            "id": "tb-500",
+            "name": "TB-500",
+            "taskNumber": "#101114",
+            "sampleLabel": "TB",
+            "testRequested": "TB4/TB-500/TB4(17-23) analysis",
+            "results": {
+                "compound": "TB-500 (TB4)",
+                "quantity": 11.92,
+                "unit": "mg",
+                "purity": 99.782,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "LABYSEAVF5P4",
+            "reportImage": "TB-500.png"
+        },
+        {
+            "id": "tesamorelin",
+            "name": "Tesamorelin",
+            "taskNumber": "#101118",
+            "sampleLabel": "Tesa",
+            "testRequested": "Tesamorelin analysis",
+            "results": {
+                "compound": "Tesamorelin",
+                "quantity": 10.28,
+                "unit": "mg",
+                "purity": 99.070,
+                "purityUnit": "%"
+            },
+            "comments": null,
+            "verificationKey": "HFXVGQ9VKB35",
+            "reportImage": "Tesamorelin.png"
+        }
+    ],
+    "summary": {
+        "totalProducts": 9,
+        "averagePurity": 97.49,
+        "highestPurity": {
+            "product": "PT-141",
+            "purity": 99.861
+        },
+        "lowestPurity": {
+            "product": "CJC-1295",
+            "purity": 81.190,
+            "note": "Contamination with related peptide"
+        }
+    }
+}

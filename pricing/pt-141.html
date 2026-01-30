@@ -42,6 +42,7 @@
         }
     </style>
     <script src='../js/app.js' defer></script>
+    <script src='../js/lab-results.js' defer></script>
 </head>
 
 <body class="flex flex-col min-h-screen">
@@ -76,25 +77,37 @@
                     Research Compound ID: PT-141-09</div>
                 <h1 class="text-6xl md:text-8xl mb-8 leading-none font-black tracking-tighter">PT-141 <span
                         class="text-[#00C2FF]">(PT-141)</span></h1>
-                <p class="text-slate-500 text-xl font-medium mb-12 leading-relaxed">Melanocortin receptor agonist
+                <p class="text-slate-500 text-xl font-medium mb-8 leading-relaxed">Melanocortin receptor agonist
                     researched for its effects on libido and sexual function in both men and women.</p>
-                <div class="space-y-6">
-                    <div class="flex items-center space-x-6">
-                        <div
-                            class="w-12 h-12 rounded-full glass shadow-lg flex items-center justify-center text-[#00C2FF]">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                                <polyline points="22 4 12 14.01 9 11.01" />
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-brand-dark font-black uppercase text-sm tracking-widest">99.8% Purity</div>
-                            <div class="text-slate-500 text-xs font-bold">Validated via HPLC/MS testing</div>
-                        </div>
+
+                <!-- Research Focus -->
+                <div class="glass p-6 mb-8">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="target" class="w-4 h-4 text-[#00C2FF]"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Research Focus</span>
+                    </div>
+                    <p class="text-[#0052cc] font-bold text-sm mb-4">Best for: Desire, confidence, intimacy</p>
+                    <ul class="space-y-2 text-slate-600 text-sm mb-4">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-[#00C2FF] mt-0.5 flex-shrink-0"></i>
+                            <span>Desire and arousal support</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-[#00C2FF] mt-0.5 flex-shrink-0"></i>
+                            <span>Sexual confidence and wellness</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-[#00C2FF] mt-0.5 flex-shrink-0"></i>
+                            <span>Intimacy for men and women</span>
+                        </li>
+                    </ul>
+                    <div class="pt-4 border-t border-slate-200">
+                        <p class="text-xs text-slate-500"><strong class="text-slate-700">Longevity benefit:</strong> Sexual wellness is directly tied to confidence, emotional well-being, and quality of life.</p>
                     </div>
                 </div>
+
+                <!-- Lab Results Component -->
+                <div data-lab-product="pt-141"></div>
             </div>
             <div class="space-y-8">
                 <div class="glass p-10 relative overflow-hidden group shadow-xl">
