@@ -1,0 +1,354 @@
+<!-- Lab Results Component -->
+<!-- Include this in pricing pages: <div id="lab-results-container" data-product-id="bpc-157"></div> -->
+
+<style>
+    .lab-results-panel {
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(0, 194, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .lab-results-panel::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #00C2FF 0%, #0052cc 50%, #00C2FF 100%);
+    }
+
+    .purity-ring {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: conic-gradient(
+            #00C2FF 0deg,
+            #0052cc calc(var(--purity) * 3.6deg),
+            #e2e8f0 calc(var(--purity) * 3.6deg)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .purity-ring::before {
+        content: '';
+        position: absolute;
+        inset: 8px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .purity-value {
+        position: relative;
+        z-index: 1;
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #0F172A;
+        letter-spacing: -0.02em;
+    }
+
+    .purity-value span {
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+
+    .lab-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .lab-stat-label {
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #94a3b8;
+    }
+
+    .lab-stat-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0F172A;
+        font-family: 'Inter', monospace;
+    }
+
+    .janoshik-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #475569;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .janoshik-badge:hover {
+        background: #0052cc;
+        border-color: #0052cc;
+        color: white;
+    }
+
+    .janoshik-badge svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .view-report-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 14px 20px;
+        background: #0F172A;
+        color: white;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .view-report-btn:hover {
+        background: #0052cc;
+    }
+
+    .view-report-btn i {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Modal Styles */
+    .lab-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(8px);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .lab-modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .lab-modal {
+        background: white;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow: auto;
+        position: relative;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .lab-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        background: #0F172A;
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .lab-modal-title {
+        font-family: 'Oswald', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .lab-modal-close {
+        background: transparent;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s;
+    }
+
+    .lab-modal-close:hover {
+        color: #00C2FF;
+    }
+
+    .lab-modal-body {
+        padding: 0;
+    }
+
+    .lab-modal-body img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .lab-modal-footer {
+        padding: 16px 20px;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .verification-code {
+        font-family: 'Inter', monospace;
+        font-size: 11px;
+        color: #64748b;
+    }
+
+    .verification-code strong {
+        color: #0F172A;
+    }
+
+    .verify-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background: #00C2FF;
+        color: #0F172A;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .verify-link:hover {
+        background: #0052cc;
+        color: white;
+    }
+</style>
+
+<div class="lab-results-panel p-6 mt-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-2">
+            <i data-lucide="flask-conical" class="w-4 h-4 text-[#00C2FF]"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Independent Lab Analysis</span>
+        </div>
+        <a href="https://www.janoshik.com" target="_blank" rel="noopener" class="janoshik-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4"/>
+                <circle cx="12" cy="12" r="10"/>
+            </svg>
+            Verified by Janoshik
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex items-center gap-8">
+        <!-- Purity Ring -->
+        <div class="purity-ring" style="--purity: 99.751">
+            <div class="purity-value">
+                99.75<span>%</span>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="flex-grow grid grid-cols-2 gap-4">
+            <div class="lab-stat">
+                <span class="lab-stat-label">Compound</span>
+                <span class="lab-stat-value">BPC-157</span>
+            </div>
+            <div class="lab-stat">
+                <span class="lab-stat-label">Quantity</span>
+                <span class="lab-stat-value">10.89 mg</span>
+            </div>
+            <div class="lab-stat">
+                <span class="lab-stat-label">Analysis Date</span>
+                <span class="lab-stat-value">Jan 28, 2026</span>
+            </div>
+            <div class="lab-stat">
+                <span class="lab-stat-label">Task #</span>
+                <span class="lab-stat-value">#101115</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Report Button -->
+    <button class="view-report-btn mt-6" onclick="openLabModal()">
+        <i data-lucide="file-search"></i>
+        View Full Lab Report
+    </button>
+</div>
+
+<!-- Lab Report Modal -->
+<div id="lab-modal-overlay" class="lab-modal-overlay" onclick="closeLabModal(event)">
+    <div class="lab-modal" onclick="event.stopPropagation()">
+        <div class="lab-modal-header">
+            <span class="lab-modal-title">
+                <i data-lucide="microscope" class="w-4 h-4 inline mr-2"></i>
+                BPC-157 Lab Analysis Report
+            </span>
+            <button class="lab-modal-close" onclick="closeLabModal()">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div class="lab-modal-body">
+            <img src="../assets/lab-results/BPC-157.png" alt="BPC-157 Lab Report">
+        </div>
+        <div class="lab-modal-footer">
+            <span class="verification-code">
+                Verification Key: <strong>1UGJHZ51HQVR</strong>
+            </span>
+            <a href="https://www.janoshik.com/verify/" target="_blank" rel="noopener" class="verify-link">
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+                Verify Result
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openLabModal() {
+        const modal = document.getElementById('lab-modal-overlay');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function closeLabModal(event) {
+        if (event && event.target !== event.currentTarget) return;
+        const modal = document.getElementById('lab-modal-overlay');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLabModal();
+    });
+</script>
