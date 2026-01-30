@@ -13,6 +13,9 @@ let stripe;
 function getStripe() {
     if (!stripe) {
         const secretKey = functions.config().stripe?.secret_key || process.env.STRIPE_SECRET_KEY;
+        if (!secretKey) {
+            throw new Error('Stripe secret key not configured. Run: firebase functions:config:set stripe.secret_key="sk_..." --project apex-labs-18862');
+        }
         stripe = new Stripe(secretKey, {
             apiVersion: '2023-10-16'
         });
@@ -63,12 +66,25 @@ async function validateAndBuildLineItems(items) {
             else unitAmount = 7500;
         }
 
+        // Build properly encoded image URL
+        let imageUrl = null;
+        if (item.image) {
+            if (item.image.startsWith('http')) {
+                imageUrl = item.image;
+            } else {
+                // Encode path segments to handle spaces and special characters
+                const cleanPath = item.image.replace(/^\//, '');
+                const encodedPath = cleanPath.split('/').map(segment => encodeURIComponent(segment)).join('/');
+                imageUrl = `https://apex-labs-18862.web.app/${encodedPath}`;
+            }
+        }
+
         lineItems.push({
             price_data: {
                 currency: 'usd',
                 product_data: {
                     name: item.name,
-                    images: item.image ? [item.image.startsWith('http') ? item.image : `https://apex-labs-18862.web.app/${item.image.replace(/^\//, '')}`] : [],
+                    images: imageUrl ? [imageUrl] : [],
                     metadata: {
                         productId: item.id
                     }
@@ -147,7 +163,102 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
             // Validate and build Stripe line items
             const lineItems = await validateAndBuildLineItems(items);
 
-            // Create Stripe Checkout session
+            // Calculate total unit amount for potential Payment Link
+            const totalAmount = lineItems.reduce((sum, item) => sum + (item.price_data.unit_amount * item.quantity), 0);
+
+            // Support for Stripe Payment Link as requested
+            if (req.body.usePaymentLink === true) {
+                const stripe = getStripe();
+
+                // Robust product lookup/creation
+                let productId;
+                try {
+                    const products = await stripe.products.list({ limit: 100 });
+                    const existingProduct = products.data.find(p => p.name === 'Custom Order Fulfillment');
+                    if (existingProduct) {
+                        productId = existingProduct.id;
+                    } else {
+                        const newProduct = await stripe.products.create({
+                            name: 'Custom Order Fulfillment',
+                            description: 'Generic product for custom order totals from Apex Labs.'
+                        });
+                        productId = newProduct.id;
+                    }
+                } catch (pe) {
+                    console.error('Error finding/creating product:', pe);
+                    // Fallback to the one I created just in case
+                    productId = 'prod_TsjoEOJRMMTWY6';
+                }
+
+                // Create a temporary price for the total amount
+                const price = await stripe.prices.create({
+                    currency: 'usd',
+                    unit_amount: totalAmount,
+                    product: productId,
+                    metadata: {
+                        source: 'apex_labs_payment_link',
+                        userId: userId || 'guest'
+                    }
+                });
+
+                // Pre-generate order ID to use in metadata
+                const orderRef = db.collection('orders').doc();
+                const orderId = orderRef.id;
+
+                // Create the Payment Link
+                const paymentLink = await getStripe().paymentLinks.create({
+                    line_items: [{
+                        price: price.id,
+                        quantity: 1,
+                    }],
+                    after_completion: {
+                        type: 'redirect',
+                        redirect: {
+                            url: finalSuccessUrl.replace('{CHECKOUT_SESSION_ID}', 'payment_link')
+                        }
+                    },
+                    metadata: {
+                        ...metadata,
+                        orderId: orderId, // Crucial for webhook
+                        source: 'apex_labs_checkout',
+                        isPaymentLink: 'true'
+                    }
+                });
+
+                // Store pending order in Firestore
+                const orderData = {
+                    id: orderId,
+                    stripeSessionId: paymentLink.id, // Store payment link ID
+                    status: 'pending',
+                    items: items.map(item => ({
+                        id: item.id,
+                        priceId: item.priceId || null,
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity,
+                        image: item.image
+                    })),
+                    customerEmail: customerEmail || null,
+                    userId: userId || null,
+                    metadata: {
+                        ...metadata,
+                        priceId: price.id,
+                        isPaymentLink: true
+                    },
+                    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+                };
+
+                await orderRef.set(orderData);
+
+                return res.status(200).json({
+                    sessionId: paymentLink.id,
+                    sessionUrl: paymentLink.url,
+                    orderId: orderId
+                });
+            }
+
+            // Default: Create Stripe Checkout session
             const sessionParams = {
                 mode: 'payment',
                 payment_method_types: ['card'],

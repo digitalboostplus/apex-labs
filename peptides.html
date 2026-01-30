@@ -58,6 +58,14 @@
 
     <!-- Cart Manager -->
     <link rel="stylesheet" href="css/design-system.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
     <script src="js/cart.js" defer></script>
     <script src="js/app.js" defer></script>
 
@@ -295,6 +303,10 @@
             </div>
 
             <div class="flex items-center gap-4">
+                <!-- User Auth & Portal -->
+                <div id="user-menu-container"></div>
+                <div id="auth-modal-container"></div>
+
                 <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
                     class="hidden md:flex group relative overflow-hidden bg-brand-dark px-8 py-3 rounded-none font-bold uppercase text-[10px] tracking-[0.2em] text-white shadow-2xl hover:shadow-brand-blue/20 transition-all duration-500">
                     <span class="relative z-10 flex items-center gap-3">
@@ -924,6 +936,108 @@
                             Lab Analysis <i data-lucide="arrow-right"
                                 class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 10: GHK-Cu -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)GHK-CU.jpg" alt="GHK-Cu"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 py-1 px-3 bg-brand-dark/5 text-brand-dark text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        In Stock
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        GHK-Cu</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Skin Regeneration
+                    </p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Copper peptide complex known for its role in skin regeneration, DNA repair, and
+                        anti-inflammatory properties.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">100 MG / VIAL</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/ghk-cu.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 75, image: 'assets/APEX LABS(VIAL STICKER)GHK-CU.jpg', category: 'Skin Regeneration'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 11: Retatrutide -->
+            <div
+                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="assets/APEX LABS(VIAL STICKER)RETATRUTIDE.png" alt="Retatrutide"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 py-1 px-3 bg-brand-dark/5 text-brand-dark text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        In Stock
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        Retatrutide</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Advanced Metabolic
+                    </p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum
+                        receptor affinity.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/reta.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'reta', name: 'Retatrutide', price: 120, image: 'assets/APEX LABS(VIAL STICKER)RETATRUTIDE.png', category: 'Advanced Metabolic'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

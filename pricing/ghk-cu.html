@@ -12,7 +12,15 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Cart Manager -->
-    <script src="../js/cart.js"></script>
+        <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/firebase-init.js" defer></script>
+    <script src="../js/auth.js" defer></script>
+    <script src='../js/cart.js'></script>
     <style>
         body {
             background: #F8FAFC;
@@ -42,7 +50,10 @@
             <a href="../index.html" class="text-xl font-bold tracking-tighter text-brand-dark">APEX<span
                     class="text-[#0052cc]">LABS</span></a>
 
-            <div class="flex items-center gap-8">
+                        <div class="flex items-center gap-8">
+                <!-- User Auth & Portal -->
+                <div id="user-menu-container"></div>
+                <div id="auth-modal-container"></div>
                 <a href="../pricing.html"
                     class="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">&larr;
                     Back to Wholesale Matrix</a>
@@ -98,7 +109,7 @@
                         <span class="text-slate-500 font-bold">/ 100mg Vial</span>
                     </div>
                     <button
-                        onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 75, image: 'assets/APEX LABS(VIAL STICKER)BPC-157.png', category: 'Skin Regeneration'}, 1)"
+                        onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 75, image: 'assets/APEX LABS(VIAL STICKER)GHK-CU.jpg', category: 'Skin Regeneration'}, 1)"
                         class="w-full mt-10 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         Add to Cart
@@ -118,7 +129,7 @@
                         <span class="text-slate-500 font-bold">/ Unit</span>
                     </div>
                     <button
-                        onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 60, image: 'assets/APEX LABS(VIAL STICKER)BPC-157.png', category: 'Skin Regeneration'}, 10)"
+                        onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 60, image: 'assets/APEX LABS(VIAL STICKER)GHK-CU.jpg', category: 'Skin Regeneration'}, 10)"
                         class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         Add Wholesale Lot
@@ -135,7 +146,7 @@
                         <span class="text-slate-400 font-bold">/ Unit</span>
                     </div>
                     <button
-                        onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 50, image: 'assets/APEX LABS(VIAL STICKER)BPC-157.png', category: 'Skin Regeneration'}, 25)"
+                        onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 50, image: 'assets/APEX LABS(VIAL STICKER)GHK-CU.jpg', category: 'Skin Regeneration'}, 25)"
                         class="w-full mt-10 py-5 bg-brand-blue text-white hover:bg-brand-dark transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         Add Distribution Lot
