@@ -52,6 +52,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
     <script src="js/cart.js" defer></script>
     <script src="js/app.js" defer></script>
     <style>
@@ -233,6 +241,10 @@
                     <span
                         class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-blue group-hover:w-full transition-all duration-300"></span>
                 </a>
+                <!-- User Auth & Portal -->
+                <div id="user-menu-container"></div>
+                <div id="auth-modal-container"></div>
+
                 <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
                     class="px-8 py-3 bg-brand-dark text-white rounded-none hover:bg-brand-blue transition-all magnetic-wrap">
                     Portal Access
@@ -390,30 +402,41 @@
                         purity compounds for academic and professional research.
                     </p>
                     <div class="flex space-x-6">
-                        <a href="https://twitter.com/apexlabs" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-brand-blue transition-colors" aria-label="Twitter"><i
+                        <a href="https://twitter.com/apexlabs" target="_blank" rel="noreferrer"
+                            class="text-slate-400 hover:text-brand-blue transition-colors" aria-label="Twitter"><i
                                 data-lucide="twitter"></i></a>
-                        <a href="https://instagram.com/apexlabs" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-brand-blue transition-colors" aria-label="Instagram"><i
+                        <a href="https://instagram.com/apexlabs" target="_blank" rel="noreferrer"
+                            class="text-slate-400 hover:text-brand-blue transition-colors" aria-label="Instagram"><i
                                 data-lucide="instagram"></i></a>
-                        <a href="https://www.linkedin.com/company/apexlabs" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-brand-blue transition-colors" aria-label="LinkedIn"><i
+                        <a href="https://www.linkedin.com/company/apexlabs" target="_blank" rel="noreferrer"
+                            class="text-slate-400 hover:text-brand-blue transition-colors" aria-label="LinkedIn"><i
                                 data-lucide="linkedin"></i></a>
                     </div>
                 </div>
                 <div>
                     <h4 class="text-brand-dark text-[10px] font-black mb-10 uppercase tracking-[0.3em]">Scientific</h4>
                     <ul class="space-y-6 text-slate-500 text-[11px] font-bold uppercase tracking-widest">
-                        <li><a href="program-overview.html#matrix" class="hover:text-brand-blue transition-colors">Methods</a></li>
-                        <li><a href="index.html#science" class="hover:text-brand-blue transition-colors">Batch Reports</a></li>
-                        <li><a href="index.html#collection" class="hover:text-brand-blue transition-colors">Synthesis</a></li>
-                        <li><a href="program-overview.html" class="hover:text-brand-blue transition-colors">Protocols</a></li>
+                        <li><a href="program-overview.html#matrix"
+                                class="hover:text-brand-blue transition-colors">Methods</a></li>
+                        <li><a href="index.html#science" class="hover:text-brand-blue transition-colors">Batch
+                                Reports</a></li>
+                        <li><a href="index.html#collection"
+                                class="hover:text-brand-blue transition-colors">Synthesis</a></li>
+                        <li><a href="program-overview.html"
+                                class="hover:text-brand-blue transition-colors">Protocols</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-brand-dark text-[10px] font-black mb-10 uppercase tracking-[0.3em]">Resources</h4>
                     <ul class="space-y-6 text-slate-500 text-[11px] font-bold uppercase tracking-widest">
-                        <li><a href="program-overview.html#matrix" class="hover:text-brand-blue transition-colors">Research Guide</a></li>
-                        <li><a href="index.html#science" class="hover:text-brand-blue transition-colors">Security</a></li>
-                        <li><a href="mailto:support@apexlabs.com" class="hover:text-brand-blue transition-colors">Support</a></li>
-                        <li><a href="mailto:hello@apexlabs.com" class="hover:text-brand-blue transition-colors">Contact</a></li>
+                        <li><a href="program-overview.html#matrix"
+                                class="hover:text-brand-blue transition-colors">Research Guide</a></li>
+                        <li><a href="index.html#science" class="hover:text-brand-blue transition-colors">Security</a>
+                        </li>
+                        <li><a href="mailto:support@apexlabs.com"
+                                class="hover:text-brand-blue transition-colors">Support</a></li>
+                        <li><a href="mailto:hello@apexlabs.com"
+                                class="hover:text-brand-blue transition-colors">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -422,8 +445,10 @@
                     &copy; 2026 APEX LABORATORIES. RESEARCH USE ONLY.
                 </p>
                 <div class="flex space-x-10 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
-                    <a href="https://apexlabs.com/privacy" class="hover:text-brand-blue transition-colors">Privacy Policy</a>
-                    <a href="https://apexlabs.com/terms" class="hover:text-brand-blue transition-colors">Terms of Service</a>
+                    <a href="https://apexlabs.com/privacy" class="hover:text-brand-blue transition-colors">Privacy
+                        Policy</a>
+                    <a href="https://apexlabs.com/terms" class="hover:text-brand-blue transition-colors">Terms of
+                        Service</a>
                 </div>
             </div>
         </div>

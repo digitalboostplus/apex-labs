@@ -179,6 +179,14 @@
             mix-blend-mode: multiply;
         }
     </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
     <script src="js/cart.js" defer></script>
     <script src="js/app.js" defer></script>
 </head>
@@ -202,6 +210,10 @@
                 <a href="program-overview.html" class="hover:text-brand-blue transition-colors">Protocols</a>
                 <a href="pricing.html" class="text-brand-blue border-b-2 border-brand-blue pb-1">Pricing</a>
                 <a href="index.html#science" class="hover:text-brand-blue transition-colors">The Standard</a>
+                <!-- User Auth & Portal -->
+                <div id="user-menu-container"></div>
+                <div id="auth-modal-container"></div>
+
                 <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
                     class="px-8 py-3 bg-brand-dark text-white rounded-none hover:bg-brand-blue transition-all">Portal
                     Access</a>

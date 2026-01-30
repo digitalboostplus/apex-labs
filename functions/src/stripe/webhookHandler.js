@@ -1,12 +1,13 @@
 const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+const { onRequest } = require('firebase-functions/v2/https');
+const { logger } = require('firebase-functions');
 const Stripe = require('stripe');
 
 // Initialize Stripe lazily to prevent build-time failures
 let stripe;
 function getStripe() {
     if (!stripe) {
-        const secretKey = functions.config().stripe?.secret_key || process.env.STRIPE_SECRET_KEY;
+        const secretKey = process.env.STRIPE_SECRET_KEY;
         stripe = new Stripe(secretKey, {
             apiVersion: '2023-10-16'
         });
@@ -17,24 +18,49 @@ function getStripe() {
 const db = admin.firestore();
 
 // Webhook signing secret
-const getEndpointSecret = () => functions.config().stripe?.webhook_secret || process.env.STRIPE_WEBHOOK_SECRET;
+const getEndpointSecret = () => process.env.STRIPE_WEBHOOK_SECRET;
 
-async function updateOrderBySessionId(sessionId, updates) {
+
+async function updateOrderLookup(sessionOrId, updates) {
     const ordersRef = db.collection('orders');
+    let orderId = null;
+    let orderDoc = null;
+
+    // sessionOrId can be a session ID (string) or a session object
+    const sessionId = typeof sessionOrId === 'string' ? sessionOrId : sessionOrId.id;
+    const sessionObj = typeof sessionOrId === 'object' ? sessionOrId : null;
+
+    // 1. Try lookup by sessionId
     const snapshot = await ordersRef.where('stripeSessionId', '==', sessionId).limit(1).get();
 
-    if (snapshot.empty) {
-        console.log(`No order found for session: ${sessionId}`);
+    if (!snapshot.empty) {
+        orderDoc = snapshot.docs[0];
+        orderId = orderDoc.id;
+    }
+    // 2. Try lookup by orderId in metadata (essential for Payment Links)
+    else if (sessionObj && sessionObj.metadata && sessionObj.metadata.orderId) {
+        const metadataOrderId = sessionObj.metadata.orderId;
+        const doc = await ordersRef.doc(metadataOrderId).get();
+        if (doc.exists) {
+            orderDoc = doc;
+            orderId = doc.id;
+
+            // Update the record with the actual session ID for future lookups
+            updates.stripeSessionId = sessionId;
+        }
+    }
+
+    if (!orderId) {
+        console.log(`No order found for session/metadata identifier: ${sessionId}`);
         return null;
     }
 
-    const orderDoc = snapshot.docs[0];
     await orderDoc.ref.update({
         ...updates,
         updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    return orderDoc.id;
+    return orderId;
 }
 
 async function handleCheckoutComplete(session) {
@@ -59,7 +85,7 @@ async function handleCheckoutComplete(session) {
         paidAt: admin.firestore.FieldValue.serverTimestamp()
     };
 
-    const orderId = await updateOrderBySessionId(session.id, updates);
+    const orderId = await updateOrderLookup(session, updates);
 
     if (orderId) {
         console.log(`Order ${orderId} marked as paid`);
@@ -73,6 +99,7 @@ async function handleCheckoutComplete(session) {
                     orderId: orderId,
                     status: 'paid',
                     amountTotal: updates.amountTotal,
+                    items: orderData.items || [],
                     createdAt: orderData.createdAt,
                     paidAt: updates.paidAt
                 });
@@ -84,7 +111,7 @@ async function handleCheckoutComplete(session) {
 
 async function handleCheckoutExpired(session) {
     console.log(`Processing checkout.session.expired: ${session.id}`);
-    await updateOrderBySessionId(session.id, {
+    await updateOrderLookup(session, {
         status: 'expired'
     });
 }
@@ -126,7 +153,11 @@ async function handleChargeRefunded(charge) {
     }
 }
 
-exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+exports.stripeWebhook = onRequest({
+    secrets: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
+    maxInstances: 10
+}, async (req, res) => {
+
     if (req.method !== 'POST') {
         return res.status(405).send('Method not allowed');
     }
@@ -165,8 +196,9 @@ exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
         return res.status(200).json({ received: true });
 
     } catch (err) {
-        console.error('Webhook error:', err.message);
-        console.error('Stack trace:', err.stack);
+        logger.error('Webhook error:', err.message);
+        logger.error('Stack trace:', err.stack);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 });
+

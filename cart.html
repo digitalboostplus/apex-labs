@@ -11,7 +11,16 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
     <script src="js/cart.js" defer></script>
+    <script src="js/app.js" defer></script>
     <style>
         body {
             background: #F8FAFC;
@@ -35,13 +44,21 @@
 </head>
 
 <body class="flex flex-col min-h-screen">
+    <!-- Checkout Stepper -->
+    <div id="checkout-stepper-container"></div>
+
     <!-- Navigation -->
     <nav class="p-6 border-b border-slate-200/50 relative z-50 bg-white">
+
         <div class="container mx-auto flex justify-between items-center">
             <a href="index.html" class="text-xl font-bold tracking-tighter text-brand-dark">APEX<span
                     class="text-[#0052cc]">LABS</span></a>
 
             <div class="flex items-center gap-8">
+                <!-- User Auth & Portal -->
+                <div id="user-menu-container"></div>
+                <div id="auth-modal-container"></div>
+
                 <a href="peptides.html"
                     class="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">Continue
                     Shopping</a>
@@ -118,7 +135,24 @@
     </footer>
 
     <script>
+        // Load checkout stepper
+        (function () {
+            const container = document.getElementById('checkout-stepper-container');
+            if (container) {
+                fetch('components/checkout-stepper.html')
+                    .then(res => res.text())
+                    .then(html => {
+                        const range = document.createRange();
+                        const fragment = range.createContextualFragment(html);
+                        container.innerHTML = '';
+                        container.appendChild(fragment);
+                    })
+                    .catch(console.error);
+            }
+        })();
+
         function renderCart() {
+
             const container = document.getElementById('cart-items');
             const subtotalEl = document.getElementById('subtotal');
             const totalEl = document.getElementById('total-price');
@@ -146,37 +180,37 @@
             container.innerHTML = cart.map(item => {
                 const tieredPrice = window.cartManager.getItemPrice(item.id, item.quantity) || item.price;
                 return `
-                <div class="glass p-6 md:p-8 rounded-2xl flex flex-col md:flex-row gap-8 items-center group">
-                    <div class="w-32 h-32 md:w-40 md:h-40 bg-slate-50 p-4 rounded-xl flex items-center justify-center shrink-0">
-                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    
-                    <div class="flex-grow text-center md:text-left">
-                        <div class="text-[10px] font-black text-[#00C2FF] uppercase tracking-widest mb-1">${item.category}</div>
-                        <h3 class="text-2xl font-black text-brand-dark mb-4 tracking-tight uppercase">${item.name}</h3>
-                        
-                        <div class="flex flex-col md:flex-row items-center gap-8">
-                            <div class="flex items-center gap-4 bg-slate-100 p-1 rounded-lg">
-                                <button onclick="window.cartManager.updateQuantity('${item.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
-                                    <i data-lucide="minus" class="w-3.5 h-3.5"></i>
-                                </button>
-                                <span class="w-8 text-center font-bold text-sm">${item.quantity}</span>
-                                <button onclick="window.cartManager.updateQuantity('${item.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
-                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="flex flex-col">
-                                <div class="text-xl font-black text-brand-dark font-mono">$${(tieredPrice * item.quantity).toFixed(2)}</div>
-                                ${item.quantity >= 10 ? `<div class="text-[9px] font-bold text-emerald-600 uppercase tracking-tighter">Tier Discount Applied ($${tieredPrice}/ea)</div>` : ''}
-                            </div>
+            <div class="glass p-6 md:p-8 rounded-2xl flex flex-col md:flex-row gap-8 items-center group">
+                <div class="w-32 h-32 md:w-40 md:h-40 bg-slate-50 p-4 rounded-xl flex items-center justify-center shrink-0">
+                    <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
+                </div>
+
+                <div class="flex-grow text-center md:text-left">
+                    <div class="text-[10px] font-black text-[#00C2FF] uppercase tracking-widest mb-1">${item.category}</div>
+                    <h3 class="text-2xl font-black text-brand-dark mb-4 tracking-tight uppercase">${item.name}</h3>
+
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex items-center gap-4 bg-slate-100 p-1 rounded-lg">
+                            <button onclick="window.cartManager.updateQuantity('${item.id}', -1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
+                                <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <span class="w-8 text-center font-bold text-sm">${item.quantity}</span>
+                            <button onclick="window.cartManager.updateQuantity('${item.id}', 1)" class="w-8 h-8 flex items-center justify-center hover:bg-white rounded-md transition-colors text-slate-500">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <div class="text-xl font-black text-brand-dark font-mono">$${(tieredPrice * item.quantity).toFixed(2)}</div>
+                            ${item.quantity >= 10 ? `<div class="text-[9px] font-bold text-emerald-600 uppercase tracking-tighter">Tier Discount Applied ($${tieredPrice}/ea)</div>` : ''}
                         </div>
                     </div>
-                    
-                    <button onclick="window.cartManager.removeItem('${item.id}')" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
-                        <i data-lucide="trash-2" class="w-5 h-5"></i>
-                    </button>
                 </div>
+
+                <button onclick="window.cartManager.removeItem('${item.id}')" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+            </div>
             `}).join('');
 
             subtotalEl.textContent = `$${window.cartManager.getCartTotal().toFixed(2)}`;

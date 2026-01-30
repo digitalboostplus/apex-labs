@@ -22,10 +22,13 @@
                     <span class="text-xl font-black text-slate-900 tracking-tight">APEX LABS</span>
                 </a>
                 <div class="flex items-center gap-4">
-                    <a href="../../peptides.html" class="text-sm font-medium text-slate-600 hover:text-slate-900">Shop</a>
-                    <button onclick="toggleCart()" class="relative p-2 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+                    <a href="../../peptides.html"
+                        class="text-sm font-medium text-slate-600 hover:text-slate-900">Shop</a>
+                    <button onclick="toggleCart()"
+                        class="relative p-2 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
                         <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-600"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
+                        <span id="cart-count"
+                            class="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
                     </button>
                 </div>
             </div>
@@ -39,7 +42,9 @@
                 <div class="bg-white rounded-xl border border-slate-100 p-6 sticky top-24">
                     <!-- User Info -->
                     <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
-                        <div id="sidebar-avatar" class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-lg"></div>
+                        <div id="sidebar-avatar"
+                            class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-lg">
+                        </div>
                         <div>
                             <p id="sidebar-name" class="font-bold text-slate-900">Loading...</p>
                             <p id="sidebar-email" class="text-sm text-slate-500 truncate max-w-[150px]"></p>
@@ -48,26 +53,31 @@
 
                     <!-- Navigation -->
                     <nav class="space-y-1">
-                        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 text-amber-700 font-medium">
+                        <a href="index.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 text-amber-700 font-medium">
                             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                             Dashboard
                         </a>
-                        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <a href="orders.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
                             <i data-lucide="package" class="w-5 h-5"></i>
                             Orders
                         </a>
-                        <a href="wishlist.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <a href="wishlist.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
                             <i data-lucide="heart" class="w-5 h-5"></i>
                             Wishlist
                         </a>
-                        <a href="addresses.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <a href="addresses.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
                             <i data-lucide="map-pin" class="w-5 h-5"></i>
                             Addresses
                         </a>
                     </nav>
 
                     <!-- Sign Out -->
-                    <button onclick="handleSignOut()" class="w-full mt-6 pt-6 border-t border-slate-100 flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                    <button onclick="handleSignOut()"
+                        class="w-full mt-6 pt-6 border-t border-slate-100 flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
                         <i data-lucide="log-out" class="w-5 h-5"></i>
                         Sign Out
                     </button>
@@ -78,7 +88,9 @@
             <main class="lg:col-span-9">
                 <!-- Loading State -->
                 <div id="loading-state" class="text-center py-12">
-                    <div class="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    <div
+                        class="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto">
+                    </div>
                     <p class="text-slate-500 mt-4">Loading your account...</p>
                 </div>
 
@@ -87,7 +99,8 @@
                     <i data-lucide="user-circle" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
                     <h2 class="text-2xl font-bold text-slate-900 mb-2">Sign In Required</h2>
                     <p class="text-slate-500 mb-6">Please sign in to access your account.</p>
-                    <button onclick="openAuthModal()" class="px-8 py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-colors cursor-pointer">
+                    <button onclick="openAuthModal()"
+                        class="px-8 py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-colors cursor-pointer">
                         Sign In
                     </button>
                 </div>
@@ -141,21 +154,26 @@
                     <div class="bg-white rounded-xl border border-slate-100">
                         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
                             <h2 class="text-lg font-bold text-slate-900">Recent Orders</h2>
-                            <a href="orders.html" class="text-sm text-amber-600 hover:text-amber-700 font-medium">View All</a>
+                            <a href="orders.html" class="text-sm text-amber-600 hover:text-amber-700 font-medium">View
+                                All</a>
                         </div>
                         <div id="recent-orders" class="p-6">
                             <div class="text-center py-8 text-slate-400">
                                 <i data-lucide="inbox" class="w-10 h-10 mx-auto mb-3 opacity-50"></i>
                                 <p>No orders yet</p>
-                                <a href="../../peptides.html" class="text-amber-600 hover:text-amber-700 text-sm font-medium mt-2 inline-block">Start Shopping</a>
+                                <a href="../../peptides.html"
+                                    class="text-amber-600 hover:text-amber-700 text-sm font-medium mt-2 inline-block">Start
+                                    Shopping</a>
                             </div>
                         </div>
                     </div>
 
                     <!-- Quick Actions -->
                     <div class="grid sm:grid-cols-2 gap-4">
-                        <a href="../../peptides.html" class="flex items-center gap-4 p-6 bg-white rounded-xl border border-slate-100 hover:border-amber-200 hover:shadow-md transition-all group">
-                            <div class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                        <a href="../../peptides.html"
+                            class="flex items-center gap-4 p-6 bg-white rounded-xl border border-slate-100 hover:border-amber-200 hover:shadow-md transition-all group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
                                 <i data-lucide="shopping-bag" class="w-6 h-6 text-amber-600"></i>
                             </div>
                             <div>
@@ -163,8 +181,10 @@
                                 <p class="text-sm text-slate-500">Browse our peptide collection</p>
                             </div>
                         </a>
-                        <a href="wishlist.html" class="flex items-center gap-4 p-6 bg-white rounded-xl border border-slate-100 hover:border-pink-200 hover:shadow-md transition-all group">
-                            <div class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center group-hover:bg-pink-100 transition-colors">
+                        <a href="wishlist.html"
+                            class="flex items-center gap-4 p-6 bg-white rounded-xl border border-slate-100 hover:border-pink-200 hover:shadow-md transition-all group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center group-hover:bg-pink-100 transition-colors">
                                 <i data-lucide="heart" class="w-6 h-6 text-pink-600"></i>
                             </div>
                             <div>
@@ -196,7 +216,7 @@
             const dashboardContent = document.getElementById('dashboard-content');
 
             // Handle sign out
-            window.handleSignOut = async function() {
+            window.handleSignOut = async function () {
                 try {
                     await window.authManager.signOut();
                     window.location.href = '../../index.html';
@@ -257,6 +277,16 @@
                 const db = window.firebaseServices?.getFirestore();
                 if (db && userId) {
                     try {
+                        // Get all orders for count
+                        const allOrdersSnapshot = await db
+                            .collection('users')
+                            .doc(userId)
+                            .collection('orders')
+                            .get();
+
+                        document.getElementById('total-orders').textContent = allOrdersSnapshot.size;
+
+                        // Get limited orders for recent view
                         const ordersSnapshot = await db
                             .collection('users')
                             .doc(userId)
@@ -265,18 +295,32 @@
                             .limit(5)
                             .get();
 
-                        document.getElementById('total-orders').textContent = ordersSnapshot.size;
-
                         // Display recent orders
                         if (!ordersSnapshot.empty) {
                             const recentOrdersEl = document.getElementById('recent-orders');
                             recentOrdersEl.innerHTML = ordersSnapshot.docs.map(doc => {
                                 const order = doc.data();
+                                const itemsCount = order.items?.length || 0;
+                                const firstItem = order.items?.[0];
+
                                 return `
                                     <div class="flex items-center justify-between py-4 border-b border-slate-50 last:border-0">
-                                        <div>
-                                            <p class="font-medium text-slate-900">Order #${doc.id.slice(-8).toUpperCase()}</p>
-                                            <p class="text-sm text-slate-500">${order.status || 'Processing'}</p>
+                                        <div class="flex items-center gap-4">
+                                            ${firstItem ? `
+                                                <div class="w-10 h-10 bg-slate-50 rounded-lg p-1 border border-slate-100 flex-shrink-0">
+                                                    <img src="${firstItem.image || '../../assets/placeholder.png'}" class="w-full h-full object-contain">
+                                                </div>
+                                            ` : `
+                                                <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                    <i data-lucide="package" class="w-5 h-5 text-slate-400"></i>
+                                                </div>
+                                            `}
+                                            <div>
+                                                <p class="font-medium text-slate-900">Order #${doc.id.slice(-8).toUpperCase()}</p>
+                                                <p class="text-xs text-slate-500">
+                                                    ${order.status || 'Processing'} • ${itemsCount} ${itemsCount === 1 ? 'item' : 'items'}
+                                                </p>
+                                            </div>
                                         </div>
                                         <div class="text-right">
                                             <p class="font-bold text-slate-900">$${(order.amountTotal || 0).toFixed(2)}</p>
@@ -284,6 +328,7 @@
                                     </div>
                                 `;
                             }).join('');
+                            if (window.lucide) window.lucide.createIcons();
                         }
 
                         // Get addresses count

@@ -8,14 +8,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/design-system.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="js/cart.js" defer></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
     <script src="js/firebase-init.js" defer></script>
     <script src="js/auth.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/app.js" defer></script>
 </head>
 
 <body class="bg-gray-50 antialiased">
     <!-- Checkout Stepper -->
     <div id="checkout-stepper-container"></div>
+    <div id="auth-modal-container"></div>
 
     <div class="max-w-4xl mx-auto px-6 py-12 md:py-16">
         <!-- Header -->
@@ -344,7 +353,8 @@
                                 image: item.image
                             })),
                             customerEmail: customerEmail,
-                            userId: user?.uid || null
+                            userId: user?.uid || null,
+                            usePaymentLink: true // New flag for Stripe Payment Link
                         })
                     });
 
@@ -371,7 +381,7 @@
                     document.getElementById('btn-spinner').classList.add('hidden');
 
                     // Show error message
-                    alert('There was an error processing your checkout. Please try again.');
+                    alert(`Checkout Error: ${error.message || 'There was an error processing your checkout. Please try again.'}`);
                 }
             });
 
