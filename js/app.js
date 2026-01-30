@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `
                 <div class="cart-item border border-slate-100 rounded-xl p-4 bg-white flex gap-4">
                     <div class="w-16 h-16 flex-shrink-0 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center justify-center">
-                        <img src="${esc(itemImage)}" alt="${safeName}" class="max-w-full max-h-full object-contain">
+                        <img src="${itemImage}" alt="${safeName}" class="max-w-full max-h-full object-contain">
                     </div>
                     <div class="flex-grow">
                         <div class="flex justify-between items-start">

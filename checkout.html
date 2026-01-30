@@ -284,7 +284,7 @@
                 list.innerHTML = cart.map(item => {
                     const tieredPrice = window.cartManager.getItemPrice(item.id, item.quantity) || item.price || 0;
                     const safeName = esc(item.name || 'Unknown Item');
-                    const safeImage = esc(sanitizeImg(item.image, '.'));
+                    const safeImage = sanitizeImg(item.image, '.');
                     const quantity = parseInt(item.quantity, 10) || 1;
 
                     return `

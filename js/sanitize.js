@@ -21,12 +21,11 @@
             '>': '&gt;',
             '"': '&quot;',
             "'": '&#x27;',
-            '/': '&#x2F;',
             '`': '&#x60;',
             '=': '&#x3D;'
         };
 
-        return str.replace(/[&<>"'`=\/]/g, char => htmlEntities[char]);
+        return str.replace(/[&<>"'`=]/g, char => htmlEntities[char]);
     }
 
     /**
