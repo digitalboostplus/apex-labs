@@ -15,6 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <!-- App Scripts -->
+    <script src="js/sanitize.js"></script>
     <script src="js/firebase-init.js" defer></script>
     <script src="js/auth.js" defer></script>
     <script src="js/cart.js" defer></script>
@@ -276,21 +277,29 @@
                     return;
                 }
 
+                // Security: Sanitize user-controlled data
+                const esc = window.sanitize ? window.sanitize.html : (s => String(s || ''));
+                const sanitizeImg = window.sanitize ? window.sanitize.imageUrl : (url => url || 'assets/placeholder.png');
+
                 list.innerHTML = cart.map(item => {
-                    const tieredPrice = window.cartManager.getItemPrice(item.id, item.quantity) || item.price;
+                    const tieredPrice = window.cartManager.getItemPrice(item.id, item.quantity) || item.price || 0;
+                    const safeName = esc(item.name || 'Unknown Item');
+                    const safeImage = esc(sanitizeImg(item.image, '.'));
+                    const quantity = parseInt(item.quantity, 10) || 1;
+
                     return `
                     <div class="flex gap-4 p-4 bg-slate-50 rounded-xl">
                         <div class="w-16 h-16 bg-white rounded-lg border border-slate-100 p-2 flex items-center justify-center flex-shrink-0">
-                            <img src="${item.image}" alt="${item.name}" class="max-w-full max-h-full object-contain">
+                            <img src="${safeImage}" alt="${safeName}" class="max-w-full max-h-full object-contain">
                         </div>
                         <div class="flex-grow min-w-0">
                             <div class="flex justify-between items-start gap-2">
                                 <div>
-                                    <h3 class="font-bold text-slate-900">${item.name}</h3>
-                                    <p class="text-xs text-slate-500">Qty: ${item.quantity} x $${tieredPrice.toFixed(2)}</p>
-                                    ${item.quantity >= 10 ? `<p class="text-[9px] font-bold text-emerald-600 uppercase">Tier Discount Applied</p>` : ''}
+                                    <h3 class="font-bold text-slate-900">${safeName}</h3>
+                                    <p class="text-xs text-slate-500">Qty: ${quantity} x $${tieredPrice.toFixed(2)}</p>
+                                    ${quantity >= 10 ? `<p class="text-[9px] font-bold text-emerald-600 uppercase">Tier Discount Applied</p>` : ''}
                                 </div>
-                                <span class="font-bold text-slate-900 whitespace-nowrap">$${(tieredPrice * item.quantity).toFixed(2)}</span>
+                                <span class="font-bold text-slate-900 whitespace-nowrap">$${(tieredPrice * quantity).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>

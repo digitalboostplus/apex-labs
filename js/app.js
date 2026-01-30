@@ -11,12 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Cart Drawer Logic ---
     window.updateCartDrawerUI = (cart) => {
-        console.log('Updating cart drawer UI, items:', cart.length);
         const list = document.getElementById('cart-items');
         const totalEl = document.getElementById('cart-total');
         const checkoutBtn = document.getElementById('checkout-btn');
 
         if (!list || !totalEl || !window.cartManager) return;
+
+        // Security: Validate cart data before rendering
+        const esc = window.sanitize ? window.sanitize.html : (s => s);
+        const escAttr = window.sanitize ? window.sanitize.attr : (s => s);
+        const sanitizeId = window.sanitize ? window.sanitize.id : (s => s);
+        const sanitizeImg = window.sanitize ? window.sanitize.imageUrl : ((url, bp) => url || `${bp}/assets/placeholder.png`);
 
         if (cart.length === 0) {
             list.innerHTML = `
@@ -33,12 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             list.innerHTML = cart.map(item => {
-                const id = item.id || item.priceId;
-                const price = window.cartManager.getItemPrice(id, item.quantity) || Number(item.price);
+                // Security: Sanitize all user-controlled data
+                const rawId = item.id || item.priceId;
+                const id = sanitizeId(rawId) || 'unknown';
+                const safeName = esc(item.name || 'Unknown Item');
+                const safeCategory = esc(item.category || 'Compound');
+                const price = window.cartManager.getItemPrice(rawId, item.quantity) || Number(item.price) || 0;
+                const quantity = parseInt(item.quantity, 10) || 1;
 
                 // Determine if a tier discount is active
-                const isTier1 = item.quantity >= 10 && item.quantity < 25;
-                const isTier2 = item.quantity >= 25;
+                const isTier1 = quantity >= 10 && quantity < 25;
+                const isTier2 = quantity >= 25;
                 let tierBadge = '';
                 if (isTier2) {
                     tierBadge = '<span class="ml-2 px-1.5 py-0.5 bg-brand-cyan/10 text-brand-blue text-[8px] font-black uppercase rounded">Tier 2 Labs</span>';
@@ -46,31 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     tierBadge = '<span class="ml-2 px-1.5 py-0.5 bg-brand-blue/10 text-brand-blue text-[8px] font-black uppercase rounded">Tier 1 Elite</span>';
                 }
 
-                // Fix image path for subdirectories
-                const itemImage = (item.image && (item.image.startsWith('http') || item.image.startsWith('/') || item.image.startsWith('..')))
-                    ? item.image
-                    : `${basePath}/${item.image || 'assets/placeholder.png'}`;
+                // Security: Validate and sanitize image URL
+                const itemImage = sanitizeImg(item.image, basePath);
 
                 return `
                 <div class="cart-item border border-slate-100 rounded-xl p-4 bg-white flex gap-4">
                     <div class="w-16 h-16 flex-shrink-0 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center justify-center">
-                        <img src="${itemImage}" alt="${item.name}" class="max-w-full max-h-full object-contain">
+                        <img src="${esc(itemImage)}" alt="${safeName}" class="max-w-full max-h-full object-contain">
                     </div>
                     <div class="flex-grow">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="font-bold text-slate-900 leading-tight">${item.name || 'Unknown Item'}</h3>
-                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">${item.category || 'Compound'}</p>
+                                <h3 class="font-bold text-slate-900 leading-tight">${safeName}</h3>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">${safeCategory}</p>
                             </div>
-                            <button onclick="window.cartManager.removeItem('${id}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 cursor-pointer">
+                            <button onclick="window.cartManager.removeItem('${escAttr(id)}')" class="text-slate-300 hover:text-red-500 transition-colors p-1 cursor-pointer">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
                         <div class="flex items-center justify-between mt-4">
                             <div class="flex items-center border border-slate-100 bg-slate-50 rounded-lg overflow-hidden">
-                                <button onclick="window.cartManager.updateQuantity('${id}', -1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">-</button>
-                                <span class="px-3 py-1 text-xs font-black text-slate-700 min-w-[2rem] text-center">${item.quantity}</span>
-                                <button onclick="window.cartManager.updateQuantity('${id}', 1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">+</button>
+                                <button onclick="window.cartManager.updateQuantity('${escAttr(id)}', -1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">-</button>
+                                <span class="px-3 py-1 text-xs font-black text-slate-700 min-w-[2rem] text-center">${quantity}</span>
+                                <button onclick="window.cartManager.updateQuantity('${escAttr(id)}', 1)" class="px-2 py-1 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer">+</button>
                             </div>
                             <div class="text-right">
                                 <p class="text-brand-blue font-black">$${price.toFixed(2)}${tierBadge}</p>

@@ -32,9 +32,40 @@ class Cart {
     loadCart() {
         const saved = localStorage.getItem(CART_STORAGE_KEY);
         try {
-            return saved ? JSON.parse(saved) : [];
+            const parsed = saved ? JSON.parse(saved) : [];
+
+            // Security: Validate cart data structure from localStorage
+            if (!Array.isArray(parsed)) return [];
+
+            return parsed.filter(item => {
+                // Validate item is an object with required fields
+                if (!item || typeof item !== 'object') return false;
+
+                // Validate ID (required, must be string with safe characters)
+                const id = item.id || item.priceId;
+                if (typeof id !== 'string' || !/^[a-zA-Z0-9\-_:]+$/.test(id)) return false;
+
+                // Validate quantity (must be positive number)
+                if (typeof item.quantity !== 'number' || item.quantity < 1 || item.quantity > 1000) return false;
+
+                // Validate price if present (must be reasonable number)
+                if (item.price !== undefined) {
+                    if (typeof item.price !== 'number' || item.price < 0 || item.price > 100000) return false;
+                }
+
+                // Validate name if present (must be string, reasonable length)
+                if (item.name !== undefined && (typeof item.name !== 'string' || item.name.length > 200)) return false;
+
+                // Validate category if present
+                if (item.category !== undefined && (typeof item.category !== 'string' || item.category.length > 100)) return false;
+
+                // Validate image if present
+                if (item.image !== undefined && (typeof item.image !== 'string' || item.image.length > 500)) return false;
+
+                return true;
+            });
         } catch (e) {
-            console.error('Error parsing cart from localStorage:', e);
+            // If parsing fails, return empty cart
             return [];
         }
     }
