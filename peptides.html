@@ -561,22 +561,57 @@
                 </p>
             </div>
 
-            <div class="flex items-center gap-6">
-                <div class="flex gap-2 p-1 bg-white border border-slate-200 shadow-sm">
-                    <button id="view-grid" class="view-toggle w-10 h-10 flex items-center justify-center bg-brand-dark text-white transition-colors">
+            <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 w-full">
+
+                <div class="flex gap-2 p-1 bg-white border border-slate-200 shadow-sm self-start">
+
+                    <button id="view-grid" class="view-toggle w-10 h-10 flex items-center justify-center bg-brand-dark text-white transition-colors" aria-label="Grid view">
+
                         <i data-lucide="layout-grid" class="w-4 h-4"></i>
+
                     </button>
-                    <button id="view-list" class="view-toggle w-10 h-10 flex items-center justify-center text-slate-400 hover:text-brand-dark transition-colors">
+
+                    <button id="view-list" class="view-toggle w-10 h-10 flex items-center justify-center text-slate-400 hover:text-brand-dark transition-colors" aria-label="List view">
+
                         <i data-lucide="list" class="w-4 h-4"></i>
+
                     </button>
+
                 </div>
-                <div class="h-10 w-[1px] bg-slate-200 hidden md:block"></div>
-                <div class="relative hidden md:block">
-                    <input type="text" id="product-search" placeholder="Search Compounds..."
-                        class="bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-brand-blue w-64 transition-all">
-                    <i data-lucide="search"
-                        class="w-3.5 h-3.5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+
+                <div class="hidden md:block h-10 w-[1px] bg-slate-200"></div>
+
+                <div class="w-full md:w-auto flex-1">
+
+                    <div class="relative">
+
+                        <input type="text" id="product-search" placeholder="Search Compounds..."
+
+                            class="bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-[0.3em] focus:outline-none focus:border-brand-blue w-full md:w-72 transition-all">
+
+                        <i data-lucide="search"
+
+                            class="w-3.5 h-3.5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+
+                        <button type="button" id="search-input-clear"
+
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-brand-blue hidden">Clear</button>
+
+                    </div>
+
+                    <div class="flex items-center justify-between mt-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+
+                        <span id="search-count">Showing all compounds</span>
+
+                        <button type="button" id="search-reset"
+
+                            class="text-brand-blue hover:text-brand-dark tracking-[0.3em] hidden">Reset</button>
+
+                    </div>
+
                 </div>
+
+            </div>
             </div>
         </div>
 
@@ -587,8 +622,8 @@
             <!-- Item 1: AOD-9604 -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="AOD-9604" data-category="Lipolysis Protocol"
-                data-description="Fragment 176-191 of Human Growth Hormone. Specifically researched for its ability to stimulate lipolysis (fat breakdown) without affecting blood sugar."
+                data-product-id="aod-9604" data-name="AOD-9604" data-category="Lipolysis Protocol"
+                data-description="Fragment 176-191 of Human Growth Hormone. Specifically researched for its ability to stimulate lipolysis (fat breakdown) without affecting blood sugar.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)AOD-9604.png" alt="AOD-9604"
@@ -646,8 +681,8 @@
             <!-- Item 2: BPC-157 -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="BPC-157" data-category="Recovery Agent"
-                data-description="Body Protection Compound. Pentadecapeptide isolated from gastric juice, known for its potent cytoprotective and tissue-healing properties."
+                data-product-id="bpc-157" data-name="BPC-157" data-category="Recovery Agent"
+                data-description="Body Protection Compound. Pentadecapeptide isolated from gastric juice, known for its potent cytoprotective and tissue-healing properties.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)BPC-157.png" alt="BPC-157"
@@ -694,8 +729,8 @@
             <!-- Item 3: CJC-1295 -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="CJC-1295" data-category="GHRH Analog"
-                data-description="Tetrasubstituted 30-amino acid peptide hormone. Promotes pulsatile GH release with an extended half-life compared to native GHRH."
+                data-product-id="cjc-1295" data-name="CJC-1295" data-category="GHRH Analog"
+                data-description="Tetrasubstituted 30-amino acid peptide hormone. Promotes pulsatile GH release with an extended half-life compared to native GHRH.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)CJC-1295.png" alt="CJC-1295"
@@ -742,8 +777,8 @@
             <!-- Item 4: IPAMORELIN -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="IPAMORELIN" data-category="Selective Secretagogue"
-                data-description="A selective GH-Secretagogue causing growth hormone release without significant impact on ACTH/cortisol or prolactin levels."
+                data-product-id="ipamorelin" data-name="IPAMORELIN" data-category="Selective Secretagogue"
+                data-description="A selective GH-Secretagogue causing growth hormone release without significant impact on ACTH/cortisol or prolactin levels.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)IPAMORELIN.png" alt="IPAMORELIN"
@@ -791,8 +826,8 @@
             <!-- Item 5: MOTS-C -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="MOTS-C" data-category="Mitochondrial Derived"
-                data-description="A mitochondrial-derived peptide that regulates metabolic functions and supports cellular energy homeostasis."
+                data-product-id="mots-c" data-name="MOTS-C" data-category="Mitochondrial Derived"
+                data-description="A mitochondrial-derived peptide that regulates metabolic functions and supports cellular energy homeostasis.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)MOTS-C.png" alt="MOTS-C"
@@ -840,8 +875,8 @@
             <!-- Item 6: NADS+ -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="NADS+" data-category="Cellular Vitality"
-                data-description="Critical coenzyme found in all living cells. Essential for sirtuin activation, DNA repair, and energy metabolism."
+                data-product-id="nadplus" data-name="NADS+" data-category="Cellular Vitality"
+                data-description="Critical coenzyme found in all living cells. Essential for sirtuin activation, DNA repair, and energy metabolism.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)NADS+ (1).png" alt="NADS+"
@@ -889,8 +924,8 @@
             <!-- Item 7: PTP-141 -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="PTP-141 PT-141" data-category="Neural Signaling"
-                data-description="Bremelanotide. A melanocortin receptor agonist which acts centrally to improve libido and arousal in both sexes."
+                data-product-id="pt-141" data-name="PTP-141 PT-141" data-category="Neural Signaling"
+                data-description="Bremelanotide. A melanocortin receptor agonist which acts centrally to improve libido and arousal in both sexes.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png" alt="PTP-141"
@@ -938,8 +973,8 @@
             <!-- Item 8: TB-500 -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="TB-500" data-category="Tissue Regeneration"
-                data-description="Synthetic fraction of Thymosin Beta-4. Promotes endothelial cell migration, angiogenesis, and reduced inflammation."
+                data-product-id="tb-500" data-name="TB-500" data-category="Tissue Regeneration"
+                data-description="Synthetic fraction of Thymosin Beta-4. Promotes endothelial cell migration, angiogenesis, and reduced inflammation.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)TB500.png" alt="TB-500"
@@ -987,8 +1022,8 @@
             <!-- Item 9: TESAMORELIN -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="TESAMORELIN" data-category="Metabolic Factor"
-                data-description="A stabilized growth hormone-releasing hormone (GHRH) analogue. Clinically shown to reduce visceral adipose tissue."
+                data-product-id="tesamorelin" data-name="TESAMORELIN" data-category="Metabolic Factor"
+                data-description="A stabilized growth hormone-releasing hormone (GHRH) analogue. Clinically shown to reduce visceral adipose tissue.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)TESAMORELIN.png" alt="TESAMORELIN"
@@ -1029,8 +1064,8 @@
             <!-- Item 10: GHK-Cu -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="GHK-Cu" data-category="Skin Regeneration"
-                data-description="Copper peptide complex known for its role in skin regeneration, DNA repair, and anti-inflammatory properties."
+                data-product-id="ghk-cu" data-name="GHK-Cu" data-category="Skin Regeneration"
+                data-description="Copper peptide complex known for its role in skin regeneration, DNA repair, and anti-inflammatory properties.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)GHK-CU.jpg" alt="GHK-Cu"
@@ -1082,8 +1117,8 @@
             <!-- Item 11: Retatrutide -->
             <div
                 class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
-                data-name="Retatrutide RETA" data-category="Advanced Metabolic"
-                data-description="Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum receptor affinity."
+                data-product-id="reta" data-name="Retatrutide RETA" data-category="Advanced Metabolic"
+                data-description="Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum receptor affinity.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)RETATRUTIDE.png" alt="Retatrutide"
@@ -1132,13 +1167,20 @@
                 </div>
             </div>
 
-            <!-- No Results Message -->
-            <div id="no-results" class="text-center py-16">
-                <i data-lucide="search-x" class="w-16 h-16 text-slate-300 mx-auto mb-6"></i>
-                <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight mb-2">No Compounds Found</h3>
-                <p class="text-slate-500 font-medium">Try adjusting your search terms or <button id="clear-search" class="text-brand-blue hover:underline">clear the search</button></p>
-            </div>
 
+        </div>
+
+        <div id="product-list" class="max-w-7xl mx-auto px-6 hidden">
+            <div class="space-y-4">
+                <div id="product-list-loading" class="text-center py-12 text-xs font-black uppercase tracking-[0.3em] text-slate-400">Preparing list view...</div>
+                <div id="product-list-content" class="space-y-4 hidden"></div>
+            </div>
+        </div>
+
+        <div id="no-results" class="text-center py-16">
+            <i data-lucide="search-x" class="w-16 h-16 text-slate-300 mx-auto mb-6"></i>
+            <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight mb-2">No Compounds Found</h3>
+            <p class="text-slate-500 font-medium">Try adjusting your search terms or <button id="clear-search" class="text-brand-blue hover:underline">clear the search</button></p>
         </div>
     </section>
 
@@ -1515,94 +1557,273 @@
         const viewGridBtn = document.getElementById('view-grid');
         const viewListBtn = document.getElementById('view-list');
         const productGrid = document.getElementById('product-grid');
+        const productList = document.getElementById('product-list');
+        const productListContent = document.getElementById('product-list-content');
+        const productListLoading = document.getElementById('product-list-loading');
+        const productCards = Array.from(document.querySelectorAll('.product-card'));
+        const totalProducts = productCards.length;
+        const productMap = new Map(productCards.map(card => [card.dataset.productId, card]));
+        let listItems = [];
+        let prefersListView = false;
 
-        function setGridView() {
-            productGrid.classList.remove('list-view');
+        function activateGridButton() {
+            if (!viewGridBtn || !viewListBtn) return;
             viewGridBtn.classList.add('bg-brand-dark', 'text-white');
             viewGridBtn.classList.remove('text-slate-400');
             viewListBtn.classList.remove('bg-brand-dark', 'text-white');
             viewListBtn.classList.add('text-slate-400');
-            localStorage.setItem('catalogView', 'grid');
         }
 
-        function setListView() {
-            productGrid.classList.add('list-view');
+        function activateListButton() {
+            if (!viewGridBtn || !viewListBtn) return;
             viewListBtn.classList.add('bg-brand-dark', 'text-white');
             viewListBtn.classList.remove('text-slate-400');
             viewGridBtn.classList.remove('bg-brand-dark', 'text-white');
             viewGridBtn.classList.add('text-slate-400');
-            localStorage.setItem('catalogView', 'list');
         }
 
-        viewGridBtn.addEventListener('click', setGridView);
-        viewListBtn.addEventListener('click', setListView);
+        function setGridView(savePreference = true) {
+            prefersListView = false;
+            activateGridButton();
+            if (productGrid) {
+                productGrid.classList.remove('hidden', 'list-view');
+            }
+            if (productList) {
+                productList.classList.add('hidden');
+            }
+            if (savePreference) {
+                localStorage.setItem('catalogView', 'grid');
+            }
+        }
 
-        // Restore saved view preference
-        const savedView = localStorage.getItem('catalogView');
-        if (savedView === 'list') {
-            setListView();
+        function setListView(savePreference = true) {
+            prefersListView = true;
+            activateListButton();
+            if (productList && productGrid) {
+                productGrid.classList.add('hidden');
+                productGrid.classList.remove('list-view');
+                productList.classList.remove('hidden');
+            } else if (productGrid) {
+                productGrid.classList.add('list-view');
+            }
+            if (savePreference) {
+                localStorage.setItem('catalogView', 'list');
+            }
+        }
+
+        if (viewGridBtn && viewListBtn && productGrid) {
+            viewGridBtn.addEventListener('click', () => setGridView());
+            viewListBtn.addEventListener('click', () => setListView());
+            setGridView(false);
+            const savedView = localStorage.getItem('catalogView');
+            if (savedView === 'list') {
+                setListView(false);
+            }
         }
 
         // --- Product Search Functionality ---
         const searchInput = document.getElementById('product-search');
-        const productCards = document.querySelectorAll('.product-card');
         const noResults = document.getElementById('no-results');
-        const clearSearchBtn = document.getElementById('clear-search');
+        const noResultsClearBtn = document.getElementById('clear-search');
+        const searchResetBtn = document.getElementById('search-reset');
+        const searchInputClearBtn = document.getElementById('search-input-clear');
+        const searchCount = document.getElementById('search-count');
+
+        function matchesSearch(element, term) {
+            if (!term) return true;
+            const haystack = [
+                element.dataset.name,
+                element.dataset.category,
+                element.dataset.description,
+                element.dataset.tags,
+                element.dataset.shortDescription
+            ];
+            return haystack.some(field => field && field.toLowerCase().includes(term));
+        }
 
         function filterProducts(searchTerm) {
-            const term = searchTerm.toLowerCase().trim();
+            const term = (searchTerm || '').toLowerCase().trim();
             let visibleCount = 0;
 
             productCards.forEach(card => {
-                const name = (card.dataset.name || '').toLowerCase();
-                const category = (card.dataset.category || '').toLowerCase();
-                const description = (card.dataset.description || '').toLowerCase();
-
-                const matches = term === '' ||
-                    name.includes(term) ||
-                    category.includes(term) ||
-                    description.includes(term);
-
+                const matches = matchesSearch(card, term);
+                card.classList.toggle('hidden', !matches);
                 if (matches) {
-                    card.classList.remove('hidden');
-                    visibleCount++;
-                } else {
-                    card.classList.add('hidden');
+                    visibleCount += 1;
                 }
             });
 
-            // Show/hide no results message
-            if (visibleCount === 0 && term !== '') {
-                noResults.classList.add('visible');
-            } else {
-                noResults.classList.remove('visible');
+            if (listItems.length) {
+                listItems.forEach(item => {
+                    const matches = matchesSearch(item, term);
+                    item.classList.toggle('hidden', !matches);
+                });
+            }
+
+            if (noResults) {
+                if (term && visibleCount === 0) {
+                    noResults.classList.add('visible');
+                } else {
+                    noResults.classList.remove('visible');
+                }
+            }
+
+            if (searchCount) {
+                searchCount.textContent = term
+                    ? `Showing ${visibleCount} of ${totalProducts} compounds`
+                    : `Showing all ${totalProducts} compounds`;
+            }
+
+            const hasTerm = term.length > 0;
+            if (searchInputClearBtn) {
+                searchInputClearBtn.classList.toggle('hidden', !hasTerm);
+            }
+            if (searchResetBtn) {
+                searchResetBtn.classList.toggle('hidden', !hasTerm);
             }
         }
 
-        searchInput.addEventListener('input', (e) => {
-            filterProducts(e.target.value);
-        });
-
-        clearSearchBtn.addEventListener('click', () => {
+        function resetSearch(focusField = true) {
+            if (!searchInput) return;
             searchInput.value = '';
             filterProducts('');
-            searchInput.focus();
-        });
+            if (focusField) {
+                searchInput.focus();
+            }
+        }
 
-        // Handle keyboard shortcut for search (Ctrl/Cmd + K)
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                filterProducts(e.target.value);
+            });
+            filterProducts(searchInput.value);
+        } else {
+            filterProducts('');
+        }
+
+        searchResetBtn?.addEventListener('click', () => resetSearch(true));
+        searchInputClearBtn?.addEventListener('click', () => resetSearch(true));
+        noResultsClearBtn?.addEventListener('click', () => resetSearch(true));
+
         document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            if (!searchInput) return;
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
                 searchInput.focus();
                 searchInput.select();
             }
-            // Clear search on Escape
             if (e.key === 'Escape' && document.activeElement === searchInput) {
-                searchInput.value = '';
-                filterProducts('');
+                resetSearch(false);
                 searchInput.blur();
             }
         });
+
+        function renderProductList(products) {
+            if (!productListContent) return;
+            const fragment = document.createDocumentFragment();
+
+            products.forEach(product => {
+                const card = productMap.get(product.id);
+                if (card) {
+                    card.dataset.tags = (product.tags || []).join(' ');
+                    if (product.shortDescription) {
+                        card.dataset.shortDescription = product.shortDescription;
+                        card.dataset.description = `${card.dataset.description || ''} ${product.shortDescription}`.trim();
+                    }
+                }
+
+                const listItem = document.createElement('div');
+                listItem.className = 'product-list-item flex flex-col md:flex-row gap-6 md:gap-10 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm';
+                listItem.dataset.productId = product.id;
+                listItem.dataset.name = product.name;
+                listItem.dataset.category = product.category;
+                listItem.dataset.description = `${product.description || ''} ${product.shortDescription || ''}`.trim();
+                listItem.dataset.shortDescription = product.shortDescription || '';
+                listItem.dataset.tags = (product.tags || []).join(' ');
+
+                const specChips = [product.concentration, product.purity, product.format]
+                    .filter(Boolean)
+                    .map(spec => `<span class="px-3 py-1 bg-brand-dark/5 text-brand-dark text-[10px] font-black uppercase tracking-[0.2em]">${spec}</span>`)
+                    .join('');
+
+                const tagChips = (product.tags || [])
+                    .map(tag => `<span class="px-3 py-1 bg-slate-100 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 rounded-full">${tag}</span>`)
+                    .join('');
+
+                const priceLabel = typeof product.price === 'number'
+                    ? `$${product.price.toFixed(2)}`
+                    : 'Contact';
+
+                const wholesalePieces = [];
+                if (product.wholesale1Price && product.wholesaleMinQty) {
+                    wholesalePieces.push(`Tier 1 $${product.wholesale1Price} (${product.wholesaleMinQty}+)`);
+                }
+                if (product.wholesale2Price && product.wholesale2MinQty) {
+                    wholesalePieces.push(`Tier 2 $${product.wholesale2Price} (${product.wholesale2MinQty}+)`);
+                }
+                const wholesaleMessage = wholesalePieces.join(' / ') || 'Wholesale tiers available';
+                const addPrice = typeof product.price === 'number' ? product.price : 0;
+
+                listItem.innerHTML = `
+                    <div class="flex flex-col sm:flex-row gap-4 md:gap-6 flex-1">
+                        <div class="w-24 h-24 flex-shrink-0 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center p-3">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-contain">
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.3em]">${product.category}</p>
+                            <h3 class="text-3xl font-black text-brand-dark leading-tight">${product.name}</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">${product.shortDescription || product.description || ''}</p>
+                            <div class="flex flex-wrap gap-2 mt-3">${specChips}${tagChips}</div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-64 flex flex-col gap-3 text-left md:text-right">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-1">Base Pricing</p>
+                            <p class="text-3xl font-black text-brand-dark">${priceLabel}</p>
+                        </div>
+                        <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400">${wholesaleMessage}</p>
+                        <div class="flex flex-col sm:flex-row md:flex-col gap-3">
+                            <a href="pricing/${product.id}.html" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center">Details</a>
+                            <button type="button" onclick="cartManager.addItem({id: '${product.id}', name: '${product.name}', price: ${addPrice}, image: '${product.image}', category: '${product.category}'}, 1)" class="w-full py-3 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                fragment.appendChild(listItem);
+            });
+
+            productListContent.innerHTML = '';
+            productListContent.appendChild(fragment);
+            listItems = Array.from(productListContent.querySelectorAll('.product-list-item'));
+            productListLoading?.classList.add('hidden');
+            productListContent.classList.remove('hidden');
+            if (prefersListView) {
+                setListView(false);
+            }
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+            filterProducts(searchInput ? searchInput.value : '');
+        }
+
+        if (productListContent) {
+            fetch('data/products.json')
+                .then(response => response.ok ? response.json() : Promise.reject('Failed to load catalog data'))
+                .then(({ products }) => {
+                    if (Array.isArray(products)) {
+                        renderProductList(products);
+                    }
+                })
+                .catch(error => {
+                    console.error('List view failed to load:', error);
+                    if (productListLoading) {
+                        productListLoading.textContent = 'List view is unavailable right now.';
+                    }
+                });
+        }
     </script>
     <!-- Dynamic Cart Components -->
     <div id="cart-container"></div>

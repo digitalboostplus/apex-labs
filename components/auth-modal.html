@@ -4,8 +4,8 @@
     <div id="auth-modal-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAuthModal()"></div>
 
     <!-- Modal Content -->
-    <div class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto transform transition-all"
+    <div class="fixed inset-0 flex items-start md:items-center justify-center p-4 md:p-6 pointer-events-none overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto transform transition-all max-h-[calc(100vh-2rem)] overflow-y-auto"
             id="auth-modal-content">
             <!-- Header -->
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 rounded-t-2xl">
@@ -177,6 +177,10 @@
             if (modal) {
                 modal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
+                const content = document.getElementById('auth-modal-content');
+                if (content) {
+                    content.scrollTop = 0;
+                }
                 switchAuthTab(tab);
             }
         };
