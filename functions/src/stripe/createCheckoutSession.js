@@ -4,7 +4,7 @@
  */
 
 const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+const { onRequest } = require('firebase-functions/v2/https');
 const Stripe = require('stripe');
 const cors = require('cors')({ origin: true });
 
@@ -12,9 +12,10 @@ const cors = require('cors')({ origin: true });
 let stripe;
 function getStripe() {
     if (!stripe) {
-        const secretKey = functions.config().stripe?.secret_key || process.env.STRIPE_SECRET_KEY;
+        // Prefer secret from environment/secrets in Gen 2
+        const secretKey = process.env.STRIPE_SECRET_KEY;
         if (!secretKey) {
-            throw new Error('Stripe secret key not configured. Run: firebase functions:config:set stripe.secret_key="sk_..." --project apex-labs-18862');
+            throw new Error('Stripe secret key not configured. Ensure STRIPE_SECRET_KEY secret is set.');
         }
         stripe = new Stripe(secretKey, {
             apiVersion: '2023-10-16'
@@ -133,7 +134,10 @@ async function createPendingOrder({ sessionId, items, customerEmail, userId, met
 /**
  * Main handler for creating checkout session
  */
-exports.createCheckoutSession = functions.https.onRequest((req, res) => {
+exports.createCheckoutSession = onRequest({
+    secrets: ["STRIPE_SECRET_KEY"],
+    maxInstances: 10
+}, (req, res) => {
     cors(req, res, async () => {
         // Only allow POST requests
         if (req.method !== 'POST') {
