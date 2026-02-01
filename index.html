@@ -56,6 +56,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
+    <!-- Cart Manager -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/sanitize.js"></script>
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/app.js" defer></script>
+
     <style>
         body {
             background-color: #F8FAFC;
@@ -234,11 +248,76 @@
         .group:hover .glow-overlay {
             opacity: 1;
         }
+
+        /* List View Styles */
+        #product-grid.list-view {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        #product-grid.list-view .product-card {
+            flex-direction: row;
+            height: auto;
+            min-height: 200px;
+        }
+
+        #product-grid.list-view .product-card > div:first-child {
+            width: 200px;
+            min-width: 200px;
+            height: 200px;
+            padding: 1.5rem;
+            border-bottom: none;
+            border-right: 1px solid rgb(226 232 240);
+        }
+
+        #product-grid.list-view .product-card > div:last-child {
+            flex: 1;
+            padding: 1.5rem 2rem;
+        }
+
+        #product-grid.list-view .product-card h3 {
+            font-size: 1.75rem;
+        }
+
+        #product-grid.list-view .product-card .line-clamp-3 {
+            -webkit-line-clamp: 2;
+        }
+
+        #product-grid.list-view .product-card .mt-auto {
+            margin-top: 1rem;
+        }
+
+        #product-grid.list-view .product-card .mt-auto .grid {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #product-grid.list-view .product-card .mt-auto .grid > * {
+            flex: 0 0 auto;
+            width: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        /* Hidden state for search */
+        .product-card.hidden {
+            display: none !important;
+        }
+
+        /* No results message */
+        #no-results {
+            display: none;
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        #no-results.visible {
+            display: block;
+        }
     </style>
-    <link rel="stylesheet" href="css/design-system.css">
-    <script src="js/sanitize.js"></script>
-    <script src="js/cart.js" defer></script>
-    <script src="js/app.js" defer></script>
+    </style>
 </head>
 
 <body class="antialiased selection:bg-brand-cyan selection:text-white overflow-x-hidden">
@@ -292,23 +371,35 @@
                 </a>
             </div>
 
-            <!-- Cart Trigger -->
-            <button onclick="toggleCart()"
-                class="relative p-3 text-slate-500 hover:text-brand-blue transition-colors cursor-pointer group">
-                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
-                <span id="cart-count"
-                    class="absolute top-1 right-1 bg-brand-cyan text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full scale-0 group-hover:scale-110 transition-transform">0</span>
-            </button>
+            <div class="flex items-center gap-4">
+                <!-- User Auth & Portal -->
+                <div id="user-menu-container"></div>
+                <div id="auth-modal-container"></div>
 
-            <!-- User Auth & Portal -->
-            <div id="user-menu-container" class="hidden md:flex"></div>
-            <div id="auth-modal-container"></div>
+                <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
+                    class="hidden md:flex group relative overflow-hidden bg-brand-dark px-8 py-3 rounded-none font-bold uppercase text-[10px] tracking-[0.2em] text-white shadow-2xl hover:shadow-brand-blue/20 transition-all duration-500">
+                    <span class="relative z-10 flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-brand-cyan"></i>
+                        Secure Portal
+                    </span>
+                    <div
+                        class="absolute inset-0 bg-brand-blue translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                    </div>
+                </a>
 
-            <!-- Mobile Toggle -->
-            <button id="mobile-menu-toggle" class="lg:hidden p-2 text-brand-dark">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
-        </div>
+                <!-- Cart Trigger -->
+                <button onclick="toggleCart()"
+                    class="relative p-2 text-brand-dark hover:text-brand-blue transition-colors group cursor-pointer">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span id="cart-count"
+                        class="absolute -top-1 -right-1 bg-brand-blue text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full scale-0 group-hover:scale-110 transition-transform">0</span>
+                </button>
+
+                <!-- Mobile Toggle -->
+                <button id="mobile-menu-toggle" class="lg:hidden p-2 text-brand-dark">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
         </div>
 
     </nav>
@@ -335,7 +426,11 @@
                 Standard</a>
 
             <div class="mt-10 pt-10 border-t border-slate-100">
-                <div id="mobile-auth-container"></div>
+                <a href="mailto:partners@apexlabs.com?subject=Apex%20Labs%20Portal%20Access"
+                    class="w-full py-6 bg-brand-dark text-white font-black uppercase tracking-widest flex items-center justify-center gap-4">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-brand-cyan"></i>
+                    Secure Portal
+                </a>
             </div>
         </div>
     </div>
@@ -401,22 +496,19 @@
                 </div>
 
                 <!-- Trust Stats -->
-                <div class="mt-12 md:mt-20 grid grid-cols-3 gap-4 md:gap-8">
+                <div class="mt-20 grid grid-cols-3 gap-8">
                     <div>
-                        <div class="text-xl md:text-2xl font-black text-brand-dark">99.8%</div>
-                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                            Min Purity
+                        <div class="text-2xl font-black text-brand-dark">99.8%</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Min Purity
                         </div>
                     </div>
                     <div>
-                        <div class="text-xl md:text-2xl font-black text-brand-dark">HPLC</div>
-                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                            Verified</div>
+                        <div class="text-2xl font-black text-brand-dark">HPLC</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Verified</div>
                     </div>
                     <div>
-                        <div class="text-xl md:text-2xl font-black text-brand-dark">24H</div>
-                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                            Logistics</div>
+                        <div class="text-2xl font-black text-brand-dark">24H</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Logistics</div>
                     </div>
                 </div>
             </div>
@@ -456,49 +548,82 @@
     </header>
 
     <!-- The Collection - Tech Grid -->
-    <section id="collection" class="py-20 md:py-32 bg-slate-50 relative">
-        <div
-            class="max-w-7xl mx-auto px-6 mb-12 md:mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-8 md:gap-10">
+    <section id="collection" class="py-32 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-6 mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
             <div class="max-w-xl">
-                <div class="flex items-center gap-3 mb-4 md:mb-6">
+                <div class="flex items-center gap-3 mb-6">
                     <span class="w-12 h-[1px] bg-brand-blue"></span>
                     <span class="text-brand-blue font-black tracking-[0.3em] uppercase text-[10px]">Compound
                         Catalog</span>
                 </div>
-                <h2 class="text-4xl md:text-6xl font-black text-brand-dark uppercase tracking-tighter mb-4">Master Index
-                </h2>
-                <p class="text-slate-500 font-medium text-sm md:text-base">Browse our complete inventory of ultra-pure
-                    research formulations.
+                <h2 class="text-6xl font-black text-brand-dark uppercase tracking-tighter mb-4">Master Index</h2>
+                <p class="text-slate-500 font-medium">Browse our complete inventory of ultra-pure research formulations.
                 </p>
             </div>
 
-            <div class="flex flex-wrap items-center gap-4 md:gap-6">
-                <div class="flex gap-2 p-1 bg-white border border-slate-200 shadow-sm">
-                    <button class="w-10 h-10 flex items-center justify-center bg-brand-dark text-white">
+            <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 w-full">
+
+                <div class="flex gap-2 p-1 bg-white border border-slate-200 shadow-sm self-start">
+
+                    <button id="view-grid" class="view-toggle w-10 h-10 flex items-center justify-center bg-brand-dark text-white transition-colors" aria-label="Grid view">
+
                         <i data-lucide="layout-grid" class="w-4 h-4"></i>
+
                     </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-brand-dark transition-colors">
+
+                    <button id="view-list" class="view-toggle w-10 h-10 flex items-center justify-center text-slate-400 hover:text-brand-dark transition-colors" aria-label="List view">
+
                         <i data-lucide="list" class="w-4 h-4"></i>
+
                     </button>
+
                 </div>
-                <div class="h-10 w-[1px] bg-slate-200 hidden md:block"></div>
-                <div class="relative flex-grow md:flex-initial">
-                    <input type="text" placeholder="Search Compounds..."
-                        class="w-full md:w-64 bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-brand-blue transition-all">
-                    <i data-lucide="search"
-                        class="w-3.5 h-3.5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+
+                <div class="hidden md:block h-10 w-[1px] bg-slate-200"></div>
+
+                <div class="w-full md:w-auto flex-1">
+
+                    <div class="relative">
+
+                        <input type="text" id="product-search" placeholder="Search Compounds..."
+
+                            class="bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-[0.3em] focus:outline-none focus:border-brand-blue w-full md:w-72 transition-all">
+
+                        <i data-lucide="search"
+
+                            class="w-3.5 h-3.5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+
+                        <button type="button" id="search-input-clear"
+
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-brand-blue hidden">Clear</button>
+
+                    </div>
+
+                    <div class="flex items-center justify-between mt-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+
+                        <span id="search-count">Showing all compounds</span>
+
+                        <button type="button" id="search-reset"
+
+                            class="text-brand-blue hover:text-brand-dark tracking-[0.3em] hidden">Reset</button>
+
+                    </div>
+
                 </div>
+
+            </div>
             </div>
         </div>
 
         <!-- GRID LAYOUT: Equal Sizes -->
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div id="product-grid" class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <!-- PRODUCT CARD TEMPLATE -->
             <!-- Item 1: AOD-9604 -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="aod-9604" data-name="AOD-9604" data-category="Lipolysis Protocol"
+                data-description="Fragment 176-191 of Human Growth Hormone. Specifically researched for its ability to stimulate lipolysis (fat breakdown) without affecting blood sugar.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)AOD-9604.png" alt="AOD-9604"
@@ -537,15 +662,16 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-2 gap-4">
                             <a href="pricing/aod-9604.html"
-                                class="py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2">
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'aod-9604', name: 'AOD-9604', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)AOD-9604.png', category: 'Lipolysis Protocol'}, 1); toggleCart();"
-                                class="py-4 bg-brand-dark text-white font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2 cursor-pointer hover:bg-brand-blue">
-                                Add to Cart
+                                onclick="cartManager.addItem({id: 'aod-9604', name: 'AOD-9604', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)AOD-9604.png', category: 'Lipolysis Protocol'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
                             </button>
                         </div>
                     </div>
@@ -554,7 +680,9 @@
 
             <!-- Item 2: BPC-157 -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="bpc-157" data-name="BPC-157" data-category="Recovery Agent"
+                data-description="Body Protection Compound. Pentadecapeptide isolated from gastric juice, known for its potent cytoprotective and tissue-healing properties.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)BPC-157.png" alt="BPC-157"
@@ -582,15 +710,16 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-2 gap-4">
                             <a href="pricing/bpc-157.html"
-                                class="py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2">
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'bpc-157', name: 'BPC-157', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)BPC-157.png', category: 'Recovery Agent'}, 1); toggleCart();"
-                                class="py-4 bg-brand-dark text-white font-bold uppercase text-[9px] tracking-[0.1em] transition-all flex items-center justify-center gap-2 cursor-pointer hover:bg-brand-blue">
-                                Add to Cart
+                                onclick="cartManager.addItem({id: 'bpc-157', name: 'BPC-157', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)BPC-157.png', category: 'Recovery Agent'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
                             </button>
                         </div>
                     </div>
@@ -599,7 +728,9 @@
 
             <!-- Item 3: CJC-1295 -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="cjc-1295" data-name="CJC-1295" data-category="GHRH Analog"
+                data-description="Tetrasubstituted 30-amino acid peptide hormone. Promotes pulsatile GH release with an extended half-life compared to native GHRH.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)CJC-1295.png" alt="CJC-1295"
@@ -627,18 +758,27 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <a href="pricing/cjc-1295.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/cjc-1295.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'cjc-1295', name: 'CJC-1295', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)CJC-1295.png', category: 'GHRH Analog'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 4: IPAMORELIN -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="ipamorelin" data-name="IPAMORELIN" data-category="Selective Secretagogue"
+                data-description="A selective GH-Secretagogue causing growth hormone release without significant impact on ACTH/cortisol or prolactin levels.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)IPAMORELIN.png" alt="IPAMORELIN"
@@ -667,18 +807,27 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <a href="pricing/ipamorelin.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/ipamorelin.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'ipamorelin', name: 'IPAMORELIN', price: 80, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)IPAMORELIN.png', category: 'Selective Secretagogue'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 5: MOTS-C -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="mots-c" data-name="MOTS-C" data-category="Mitochondrial Derived"
+                data-description="A mitochondrial-derived peptide that regulates metabolic functions and supports cellular energy homeostasis.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)MOTS-C.png" alt="MOTS-C"
@@ -707,18 +856,27 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <a href="pricing/mots-c.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/mots-c.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'mots-c', name: 'MOTS-C', price: 65, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)MOTS-C.png', category: 'Mitochondrial Derived'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 6: NADS+ -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="nadplus" data-name="NADS+" data-category="Cellular Vitality"
+                data-description="Critical coenzyme found in all living cells. Essential for sirtuin activation, DNA repair, and energy metabolism.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)NADS+ (1).png" alt="NADS+"
@@ -747,18 +905,27 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">500 MG / VIAL</span>
                         </div>
-                        <a href="pricing/nadplus.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/nadplus.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'nadplus', name: 'NADS+', price: 150, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)NADS+ (1).png', category: 'Cellular Vitality'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 7: PTP-141 -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="pt-141" data-name="PTP-141 PT-141" data-category="Neural Signaling"
+                data-description="Bremelanotide. A melanocortin receptor agonist which acts centrally to improve libido and arousal in both sexes.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png" alt="PTP-141"
@@ -787,18 +954,27 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <a href="pricing/pt-141.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/pt-141.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'pt-141', name: 'PTP-141', price: 60, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png', category: 'Neural Signaling'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 8: TB-500 -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="tb-500" data-name="TB-500" data-category="Tissue Regeneration"
+                data-description="Synthetic fraction of Thymosin Beta-4. Promotes endothelial cell migration, angiogenesis, and reduced inflammation.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)TB500.png" alt="TB-500"
@@ -827,18 +1003,27 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <a href="pricing/tb-500.html"
-                            class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
-                                class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/tb-500.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'tb-500', name: 'TB-500', price: 80, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Item 9: TESAMORELIN -->
             <div
-                class="group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover">
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="tesamorelin" data-name="TESAMORELIN" data-category="Metabolic Factor"
+                data-description="A stabilized growth hormone-releasing hormone (GHRH) analogue. Clinically shown to reduce visceral adipose tissue.">
                 <div
                     class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)TESAMORELIN.png" alt="TESAMORELIN"
@@ -867,15 +1052,135 @@
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
                             <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
                         </div>
-                        <a href="pricing/tesamorelin.html"
+                        <button
                             class="w-full py-4 bg-slate-100 group-hover:bg-brand-dark group-hover:text-white text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                            Check Pricing <i data-lucide="arrow-right"
+                            Lab Analysis <i data-lucide="arrow-right"
                                 class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
 
+            <!-- Item 10: GHK-Cu -->
+            <div
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="ghk-cu" data-name="GHK-Cu" data-category="Skin Regeneration"
+                data-description="Copper peptide complex known for its role in skin regeneration, DNA repair, and anti-inflammatory properties.">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)GHK-CU.jpg" alt="GHK-Cu"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 py-1 px-3 bg-brand-dark/5 text-brand-dark text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        In Stock
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        GHK-Cu</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Skin Regeneration
+                    </p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Copper peptide complex known for its role in skin regeneration, DNA repair, and
+                        anti-inflammatory properties.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">100 MG / VIAL</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/ghk-cu.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)GHK-CU.jpg', category: 'Skin Regeneration'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 11: Retatrutide -->
+            <div
+                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+                data-product-id="reta" data-name="Retatrutide RETA" data-category="Advanced Metabolic"
+                data-description="Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum receptor affinity.">
+                <div
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)RETATRUTIDE.png" alt="Retatrutide"
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 py-1 px-3 bg-brand-dark/5 text-brand-dark text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        In Stock
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow relative">
+                    <div
+                        class="absolute top-0 right-8 -translate-y-1/2 p-3 bg-brand-dark group-hover:bg-brand-blue transition-colors shadow-xl text-brand-cyan">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                    </div>
+                    <h3
+                        class="text-4xl font-black text-brand-dark mb-1 group-hover:text-brand-blue transition-colors tracking-tighter">
+                        Retatrutide</h3>
+                    <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.2em] mb-4">Advanced Metabolic
+                    </p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-3 font-medium">
+                        Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum
+                        receptor affinity.
+                    </p>
+                    <div class="mt-auto space-y-4">
+                        <div class="flex items-center justify-between py-3 border-y border-slate-100">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concentration</span>
+                            <span class="text-xs font-black text-brand-dark font-mono">10 MG / VIAL</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="pricing/reta.html"
+                                class="w-full py-4 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                Details
+                            </a>
+                            <button
+                                onclick="cartManager.addItem({id: 'reta', name: 'Retatrutide', price: 120, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)RETATRUTIDE.png', category: 'Advanced Metabolic'}, 1)"
+                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="product-list" class="max-w-7xl mx-auto px-6 hidden">
+            <div class="space-y-4">
+                <div id="product-list-loading" class="text-center py-12 text-xs font-black uppercase tracking-[0.3em] text-slate-400">Preparing list view...</div>
+                <div id="product-list-content" class="space-y-4 hidden"></div>
+            </div>
+        </div>
+
+        <div id="no-results" class="text-center py-16">
+            <i data-lucide="search-x" class="w-16 h-16 text-slate-300 mx-auto mb-6"></i>
+            <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight mb-2">No Compounds Found</h3>
+            <p class="text-slate-500 font-medium">Try adjusting your search terms or <button id="clear-search" class="text-brand-blue hover:underline">clear the search</button></p>
         </div>
     </section>
 
@@ -1248,40 +1553,278 @@
 
         // --- FAQ Accordion Logic ---
 
-        document.querySelectorAll('.group button').forEach(button => {
-            button.addEventListener('click', () => {
-                const content = button.nextElementSibling;
-                const icon = button.querySelector('i');
-                const isHidden = content.classList.contains('hidden');
+        // --- Grid/List View Toggle ---
+        const viewGridBtn = document.getElementById('view-grid');
+        const viewListBtn = document.getElementById('view-list');
+        const productGrid = document.getElementById('product-grid');
+        const productList = document.getElementById('product-list');
+        const productListContent = document.getElementById('product-list-content');
+        const productListLoading = document.getElementById('product-list-loading');
+        const productCards = Array.from(document.querySelectorAll('.product-card'));
+        const totalProducts = productCards.length;
+        const productMap = new Map(productCards.map(card => [card.dataset.productId, card]));
+        let listItems = [];
+        let prefersListView = false;
 
-                document.querySelectorAll('.group div.px-8').forEach(div => {
-                    if (div !== content) div.classList.add('hidden');
-                });
+        function activateGridButton() {
+            if (!viewGridBtn || !viewListBtn) return;
+            viewGridBtn.classList.add('bg-brand-dark', 'text-white');
+            viewGridBtn.classList.remove('text-slate-400');
+            viewListBtn.classList.remove('bg-brand-dark', 'text-white');
+            viewListBtn.classList.add('text-slate-400');
+        }
 
-                if (isHidden) {
-                    content.classList.remove('hidden');
-                    gsap.fromTo(content,
-                        { opacity: 0, height: 0 },
-                        { opacity: 1, height: "auto", duration: 0.4, ease: "power2.out" }
-                    );
-                    gsap.to(icon, { rotate: 45, duration: 0.3 });
-                } else {
-                    gsap.to(content, {
-                        opacity: 0,
-                        height: 0,
-                        duration: 0.3,
-                        onComplete: () => content.classList.add('hidden')
-                    });
-                    gsap.to(icon, { rotate: 0, duration: 0.3 });
+        function activateListButton() {
+            if (!viewGridBtn || !viewListBtn) return;
+            viewListBtn.classList.add('bg-brand-dark', 'text-white');
+            viewListBtn.classList.remove('text-slate-400');
+            viewGridBtn.classList.remove('bg-brand-dark', 'text-white');
+            viewGridBtn.classList.add('text-slate-400');
+        }
+
+        function setGridView(savePreference = true) {
+            prefersListView = false;
+            activateGridButton();
+            if (productGrid) {
+                productGrid.classList.remove('hidden', 'list-view');
+            }
+            if (productList) {
+                productList.classList.add('hidden');
+            }
+            if (savePreference) {
+                localStorage.setItem('catalogView', 'grid');
+            }
+        }
+
+        function setListView(savePreference = true) {
+            prefersListView = true;
+            activateListButton();
+            if (productList && productGrid) {
+                productGrid.classList.add('hidden');
+                productGrid.classList.remove('list-view');
+                productList.classList.remove('hidden');
+            } else if (productGrid) {
+                productGrid.classList.add('list-view');
+            }
+            if (savePreference) {
+                localStorage.setItem('catalogView', 'list');
+            }
+        }
+
+        if (viewGridBtn && viewListBtn && productGrid) {
+            viewGridBtn.addEventListener('click', () => setGridView());
+            viewListBtn.addEventListener('click', () => setListView());
+            setGridView(false);
+            const savedView = localStorage.getItem('catalogView');
+            if (savedView === 'list') {
+                setListView(false);
+            }
+        }
+
+        // --- Product Search Functionality ---
+        const searchInput = document.getElementById('product-search');
+        const noResults = document.getElementById('no-results');
+        const noResultsClearBtn = document.getElementById('clear-search');
+        const searchResetBtn = document.getElementById('search-reset');
+        const searchInputClearBtn = document.getElementById('search-input-clear');
+        const searchCount = document.getElementById('search-count');
+
+        function matchesSearch(element, term) {
+            if (!term) return true;
+            const haystack = [
+                element.dataset.name,
+                element.dataset.category,
+                element.dataset.description,
+                element.dataset.tags,
+                element.dataset.shortDescription
+            ];
+            return haystack.some(field => field && field.toLowerCase().includes(term));
+        }
+
+        function filterProducts(searchTerm) {
+            const term = (searchTerm || '').toLowerCase().trim();
+            let visibleCount = 0;
+
+            productCards.forEach(card => {
+                const matches = matchesSearch(card, term);
+                card.classList.toggle('hidden', !matches);
+                if (matches) {
+                    visibleCount += 1;
                 }
             });
+
+            if (listItems.length) {
+                listItems.forEach(item => {
+                    const matches = matchesSearch(item, term);
+                    item.classList.toggle('hidden', !matches);
+                });
+            }
+
+            if (noResults) {
+                if (term && visibleCount === 0) {
+                    noResults.classList.add('visible');
+                } else {
+                    noResults.classList.remove('visible');
+                }
+            }
+
+            if (searchCount) {
+                searchCount.textContent = term
+                    ? `Showing ${visibleCount} of ${totalProducts} compounds`
+                    : `Showing all ${totalProducts} compounds`;
+            }
+
+            const hasTerm = term.length > 0;
+            if (searchInputClearBtn) {
+                searchInputClearBtn.classList.toggle('hidden', !hasTerm);
+            }
+            if (searchResetBtn) {
+                searchResetBtn.classList.toggle('hidden', !hasTerm);
+            }
+        }
+
+        function resetSearch(focusField = true) {
+            if (!searchInput) return;
+            searchInput.value = '';
+            filterProducts('');
+            if (focusField) {
+                searchInput.focus();
+            }
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                filterProducts(e.target.value);
+            });
+            filterProducts(searchInput.value);
+        } else {
+            filterProducts('');
+        }
+
+        searchResetBtn?.addEventListener('click', () => resetSearch(true));
+        searchInputClearBtn?.addEventListener('click', () => resetSearch(true));
+        noResultsClearBtn?.addEventListener('click', () => resetSearch(true));
+
+        document.addEventListener('keydown', (e) => {
+            if (!searchInput) return;
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                resetSearch(false);
+                searchInput.blur();
+            }
         });
+
+        function renderProductList(products) {
+            if (!productListContent) return;
+            const fragment = document.createDocumentFragment();
+
+            products.forEach(product => {
+                const card = productMap.get(product.id);
+                if (card) {
+                    card.dataset.tags = (product.tags || []).join(' ');
+                    if (product.shortDescription) {
+                        card.dataset.shortDescription = product.shortDescription;
+                        card.dataset.description = `${card.dataset.description || ''} ${product.shortDescription}`.trim();
+                    }
+                }
+
+                const listItem = document.createElement('div');
+                listItem.className = 'product-list-item flex flex-col md:flex-row gap-6 md:gap-10 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm';
+                listItem.dataset.productId = product.id;
+                listItem.dataset.name = product.name;
+                listItem.dataset.category = product.category;
+                listItem.dataset.description = `${product.description || ''} ${product.shortDescription || ''}`.trim();
+                listItem.dataset.shortDescription = product.shortDescription || '';
+                listItem.dataset.tags = (product.tags || []).join(' ');
+
+                const specChips = [product.concentration, product.purity, product.format]
+                    .filter(Boolean)
+                    .map(spec => `<span class="px-3 py-1 bg-brand-dark/5 text-brand-dark text-[10px] font-black uppercase tracking-[0.2em]">${spec}</span>`)
+                    .join('');
+
+                const tagChips = (product.tags || [])
+                    .map(tag => `<span class="px-3 py-1 bg-slate-100 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 rounded-full">${tag}</span>`)
+                    .join('');
+
+                const priceLabel = typeof product.price === 'number'
+                    ? `$${product.price.toFixed(2)}`
+                    : 'Contact';
+
+                const wholesalePieces = [];
+                if (product.wholesale1Price && product.wholesaleMinQty) {
+                    wholesalePieces.push(`Tier 1 $${product.wholesale1Price} (${product.wholesaleMinQty}+)`);
+                }
+                if (product.wholesale2Price && product.wholesale2MinQty) {
+                    wholesalePieces.push(`Tier 2 $${product.wholesale2Price} (${product.wholesale2MinQty}+)`);
+                }
+                const wholesaleMessage = wholesalePieces.join(' / ') || 'Wholesale tiers available';
+                const addPrice = typeof product.price === 'number' ? product.price : 0;
+
+                listItem.innerHTML = `
+                    <div class="flex flex-col sm:flex-row gap-4 md:gap-6 flex-1">
+                        <div class="w-24 h-24 flex-shrink-0 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center p-3">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-contain">
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-[10px] text-brand-blue font-black uppercase tracking-[0.3em]">${product.category}</p>
+                            <h3 class="text-3xl font-black text-brand-dark leading-tight">${product.name}</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">${product.shortDescription || product.description || ''}</p>
+                            <div class="flex flex-wrap gap-2 mt-3">${specChips}${tagChips}</div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-64 flex flex-col gap-3 text-left md:text-right">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-1">Base Pricing</p>
+                            <p class="text-3xl font-black text-brand-dark">${priceLabel}</p>
+                        </div>
+                        <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400">${wholesaleMessage}</p>
+                        <div class="flex flex-col sm:flex-row md:flex-col gap-3">
+                            <a href="pricing/${product.id}.html" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center">Details</a>
+                            <button type="button" onclick="cartManager.addItem({id: '${product.id}', name: '${product.name}', price: ${addPrice}, image: '${product.image}', category: '${product.category}'}, 1)" class="w-full py-3 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                fragment.appendChild(listItem);
+            });
+
+            productListContent.innerHTML = '';
+            productListContent.appendChild(fragment);
+            listItems = Array.from(productListContent.querySelectorAll('.product-list-item'));
+            productListLoading?.classList.add('hidden');
+            productListContent.classList.remove('hidden');
+            if (prefersListView) {
+                setListView(false);
+            }
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+            filterProducts(searchInput ? searchInput.value : '');
+        }
+
+        if (productListContent) {
+            fetch('data/products.json')
+                .then(response => response.ok ? response.json() : Promise.reject('Failed to load catalog data'))
+                .then(({ products }) => {
+                    if (Array.isArray(products)) {
+                        renderProductList(products);
+                    }
+                })
+                .catch(error => {
+                    console.error('List view failed to load:', error);
+                    if (productListLoading) {
+                        productListLoading.textContent = 'List view is unavailable right now.';
+                    }
+                });
+        }
     </script>
-    <!-- Firebase SDK Compat (Latest) -->
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore-compat.js"></script>
-    <script src="js/firebase-init.js"></script>
     <!-- Dynamic Cart Components -->
     <div id="cart-container"></div>
 </body>
