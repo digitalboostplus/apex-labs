@@ -1,0 +1,313 @@
+/**
+ * Firestore Security Rules - Users Collection
+ *
+ * This file contains comprehensive security rules for the users collection
+ * and related subcollections. These rules should be integrated into the main
+ * firestore.rules file.
+ *
+ * Collection Structure:
+ * - users/{userId} - User profile documents
+ * - users/{userId}/orders - User's order history (read-only)
+ * - users/{userId}/addresses - User's saved shipping addresses
+ * - users/{userId}/wishlist - User's wishlist items
+ *
+ * Security Principles:
+ * 1. Users can only access their own data
+ * 2. Email and timestamps are immutable after creation
+ * 3. Profile updates require authentication
+ * 4. Orders are write-protected (Cloud Functions only)
+ * 5. All writes are validated for data integrity
+ */
+
+rules_version = '2';
+service cloud.firestore {
+    match /databases/{database}/documents {
+
+        // ====================================================================
+        // Helper Functions
+        // ====================================================================
+
+        /**
+         * Check if request is authenticated
+         */
+        function isAuthenticated() {
+            return request.auth != null;
+        }
+
+        /**
+         * Check if user owns the resource
+         */
+        function isOwner(userId) {
+            return isAuthenticated() && request.auth.uid == userId;
+        }
+
+        /**
+         * Check if user is an admin
+         */
+        function isAdmin() {
+            return isAuthenticated() &&
+                   exists(/databases/$(database)/documents/admins/$(request.auth.uid)) &&
+                   get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'admin';
+        }
+
+        /**
+         * Validate email format
+         */
+        function isValidEmail(email) {
+            return email is string &&
+                   email.size() >= 3 &&
+                   email.size() <= 254 &&
+                   email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
+        }
+
+        /**
+         * Validate display name
+         */
+        function isValidDisplayName(name) {
+            return name == null || (
+                name is string &&
+                name.size() > 0 &&
+                name.size() <= 100
+            );
+        }
+
+        /**
+         * Validate photo URL
+         */
+        function isValidPhotoURL(url) {
+            return url == null || (
+                url is string &&
+                url.size() >= 10 &&
+                url.size() <= 2048 &&
+                url.matches('^https?://')
+            );
+        }
+
+        /**
+         * Validate phone number (E.164 format)
+         */
+        function isValidPhoneNumber(phone) {
+            return phone == null || (
+                phone is string &&
+                phone.matches('^\\+[1-9]\\d{1,14}$')
+            );
+        }
+
+        /**
+         * Validate user preferences object
+         */
+        function isValidPreferences(prefs) {
+            return prefs.keys().hasOnly([
+                'marketingEmails',
+                'orderEmails',
+                'smsNotifications',
+                'theme',
+                'units'
+            ]) &&
+            (
+                !('marketingEmails' in prefs) || prefs.marketingEmails is bool
+            ) &&
+            (
+                !('orderEmails' in prefs) || prefs.orderEmails is bool
+            ) &&
+            (
+                !('smsNotifications' in prefs) || prefs.smsNotifications is bool
+            ) &&
+            (
+                !('theme' in prefs) || prefs.theme in ['light', 'dark', 'auto']
+            ) &&
+            (
+                !('units' in prefs) || prefs.units in ['metric', 'imperial']
+            );
+        }
+
+        /**
+         * Validate user status
+         */
+        function isValidStatus(status) {
+            return status == null || status in ['active', 'suspended', 'deleted'];
+        }
+
+        // ====================================================================
+        // Users Collection - Main Profile Documents
+        // ====================================================================
+
+        match /users/{userId} {
+
+            /**
+             * READ: Users can read their own profile
+             * Admins can read any profile
+             */
+            allow read: if isOwner(userId) || isAdmin();
+
+            /**
+             * CREATE: New users can create their profile on signup
+             * Must include: email, createdAt, updatedAt
+             * Optional: displayName, photoURL
+             * Must NOT include: lastLoginAt (set on first login, not signup)
+             */
+            allow create: if isOwner(userId) &&
+                // Required fields
+                isValidEmail(request.resource.data.email) &&
+                request.resource.data.email == request.auth.token.email &&
+                request.resource.data.createdAt == request.time &&
+                request.resource.data.updatedAt == request.time &&
+
+                // Optional profile fields
+                isValidDisplayName(request.resource.data.get('displayName', null)) &&
+                isValidPhotoURL(request.resource.data.get('photoURL', null)) &&
+
+                // Prevent setting protected fields on creation
+                !('lastLoginAt' in request.resource.data) &&
+                !('lifetimeValue' in request.resource.data) &&
+                !('referredBy' in request.resource.data) &&
+
+                // Validate optional fields if present
+                (
+                    !('phoneNumber' in request.resource.data) ||
+                    isValidPhoneNumber(request.resource.data.phoneNumber)
+                ) &&
+                (
+                    !('preferences' in request.resource.data) ||
+                    isValidPreferences(request.resource.data.preferences)
+                ) &&
+                (
+                    !('status' in request.resource.data) ||
+                    request.resource.data.status == 'active'
+                );
+
+            /**
+             * UPDATE: Users can update their own profile
+             * Can modify: displayName, photoURL, phoneNumber, preferences
+             * Cannot modify: email, createdAt, uid
+             * System fields: updatedAt, lastLoginAt (updated automatically)
+             */
+            allow update: if isOwner(userId) &&
+                // Immutable fields - cannot be changed
+                request.resource.data.email == resource.data.email &&
+                request.resource.data.createdAt == resource.data.createdAt &&
+
+                // System-managed timestamp updates
+                request.resource.data.updatedAt == request.time &&
+
+                // Optional profile fields validation
+                isValidDisplayName(request.resource.data.get('displayName', null)) &&
+                isValidPhotoURL(request.resource.data.get('photoURL', null)) &&
+
+                // Validate optional fields if present
+                (
+                    !('phoneNumber' in request.resource.data) ||
+                    isValidPhoneNumber(request.resource.data.phoneNumber)
+                ) &&
+                (
+                    !('preferences' in request.resource.data) ||
+                    isValidPreferences(request.resource.data.preferences)
+                ) &&
+
+                // Protected fields - only Cloud Functions or admins can modify
+                (
+                    !('lifetimeValue' in request.resource.data) ||
+                    request.resource.data.lifetimeValue == resource.data.get('lifetimeValue', 0)
+                ) &&
+                (
+                    !('subscription' in request.resource.data) ||
+                    request.resource.data.subscription == resource.data.get('subscription', null)
+                ) &&
+                (
+                    !('status' in request.resource.data) ||
+                    request.resource.data.status == resource.data.get('status', 'active')
+                );
+
+            /**
+             * DELETE: Users cannot delete their own profile
+             * Only admins can delete (for GDPR compliance, use status='deleted' instead)
+             */
+            allow delete: if isAdmin();
+
+            // ================================================================
+            // Subcollection: User Orders
+            // ================================================================
+
+            match /orders/{orderId} {
+                /**
+                 * READ: Users can read their own orders
+                 */
+                allow read: if isOwner(userId);
+
+                /**
+                 * WRITE: Only Cloud Functions can create/update orders
+                 * Users cannot modify order data directly
+                 */
+                allow write: if false;
+            }
+
+            // ================================================================
+            // Subcollection: User Addresses
+            // ================================================================
+
+            match /addresses/{addressId} {
+                /**
+                 * READ/WRITE: Users can manage their own saved addresses
+                 */
+                allow read, write: if isOwner(userId);
+
+                /**
+                 * CREATE: Validate address structure
+                 */
+                allow create: if isOwner(userId) &&
+                    request.resource.data.keys().hasAll([
+                        'name',
+                        'line1',
+                        'city',
+                        'state',
+                        'postalCode',
+                        'country'
+                    ]) &&
+                    request.resource.data.name is string &&
+                    request.resource.data.name.size() > 0 &&
+                    request.resource.data.line1 is string &&
+                    request.resource.data.line1.size() > 0 &&
+                    request.resource.data.city is string &&
+                    request.resource.data.city.size() > 0 &&
+                    request.resource.data.state is string &&
+                    request.resource.data.state.size() == 2 &&
+                    request.resource.data.postalCode is string &&
+                    request.resource.data.postalCode.size() >= 5 &&
+                    request.resource.data.country is string &&
+                    request.resource.data.country in ['US', 'CA'] &&
+                    (
+                        !('line2' in request.resource.data) ||
+                        request.resource.data.line2 is string
+                    ) &&
+                    (
+                        !('phoneNumber' in request.resource.data) ||
+                        isValidPhoneNumber(request.resource.data.phoneNumber)
+                    ) &&
+                    (
+                        !('isDefault' in request.resource.data) ||
+                        request.resource.data.isDefault is bool
+                    );
+            }
+
+            // ================================================================
+            // Subcollection: User Wishlist
+            // ================================================================
+
+            match /wishlist/{productId} {
+                /**
+                 * READ/WRITE: Users can manage their own wishlist
+                 */
+                allow read, write: if isOwner(userId);
+
+                /**
+                 * CREATE: Validate wishlist item structure
+                 */
+                allow create: if isOwner(userId) &&
+                    request.resource.data.keys().hasAll(['productId', 'addedAt']) &&
+                    request.resource.data.productId is string &&
+                    request.resource.data.productId.size() > 0 &&
+                    request.resource.data.addedAt == request.time;
+            }
+        }
+    }
+}

@@ -1,7 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
     match /databases/{database}/documents {
-        // Helper functions
+
+        // ====================================================================
+        // Helper Functions
+        // ====================================================================
+
         function isAuthenticated() {
             return request.auth != null;
         }
@@ -12,13 +16,73 @@ service cloud.firestore {
 
         function isAdmin() {
             return isAuthenticated() &&
+                   exists(/databases/$(database)/documents/admins/$(request.auth.uid)) &&
                    get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'admin';
         }
 
-        // Users collection
+        // Validation functions
+        function isValidEmail(email) {
+            return email is string &&
+                   email.size() >= 3 &&
+                   email.size() <= 254 &&
+                   email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
+        }
+
+        function isValidDisplayName(name) {
+            return name == null || (
+                name is string &&
+                name.size() > 0 &&
+                name.size() <= 100
+            );
+        }
+
+        function isValidPhotoURL(url) {
+            return url == null || (
+                url is string &&
+                url.size() >= 10 &&
+                url.size() <= 2048 &&
+                url.matches('^https?://')
+            );
+        }
+
+        function isValidPhoneNumber(phone) {
+            return phone == null || (
+                phone is string &&
+                phone.matches('^\\+[1-9]\\d{1,14}$')
+            );
+        }
+
+        // ====================================================================
+        // Users Collection - Enhanced with field validation
+        // ====================================================================
+
         match /users/{userId} {
-            // Users can read and write their own profile
-            allow read, write: if isOwner(userId);
+            // READ: Users can read own profile, admins can read any
+            allow read: if isOwner(userId) || isAdmin();
+
+            // CREATE: New user profile on signup
+            allow create: if isOwner(userId) &&
+                // Required fields
+                isValidEmail(request.resource.data.email) &&
+                request.resource.data.email == request.auth.token.email &&
+                request.resource.data.createdAt == request.time &&
+                request.resource.data.updatedAt == request.time &&
+                // Optional fields
+                isValidDisplayName(request.resource.data.get('displayName', null)) &&
+                isValidPhotoURL(request.resource.data.get('photoURL', null)) &&
+                isValidPhoneNumber(request.resource.data.get('phoneNumber', null));
+
+            // UPDATE: Users can update their profile
+            allow update: if isOwner(userId) &&
+                // Immutable fields cannot change
+                request.resource.data.email == resource.data.email &&
+                request.resource.data.createdAt == resource.data.createdAt &&
+                // Auto-update timestamp
+                request.resource.data.updatedAt == request.time &&
+                // Validate editable fields
+                isValidDisplayName(request.resource.data.get('displayName', null)) &&
+                isValidPhotoURL(request.resource.data.get('photoURL', null)) &&
+                isValidPhoneNumber(request.resource.data.get('phoneNumber', null));
 
             // User's orders subcollection
             match /orders/{orderId} {

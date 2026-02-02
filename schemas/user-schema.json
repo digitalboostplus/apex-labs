@@ -1,0 +1,319 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://apexlabs.com/schemas/user-profile.json",
+    "title": "User Profile",
+    "description": "Firestore user document schema for Apex Labs peptide therapy platform",
+    "type": "object",
+    "required": [
+        "email",
+        "createdAt",
+        "updatedAt"
+    ],
+    "properties": {
+        "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address from Firebase Auth",
+            "minLength": 3,
+            "maxLength": 254,
+            "examples": [
+                "user@example.com",
+                "john.doe@apexlabs.com"
+            ]
+        },
+        "displayName": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "User's display name, populated from auth provider or user input",
+            "minLength": 1,
+            "maxLength": 100,
+            "examples": [
+                "John Doe",
+                "Jane Smith",
+                null
+            ]
+        },
+        "photoURL": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "uri",
+            "description": "User's profile photo URL, typically from Google OAuth",
+            "minLength": 10,
+            "maxLength": 2048,
+            "pattern": "^https?://",
+            "examples": [
+                "https://lh3.googleusercontent.com/a/example",
+                "https://storage.googleapis.com/apex-labs-avatars/uid.jpg",
+                null
+            ]
+        },
+        "createdAt": {
+            "type": "object",
+            "description": "Firestore timestamp of account creation (serverTimestamp)",
+            "properties": {
+                "_seconds": {
+                    "type": "number"
+                },
+                "_nanoseconds": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "_seconds",
+                "_nanoseconds"
+            ]
+        },
+        "updatedAt": {
+            "type": "object",
+            "description": "Firestore timestamp of last profile update (serverTimestamp)",
+            "properties": {
+                "_seconds": {
+                    "type": "number"
+                },
+                "_nanoseconds": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "_seconds",
+                "_nanoseconds"
+            ]
+        },
+        "lastLoginAt": {
+            "type": "object",
+            "description": "Firestore timestamp of last successful login (serverTimestamp)",
+            "properties": {
+                "_seconds": {
+                    "type": "number"
+                },
+                "_nanoseconds": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "_seconds",
+                "_nanoseconds"
+            ]
+        },
+        "phoneNumber": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "User's phone number in E.164 format for SMS notifications",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
+            "examples": [
+                "+12025551234",
+                "+442071234567",
+                null
+            ]
+        },
+        "preferences": {
+            "type": "object",
+            "description": "User's communication and UX preferences",
+            "properties": {
+                "marketingEmails": {
+                    "type": "boolean",
+                    "description": "Opt-in for marketing emails",
+                    "default": true
+                },
+                "orderEmails": {
+                    "type": "boolean",
+                    "description": "Opt-in for order update emails",
+                    "default": true
+                },
+                "smsNotifications": {
+                    "type": "boolean",
+                    "description": "Opt-in for SMS notifications",
+                    "default": false
+                },
+                "theme": {
+                    "type": "string",
+                    "enum": [
+                        "light",
+                        "dark",
+                        "auto"
+                    ],
+                    "description": "Preferred UI theme",
+                    "default": "auto"
+                },
+                "units": {
+                    "type": "string",
+                    "enum": [
+                        "metric",
+                        "imperial"
+                    ],
+                    "description": "Preferred measurement units",
+                    "default": "imperial"
+                }
+            },
+            "additionalProperties": false
+        },
+        "subscription": {
+            "type": "object",
+            "description": "User's active subscription information",
+            "required": [
+                "planId",
+                "stripeSubscriptionId",
+                "status",
+                "currentPeriodStart",
+                "currentPeriodEnd",
+                "cancelAtPeriodEnd"
+            ],
+            "properties": {
+                "planId": {
+                    "type": "string",
+                    "description": "Subscription plan identifier",
+                    "examples": [
+                        "peptide_therapy_monthly",
+                        "peptide_therapy_quarterly"
+                    ]
+                },
+                "stripeSubscriptionId": {
+                    "type": "string",
+                    "description": "Stripe subscription ID",
+                    "pattern": "^sub_[a-zA-Z0-9]+$",
+                    "examples": [
+                        "sub_1234567890abcdef"
+                    ]
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "active",
+                        "past_due",
+                        "canceled",
+                        "trialing"
+                    ],
+                    "description": "Current subscription status"
+                },
+                "currentPeriodStart": {
+                    "type": "object",
+                    "description": "Start of current billing period",
+                    "properties": {
+                        "_seconds": {
+                            "type": "number"
+                        },
+                        "_nanoseconds": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "_seconds",
+                        "_nanoseconds"
+                    ]
+                },
+                "currentPeriodEnd": {
+                    "type": "object",
+                    "description": "End of current billing period",
+                    "properties": {
+                        "_seconds": {
+                            "type": "number"
+                        },
+                        "_nanoseconds": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "_seconds",
+                        "_nanoseconds"
+                    ]
+                },
+                "cancelAtPeriodEnd": {
+                    "type": "boolean",
+                    "description": "Whether subscription will cancel at period end"
+                }
+            },
+            "additionalProperties": false
+        },
+        "referralCode": {
+            "type": "string",
+            "description": "Unique referral code assigned to this user",
+            "pattern": "^[A-Z0-9]{6,12}$",
+            "examples": [
+                "APEX2024",
+                "PEPTIDE123"
+            ]
+        },
+        "referredBy": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "UID of user who referred this user",
+            "minLength": 28,
+            "maxLength": 28,
+            "examples": [
+                "abc123def456ghi789jkl012mno",
+                null
+            ]
+        },
+        "lifetimeValue": {
+            "type": "number",
+            "description": "Total lifetime value in cents (calculated from orders)",
+            "minimum": 0,
+            "examples": [
+                0,
+                25900,
+                150000
+            ]
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "active",
+                "suspended",
+                "deleted"
+            ],
+            "description": "Account status for management purposes",
+            "default": "active"
+        }
+    },
+    "additionalProperties": false,
+    "examples": [
+        {
+            "email": "john.doe@example.com",
+            "displayName": "John Doe",
+            "photoURL": null,
+            "createdAt": {
+                "_seconds": 1706745600,
+                "_nanoseconds": 0
+            },
+            "updatedAt": {
+                "_seconds": 1706745600,
+                "_nanoseconds": 0
+            }
+        },
+        {
+            "email": "jane.smith@gmail.com",
+            "displayName": "Jane Smith",
+            "photoURL": "https://lh3.googleusercontent.com/a/example",
+            "createdAt": {
+                "_seconds": 1706745600,
+                "_nanoseconds": 0
+            },
+            "updatedAt": {
+                "_seconds": 1706831000,
+                "_nanoseconds": 0
+            },
+            "lastLoginAt": {
+                "_seconds": 1706831000,
+                "_nanoseconds": 0
+            },
+            "phoneNumber": "+12025551234",
+            "preferences": {
+                "marketingEmails": true,
+                "orderEmails": true,
+                "smsNotifications": true,
+                "theme": "dark",
+                "units": "metric"
+            },
+            "lifetimeValue": 89900,
+            "status": "active"
+        }
+    ]
+}

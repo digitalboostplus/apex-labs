@@ -2,6 +2,11 @@
  * AuthManager - Firebase Authentication handler
  * Manages user sign-in, sign-up, and auth state
  */
+
+// Import validation functions (will work when modules are properly set up)
+// For now, validation will be optional until module setup is complete
+let userValidation = null;
+
 class AuthManager {
     constructor() {
         this.user = null;
@@ -251,15 +256,33 @@ class AuthManager {
         if (!db) return;
 
         try {
-            await db.collection('users').doc(user.uid).set({
+            // Prepare profile data with validation
+            const profileData = {
                 email: user.email,
                 displayName: profile.displayName || user.displayName || null,
                 photoURL: profile.photoURL || user.photoURL || null,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
+            };
+
+            // Basic client-side validation
+            if (!profileData.email || !profileData.email.includes('@')) {
+                throw new Error('Invalid email address');
+            }
+
+            if (profileData.displayName && profileData.displayName.length > 100) {
+                throw new Error('Display name too long (max 100 characters)');
+            }
+
+            if (profileData.photoURL && !profileData.photoURL.match(/^https?:\/\//)) {
+                throw new Error('Photo URL must use HTTP or HTTPS protocol');
+            }
+
+            await db.collection('users').doc(user.uid).set(profileData, { merge: true });
+            console.log('User profile created successfully:', user.uid);
         } catch (error) {
             console.error('Failed to create user profile:', error);
+            throw error;
         }
     }
 
@@ -272,15 +295,33 @@ class AuthManager {
         if (!db) return;
 
         try {
-            await db.collection('users').doc(user.uid).set({
+            // Prepare sync data with validation
+            const syncData = {
                 email: user.email,
                 displayName: user.displayName,
                 photoURL: user.photoURL,
                 lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
+            };
+
+            // Basic client-side validation
+            if (!syncData.email || !syncData.email.includes('@')) {
+                throw new Error('Invalid email address');
+            }
+
+            if (syncData.displayName && syncData.displayName.length > 100) {
+                throw new Error('Display name too long (max 100 characters)');
+            }
+
+            if (syncData.photoURL && !syncData.photoURL.match(/^https?:\/\//)) {
+                throw new Error('Photo URL must use HTTP or HTTPS protocol');
+            }
+
+            await db.collection('users').doc(user.uid).set(syncData, { merge: true });
+            console.log('User profile synced successfully:', user.uid);
         } catch (error) {
             console.error('Failed to sync user profile:', error);
+            // Don't throw - sync failures shouldn't block sign in
         }
     }
 
