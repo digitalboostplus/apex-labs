@@ -1,166 +1,186 @@
 <!-- Auth Modal Component -->
 <div id="auth-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
-    <!-- Backdrop -->
-    <div id="auth-modal-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+    <!-- Backdrop: Enhanced Glassmorphism -->
+    <div id="auth-modal-overlay" class="fixed inset-0 bg-slate-950/40 backdrop-blur-md transition-opacity duration-300" onclick="closeAuthModal()"></div>
 
-    <!-- Modal Content -->
-    <div class="fixed inset-0 flex items-start md:items-center justify-center p-4 md:p-6 pointer-events-none overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto transform transition-all max-h-[calc(100vh-2rem)] overflow-y-auto"
+    <!-- Modal Content: Responsive Centering -->
+    <div class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none z-50">
+        <div class="bg-white rounded-none shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] w-full max-w-[440px] pointer-events-auto transform transition-all border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] my-auto"
             id="auth-modal-content">
-            <!-- Header -->
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 rounded-t-2xl">
-                <h2 id="auth-modal-title" class="text-xl font-bold text-slate-900">Sign In</h2>
+            
+            <!-- Tech Accent Line -->
+            <div class="h-1.5 w-full bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-dark"></div>
+
+            <!-- Header: Apex Labs Branding -->
+            <div class="p-4 md:p-6 border-b border-slate-100 flex justify-between items-center bg-white relative flex-shrink-0">
+                <div class="flex flex-col">
+                    <h2 id="auth-modal-title" class="text-2xl font-black text-brand-dark tracking-tighter uppercase leading-none">Sign In</h2>
+                    <p class="text-[10px] font-bold text-brand-blue tracking-[0.2em] uppercase mt-2">Access Portal</p>
+                </div>
                 <button onclick="closeAuthModal()"
-                    class="p-2 hover:bg-gray-200 rounded-full transition-colors cursor-pointer" aria-label="Close">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    class="p-2 hover:bg-slate-100 rounded-none transition-colors cursor-pointer group" aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400 group-hover:text-brand-dark" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                             d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
 
-            <!-- Tabs -->
-            <div class="flex border-b border-gray-100">
-                <button id="auth-tab-signin" onclick="switchAuthTab('signin')"
-                    class="flex-1 py-3 text-sm font-semibold text-amber-600 border-b-2 border-amber-600 transition-colors cursor-pointer">
-                    Sign In
-                </button>
-                <button id="auth-tab-register" onclick="switchAuthTab('register')"
-                    class="flex-1 py-3 text-sm font-semibold text-slate-400 hover:text-slate-600 border-b-2 border-transparent transition-colors cursor-pointer">
-                    Create Account
-                </button>
-            </div>
-
-            <!-- Form Container -->
-            <div class="p-6">
-                <!-- Error Message -->
-                <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+            <div class="flex-grow overflow-y-auto">
+                <!-- Tabs: Tech Style -->
+                <div class="flex border-b border-slate-100">
+                    <button id="auth-tab-signin" onclick="switchAuthTab('signin')"
+                        class="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-brand-blue border-b-2 border-brand-blue transition-all cursor-pointer bg-slate-50/50">
+                        Authentication
+                    </button>
+                    <button id="auth-tab-register" onclick="switchAuthTab('register')"
+                        class="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-slate-600 border-b-2 border-transparent transition-all cursor-pointer">
+                        Registration
+                    </button>
                 </div>
 
-                <!-- Success Message -->
-                <div id="auth-success" class="hidden mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm">
-                </div>
+                <!-- Form Container -->
+                <div class="p-4 md:p-6">
+                    <!-- Error Message -->
+                    <div id="auth-error" class="hidden mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-[11px] font-bold uppercase tracking-wider">
+                    </div>
 
-                <!-- Sign In Form -->
-                <form id="signin-form" class="space-y-4">
-                    <div>
-                        <label for="signin-email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                        <input type="email" id="signin-email" required
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                            placeholder="you@example.com">
+                    <!-- Success Message -->
+                    <div id="auth-success" class="hidden mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 text-[11px] font-bold uppercase tracking-wider">
                     </div>
-                    <div>
-                        <label for="signin-password" class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                        <input type="password" id="signin-password" required
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                            placeholder="Enter your password">
+
+                    <!-- Sign In Form -->
+                    <form id="signin-form" class="space-y-4">
+                        <div class="space-y-1.5">
+                            <label for="signin-email" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Network Identity</label>
+                            <div class="relative">
+                                <input type="email" id="signin-email" required
+                                    class="w-full px-4 py-4 bg-slate-50 border border-slate-200 focus:border-brand-blue focus:bg-white outline-none transition-all text-sm font-medium"
+                                    placeholder="Enter email address">
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label for="signin-password" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Key</label>
+                            <div class="relative">
+                                <input type="password" id="signin-password" required
+                                    class="w-full px-4 py-4 bg-slate-50 border border-slate-200 focus:border-brand-blue focus:bg-white outline-none transition-all text-sm font-medium"
+                                    placeholder="Enter credentials">
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center group cursor-pointer">
+                                <input type="checkbox" id="remember-me"
+                                    class="w-4 h-4 text-brand-blue border-slate-300 focus:ring-brand-blue rounded-none">
+                                <span class="ml-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-700 transition-colors">Maintain Session</span>
+                            </label>
+                            <button type="button" onclick="showForgotPassword()"
+                                class="text-[10px] font-black text-brand-blue hover:text-brand-dark uppercase tracking-widest transition-colors cursor-pointer">
+                                Recovery
+                            </button>
+                        </div>
+                        <button type="submit"
+                            class="w-full py-5 bg-brand-dark hover:bg-brand-blue text-white text-[11px] font-black uppercase tracking-[0.3em] transition-all shadow-xl hover:shadow-brand-blue/20 active:scale-[0.98] cursor-pointer">
+                            Initiate Access
+                        </button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="register-form" class="space-y-4 hidden">
+                        <div class="space-y-1.5">
+                            <label for="register-name" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Full Name</label>
+                            <input type="text" id="register-name"
+                                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 focus:border-brand-blue focus:bg-white outline-none transition-all text-sm font-medium"
+                                placeholder="Your full name">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label for="register-email" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email Address</label>
+                            <input type="email" id="register-email" required
+                                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 focus:border-brand-blue focus:bg-white outline-none transition-all text-sm font-medium"
+                                placeholder="you@example.com">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label for="register-password" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Pin</label>
+                            <input type="password" id="register-password" required minlength="6"
+                                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 focus:border-brand-blue focus:bg-white outline-none transition-all text-sm font-medium"
+                                placeholder="Min. 6 characters">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label for="register-confirm" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Verify Pin</label>
+                            <input type="password" id="register-confirm" required
+                                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 focus:border-brand-blue focus:bg-white outline-none transition-all text-sm font-medium"
+                                placeholder="Confirm your password">
+                        </div>
+                        <button type="submit"
+                            class="w-full py-5 bg-brand-dark hover:bg-brand-blue text-white text-[11px] font-black uppercase tracking-[0.3em] transition-all shadow-xl hover:shadow-brand-blue/20 active:scale-[0.98] cursor-pointer">
+                            Create Identity
+                        </button>
+                    </form>
+
+                    <!-- Forgot Password Form -->
+                    <form id="forgot-form" class="space-y-4 hidden">
+                        <p class="text-[11px] font-medium text-slate-500 leading-relaxed uppercase tracking-wider">
+                            Enter your verified email to receive a recovery link.
+                        </p>
+                        <div class="space-y-1.5">
+                            <label for="forgot-email" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Verified Email</label>
+                            <input type="email" id="forgot-email" required
+                                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 focus:border-brand-blue focus:bg-white outline-none transition-all text-sm font-medium"
+                                placeholder="you@example.com">
+                        </div>
+                        <button type="submit"
+                            class="w-full py-5 bg-brand-dark hover:bg-brand-blue text-white text-[11px] font-black uppercase tracking-[0.3em] transition-all shadow-xl active:scale-[0.98] cursor-pointer">
+                            Send Recovery Link
+                        </button>
+                        <button type="button" onclick="switchAuthTab('signin')"
+                            class="w-full py-2 text-[10px] font-black text-slate-400 hover:text-slate-800 uppercase tracking-widest transition-colors cursor-pointer text-center">
+                            Return to Portal
+                        </button>
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="relative my-5" id="auth-divider">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-slate-100"></div>
+                        </div>
+                        <div class="relative flex justify-center text-[10px] font-black uppercase tracking-[0.4em]">
+                            <span class="px-4 bg-white text-slate-300">Network Bridge</span>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <input type="checkbox" id="remember-me"
-                                class="w-4 h-4 text-amber-600 border-slate-300 rounded focus:ring-amber-500">
-                            <span class="ml-2 text-sm text-slate-600">Remember me</span>
-                        </label>
-                        <button type="button" onclick="showForgotPassword()"
-                            class="text-sm text-amber-600 hover:text-amber-700 font-medium cursor-pointer">
-                            Forgot password?
+
+                    <!-- Social Login -->
+                    <div id="social-login" class="space-y-3">
+                        <button type="button" onclick="signInWithGoogle()"
+                            class="w-full py-4 px-4 border border-slate-200 hover:border-brand-blue hover:bg-slate-50 transition-all flex items-center justify-center gap-4 group cursor-pointer">
+                            <svg class="w-5 h-5 grayscale group-hover:grayscale-0 transition-all duration-300" viewBox="0 0 24 24">
+                                <path fill="#4285F4"
+                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853"
+                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05"
+                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335"
+                                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 group-hover:text-brand-dark">Authorize with Google</span>
                         </button>
                     </div>
-                    <button type="submit"
-                        class="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-amber-600/20 active:scale-[0.98] cursor-pointer">
-                        Sign In
-                    </button>
-                </form>
-
-                <!-- Register Form -->
-                <form id="register-form" class="space-y-4 hidden">
-                    <div>
-                        <label for="register-name" class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-                        <input type="text" id="register-name"
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                            placeholder="Your full name">
-                    </div>
-                    <div>
-                        <label for="register-email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                        <input type="email" id="register-email" required
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                            placeholder="you@example.com">
-                    </div>
-                    <div>
-                        <label for="register-password" class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                        <input type="password" id="register-password" required minlength="6"
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                            placeholder="Min. 6 characters">
-                    </div>
-                    <div>
-                        <label for="register-confirm" class="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
-                        <input type="password" id="register-confirm" required
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                            placeholder="Confirm your password">
-                    </div>
-                    <button type="submit"
-                        class="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-amber-600/20 active:scale-[0.98] cursor-pointer">
-                        Create Account
-                    </button>
-                </form>
-
-                <!-- Forgot Password Form -->
-                <form id="forgot-form" class="space-y-4 hidden">
-                    <p class="text-sm text-slate-600 mb-4">
-                        Enter your email address and we'll send you a link to reset your password.
-                    </p>
-                    <div>
-                        <label for="forgot-email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                        <input type="email" id="forgot-email" required
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                            placeholder="you@example.com">
-                    </div>
-                    <button type="submit"
-                        class="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-amber-600/20 active:scale-[0.98] cursor-pointer">
-                        Send Reset Link
-                    </button>
-                    <button type="button" onclick="switchAuthTab('signin')"
-                        class="w-full py-3 text-slate-600 font-medium hover:text-slate-800 cursor-pointer">
-                        Back to Sign In
-                    </button>
-                </form>
-
-                <!-- Divider -->
-                <div class="relative my-6" id="auth-divider">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-slate-200"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-slate-500">or continue with</span>
-                    </div>
-                </div>
-
-                <!-- Social Login -->
-                <div id="social-login" class="space-y-3">
-                    <button type="button" onclick="signInWithGoogle()"
-                        class="w-full py-3 px-4 border-2 border-slate-200 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-50 transition-colors cursor-pointer">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24">
-                            <path fill="#4285F4"
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                            <path fill="#34A853"
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            <path fill="#FBBC05"
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                            <path fill="#EA4335"
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        </svg>
-                        <span class="font-medium text-slate-700">Continue with Google</span>
-                    </button>
                 </div>
             </div>
 
             <!-- Footer -->
-            <div class="px-6 pb-6 text-center text-xs text-slate-500">
-                By continuing, you agree to our
-                <a href="#" class="text-amber-600 hover:underline">Terms of Service</a>
-                and
-                <a href="#" class="text-amber-600 hover:underline">Privacy Policy</a>
+            <div class="px-4 py-3 md:px-6 md:py-4 text-center text-[9px] font-bold text-slate-400 uppercase tracking-widest border-t border-slate-50 bg-slate-50/50 flex-shrink-0">
+                Deployment Node: <span class="text-brand-blue">APEX-LABS-CORE</span>
+                <div class="mt-2 flex justify-center gap-4">
+                    <a href="#" class="hover:text-brand-dark transition-colors">Safety Protocols</a>
+                    <a href="#" class="hover:text-brand-dark transition-colors">Privacy Charter</a>
+                </div>
             </div>
         </div>
     </div>

@@ -215,15 +215,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auth Modal injection
+    // Auth Modal injection (MUST load before user menu so openAuthModal exists)
     const authModalContainer = document.getElementById('auth-modal-container');
-    if (authModalContainer) {
-        injectComponent('auth-modal-container', `${basePath}/components/auth-modal.html`);
-    }
-
-    // User Menu injection
     const userMenuContainer = document.getElementById('user-menu-container');
-    if (userMenuContainer) {
+
+    if (authModalContainer) {
+        injectComponent('auth-modal-container', `${basePath}/components/auth-modal.html`, () => {
+            // Auth modal loaded, now load user menu
+            if (userMenuContainer) {
+                injectComponent('user-menu-container', `${basePath}/components/user-menu.html`);
+            }
+        });
+    } else if (userMenuContainer) {
+        // Fallback: load user menu even if no auth modal container
         injectComponent('user-menu-container', `${basePath}/components/user-menu.html`);
     }
 

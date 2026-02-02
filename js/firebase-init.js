@@ -25,7 +25,7 @@ let initPromise = null;
 async function loadFirebaseSDK() {
     if (typeof firebase !== 'undefined') return;
 
-    const version = '11.1.0';
+    const version = '12.8.0';
     const scripts = [
         `https://www.gstatic.com/firebasejs/${version}/firebase-app-compat.js`,
         `https://www.gstatic.com/firebasejs/${version}/firebase-auth-compat.js`,
