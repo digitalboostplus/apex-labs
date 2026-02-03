@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Modal Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#0A1628',
+                        'brand-blue': '#0052CC',
+                        'brand-cyan': '#00C2FF'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-xl max-w-md">
+        <h1 class="text-2xl font-bold mb-4">Sign-In Modal Test</h1>
+        <p class="text-gray-600 mb-6">This page tests if the auth modal loads and displays correctly.</p>
+
+        <div class="space-y-4">
+            <button onclick="testModal()"
+                class="w-full px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition">
+                Click to Open Sign-In Modal
+            </button>
+
+            <div id="status" class="p-4 bg-gray-50 rounded text-sm font-mono min-h-[100px]">
+                <div class="font-bold mb-2">Status:</div>
+                <div id="status-text">Waiting...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Component containers -->
+    <div id="auth-modal-container"></div>
+    <div id="user-menu-container" class="hidden"></div>
+
+    <!-- Scripts -->
+    <script src="js/sanitize.js"></script>
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/app.js" defer></script>
+
+    <script>
+        function updateStatus(message) {
+            document.getElementById('status-text').innerHTML += '<br>' + message;
+        }
+
+        function testModal() {
+            updateStatus('Button clicked...');
+
+            if (typeof openAuthModal !== 'function') {
+                updateStatus('❌ ERROR: openAuthModal function not found!');
+                return;
+            }
+
+            updateStatus('✓ openAuthModal function exists');
+
+            const modal = document.getElementById('auth-modal');
+            if (!modal) {
+                updateStatus('❌ ERROR: auth-modal element not found!');
+                return;
+            }
+
+            updateStatus('✓ auth-modal element exists');
+            updateStatus('Opening modal...');
+
+            try {
+                openAuthModal();
+                setTimeout(() => {
+                    const isVisible = !modal.classList.contains('hidden');
+                    if (isVisible) {
+                        updateStatus('✅ SUCCESS: Modal is now visible!');
+                    } else {
+                        updateStatus('❌ ERROR: Modal opened but still hidden');
+                    }
+                }, 500);
+            } catch (error) {
+                updateStatus('❌ ERROR: ' + error.message);
+            }
+        }
+
+        // Monitor loading progress
+        setTimeout(() => {
+            updateStatus('Checking component loading...');
+            updateStatus('openAuthModal: ' + (typeof openAuthModal));
+            updateStatus('auth-modal exists: ' + !!document.getElementById('auth-modal'));
+        }, 2000);
+    </script>
+</body>
+</html>

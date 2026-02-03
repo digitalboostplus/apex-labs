@@ -107,60 +107,39 @@
                 <div data-lab-product="pt-141"></div>
             </div>
             <div class="space-y-8">
-                <div class="glass p-10 relative overflow-hidden group shadow-xl">
+                <div class="glass p-12 border-[#00C2FF] relative overflow-hidden group shadow-2xl scale-105 z-10">
                     <div class="flex justify-between items-center mb-6">
-                        <span class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Research
-                            Tier</span>
+                        <span class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Per Bottle</span>
                         <span
                             class="px-3 py-1 bg-slate-100 text-[10px] text-brand-dark font-black uppercase tracking-widest">Standard</span>
                     </div>
                     <div class="flex items-baseline space-x-2">
-                        <span class="text-6xl font-black text-brand-dark tracking-tighter">$60</span>
-                        <span class="text-slate-500 font-bold">/ 10mg Vial</span>
+                        <span class="text-7xl font-black text-[#00C2FF] tracking-tighter">$38</span>
+                        <span class="text-slate-500 font-bold">/ Bottle</span>
                     </div>
                     <button
-                        onclick="cartManager.addItem({id: 'pt-141', name: 'PT-141', price: 60, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png', category: 'Neural Signaling'}, 1)"
-                        class="w-full mt-10 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3">
-                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                        onclick="cartManager.addItem({id: 'pt-141', name: 'PT-141', price: 38, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png', category: 'Neural Signaling'}, 1)"
+                        class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         Add to Cart
                     </button>
                 </div>
-                <div class="glass p-12 border-[#00C2FF] relative overflow-hidden group shadow-2xl scale-105 z-10">
-                    <div
-                        class="absolute top-0 right-0 px-6 py-2 bg-[#00C2FF] text-brand-dark text-[10px] font-black uppercase tracking-widest">
-                        Wholesale Elite</div>
+                <div class="glass p-10 relative overflow-hidden group shadow-xl">
                     <div class="flex justify-between items-center mb-6">
-                        <span class="text-[10px] text-[#0052cc] font-black uppercase tracking-widest">Tier 1
-                            Logistics</span>
-                        <span class="text-[10px] text-slate-400 font-bold">10+ Vials</span>
+                        <span class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Wholesale</span>
+                        <span
+                            class="px-3 py-1 bg-slate-100 text-[10px] text-brand-dark font-black uppercase tracking-widest">Bulk Orders</span>
                     </div>
-                    <div class="flex items-baseline space-x-2">
-                        <span class="text-7xl font-black text-[#00C2FF] tracking-tighter">$50</span>
-                        <span class="text-slate-500 font-bold">/ Unit</span>
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <i data-lucide="phone" class="w-12 h-12 text-[#00C2FF] mb-4"></i>
+                        <p class="text-brand-dark font-bold text-lg mb-2">Call for Wholesale Pricing</p>
+                        <p class="text-slate-500 text-sm text-center">Contact us for volume discounts and distribution pricing</p>
                     </div>
-                    <button
-                        onclick="cartManager.addItem({id: 'pt-141', name: 'PT-141', price: 50, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png', category: 'Neural Signaling'}, 10)"
-                        class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4">
-                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        Add Wholesale Lot
-                    </button>
-                </div>
-                <div class="glass p-10 opacity-60">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Tier 2
-                            Distribution</span>
-                        <span class="text-[10px] text-slate-400 font-bold">25+ Vials</span>
-                    </div>
-                    <div class="flex items-baseline space-x-2">
-                        <span class="text-5xl font-black text-slate-400 tracking-tighter">$40</span>
-                        <span class="text-slate-400 font-bold">/ Unit</span>
-                    </div>
-                    <button
-                        onclick="cartManager.addItem({id: 'pt-141', name: 'PT-141', price: 40, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png', category: 'Neural Signaling'}, 25)"
-                        class="w-full mt-10 py-5 bg-brand-blue text-white hover:bg-brand-dark transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
-                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                        Add Distribution Lot
-                    </button>
+                    <a href="tel:+1234567890"
+                        class="w-full mt-6 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3">
+                        <i data-lucide="phone" class="w-4 h-4"></i>
+                        Contact for Wholesale
+                    </a>
                 </div>
             </div>
         </div>

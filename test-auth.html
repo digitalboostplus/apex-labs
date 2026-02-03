@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test - Apex Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#0A1628',
+                        'brand-blue': '#0052CC',
+                        'brand-cyan': '#00C2FF'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 p-8">
+    <h1 class="text-2xl font-bold mb-4">Authentication Test Page</h1>
+
+    <!-- Manual Test Button -->
+    <button onclick="testAuthModal()" class="px-6 py-3 bg-blue-600 text-white rounded mb-4">
+        Test: Open Auth Modal Manually
+    </button>
+
+    <div class="mb-4 p-4 bg-white rounded shadow">
+        <h2 class="font-bold mb-2">Debug Info:</h2>
+        <div id="debug-info" class="text-sm font-mono"></div>
+    </div>
+
+    <!-- Component Containers -->
+    <div id="user-menu-container"></div>
+    <div id="auth-modal-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/sanitize.js"></script>
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/app.js" defer></script>
+
+    <script>
+        function testAuthModal() {
+            console.log('Testing auth modal...');
+            if (typeof openAuthModal === 'function') {
+                openAuthModal();
+            } else {
+                alert('openAuthModal function not found!');
+            }
+        }
+
+        // Debug monitoring
+        setInterval(() => {
+            const debug = document.getElementById('debug-info');
+            const authModal = document.getElementById('auth-modal');
+            const guestBtn = document.getElementById('auth-btn-guest');
+
+            debug.innerHTML =
+                '<div>window.authManager: ' + (typeof window.authManager) + '</div>' +
+                '<div>window.openAuthModal: ' + (typeof window.openAuthModal) + '</div>' +
+                '<div>window.closeAuthModal: ' + (typeof window.closeAuthModal) + '</div>' +
+                '<div>auth-modal exists: ' + (!!authModal) + '</div>' +
+                '<div>auth-btn-guest exists: ' + (!!guestBtn) + '</div>' +
+                '<div>auth-btn-guest hidden: ' + (guestBtn && guestBtn.classList.contains('hidden')) + '</div>' +
+                '<div>Firebase ready: ' + (window.firebaseServices && window.firebaseServices.isInitialized()) + '</div>';
+        }, 1000);
+    </script>
+</body>
+</html>
