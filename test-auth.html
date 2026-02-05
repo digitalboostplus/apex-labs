@@ -3,71 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth Test - Apex Labs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Auth Configuration Test | Apex Labs</title>
+        <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'brand-dark': '#0A1628',
-                        'brand-blue': '#0052CC',
-                        'brand-cyan': '#00C2FF'
+                        brand: {
+                            dark: '#020617',
+                            navy: '#0F172A',
+                            blue: '#0052cc',
+                            cyan: '#00C2FF',
+                        },
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-slate-50 p-8">
-    <h1 class="text-2xl font-bold mb-4">Authentication Test Page</h1>
-
-    <!-- Manual Test Button -->
-    <button onclick="testAuthModal()" class="px-6 py-3 bg-blue-600 text-white rounded mb-4">
-        Test: Open Auth Modal Manually
-    </button>
-
-    <div class="mb-4 p-4 bg-white rounded shadow">
-        <h2 class="font-bold mb-2">Debug Info:</h2>
-        <div id="debug-info" class="text-sm font-mono"></div>
-    </div>
-
-    <!-- Component Containers -->
-    <div id="user-menu-container"></div>
-    <div id="auth-modal-container"></div>
-
-    <!-- Scripts -->
-    <script src="js/sanitize.js"></script>
     <script src="js/firebase-init.js" defer></script>
     <script src="js/auth.js" defer></script>
-    <script src="js/cart.js" defer></script>
-    <script src="js/app.js" defer></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-900">🔐 Authentication Test</h1>
+            <p class="mt-2 text-sm text-gray-600">Verify Firebase Auth is configured correctly</p>
+        </div>
+
+        <!-- Auth Status -->
+        <div id="auth-status" class="bg-white p-6 rounded-lg shadow">
+            <div class="flex items-center justify-center">
+                <div class="animate-pulse text-gray-500">Loading authentication...</div>
+            </div>
+        </div>
+
+        <!-- Sign In Form -->
+        <div id="sign-in-form" class="bg-white p-6 rounded-lg shadow hidden">
+            <h2 class="text-xl font-semibold mb-4">Sign In</h2>
+            <form id="email-sign-in-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="sign-in-email" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="sign-in-password" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <button type="submit"
+                    class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Sign In with Email
+                </button>
+            </form>
+
+            <div class="mt-4">
+                <button id="google-sign-in-btn"
+                    class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Sign In with Google
+                </button>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button id="show-sign-up-btn" class="text-sm text-blue-600 hover:text-blue-500">
+                    Need an account? Sign Up
+                </button>
+            </div>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="sign-up-form" class="bg-white p-6 rounded-lg shadow hidden">
+            <h2 class="text-xl font-semibold mb-4">Create Account</h2>
+            <form id="email-sign-up-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="sign-up-email" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password (min 6 characters)</label>
+                    <input type="password" id="sign-up-password" required minlength="6"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <button type="submit"
+                    class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Create Account
+                </button>
+            </form>
+
+            <div class="mt-4 text-center">
+                <button id="show-sign-in-btn" class="text-sm text-blue-600 hover:text-blue-500">
+                    Already have an account? Sign In
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Display -->
+        <div id="error-message" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded hidden">
+            <p class="text-sm font-medium"></p>
+        </div>
+
+        <!-- Success Display -->
+        <div id="success-message" class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded hidden">
+            <p class="text-sm font-medium"></p>
+        </div>
+
+        <!-- Configuration Info -->
+        <div class="bg-gray-100 p-4 rounded-lg text-xs">
+            <p class="font-semibold text-gray-700">Project: apex-labs-18862</p>
+            <p class="text-gray-600 mt-1">Test both Email/Password and Google sign-in</p>
+        </div>
+    </div>
 
     <script>
-        function testAuthModal() {
-            console.log('Testing auth modal...');
-            if (typeof openAuthModal === 'function') {
-                openAuthModal();
-            } else {
-                alert('openAuthModal function not found!');
+        // Wait for auth manager to be ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await window.authManager.init();
+
+                const authStatus = document.getElementById('auth-status');
+                const signInForm = document.getElementById('sign-in-form');
+                const signUpForm = document.getElementById('sign-up-form');
+                const errorMessage = document.getElementById('error-message');
+                const successMessage = document.getElementById('success-message');
+
+                // Subscribe to auth state changes
+                window.authManager.subscribe((event, data) => {
+                    if (event === 'authStateChanged') {
+                        if (data) {
+                            // User is signed in
+                            authStatus.innerHTML = `
+                                <div class="text-center">
+                                    <div class="mb-4">
+                                        <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-green-600">✓ Authentication Working!</h3>
+                                    <p class="mt-2 text-sm text-gray-600">Signed in as:</p>
+                                    <p class="mt-1 text-base font-semibold text-gray-900">${data.email}</p>
+                                    <p class="mt-1 text-xs text-gray-500">User ID: ${data.uid.substring(0, 20)}...</p>
+                                    <div class="mt-6 space-y-2">
+                                        <button id="sign-out-btn" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
+                                            Sign Out
+                                        </button>
+                                        <a href="index.html" class="block w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-center">
+                                            Go to Home Page
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                            signInForm.classList.add('hidden');
+                            signUpForm.classList.add('hidden');
+
+                            // Add sign out handler
+                            document.getElementById('sign-out-btn').addEventListener('click', async () => {
+                                try {
+                                    await window.authManager.signOut();
+                                    showSuccess('Signed out successfully');
+                                } catch (error) {
+                                    showError(error.message);
+                                }
+                            });
+                        } else {
+                            // User is signed out
+                            authStatus.classList.add('hidden');
+                            signInForm.classList.remove('hidden');
+                        }
+                    } else if (event === 'error') {
+                        showError(data.message);
+                    }
+                });
+
+                // Sign In form
+                document.getElementById('email-sign-in-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('sign-in-email').value;
+                    const password = document.getElementById('sign-in-password').value;
+
+                    try {
+                        await window.authManager.signIn(email, password);
+                        showSuccess('Signed in successfully!');
+                    } catch (error) {
+                        showError(error.message);
+                    }
+                });
+
+                // Sign Up form
+                document.getElementById('email-sign-up-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('sign-up-email').value;
+                    const password = document.getElementById('sign-up-password').value;
+
+                    try {
+                        await window.authManager.signUp(email, password);
+                        showSuccess('Account created successfully!');
+                    } catch (error) {
+                        showError(error.message);
+                    }
+                });
+
+                // Google Sign In
+                document.getElementById('google-sign-in-btn').addEventListener('click', async () => {
+                    try {
+                        await window.authManager.signInWithGoogle();
+                        showSuccess('Signed in with Google!');
+                    } catch (error) {
+                        showError(error.message);
+                    }
+                });
+
+                // Toggle forms
+                document.getElementById('show-sign-up-btn').addEventListener('click', () => {
+                    signInForm.classList.add('hidden');
+                    signUpForm.classList.remove('hidden');
+                    errorMessage.classList.add('hidden');
+                });
+
+                document.getElementById('show-sign-in-btn').addEventListener('click', () => {
+                    signUpForm.classList.add('hidden');
+                    signInForm.classList.remove('hidden');
+                    errorMessage.classList.add('hidden');
+                });
+
+                function showError(message) {
+                    errorMessage.querySelector('p').textContent = '❌ ' + message;
+                    errorMessage.classList.remove('hidden');
+                    successMessage.classList.add('hidden');
+                    setTimeout(() => errorMessage.classList.add('hidden'), 8000);
+                }
+
+                function showSuccess(message) {
+                    successMessage.querySelector('p').textContent = '✓ ' + message;
+                    successMessage.classList.remove('hidden');
+                    errorMessage.classList.add('hidden');
+                    setTimeout(() => successMessage.classList.add('hidden'), 3000);
+                }
+            } catch (error) {
+                console.error('Initialization error:', error);
+                document.getElementById('auth-status').innerHTML = `
+                    <div class="text-center text-red-600">
+                        <p class="font-semibold">Failed to initialize authentication</p>
+                        <p class="text-sm mt-2">${error.message}</p>
+                    </div>
+                `;
             }
-        }
-
-        // Debug monitoring
-        setInterval(() => {
-            const debug = document.getElementById('debug-info');
-            const authModal = document.getElementById('auth-modal');
-            const guestBtn = document.getElementById('auth-btn-guest');
-
-            debug.innerHTML =
-                '<div>window.authManager: ' + (typeof window.authManager) + '</div>' +
-                '<div>window.openAuthModal: ' + (typeof window.openAuthModal) + '</div>' +
-                '<div>window.closeAuthModal: ' + (typeof window.closeAuthModal) + '</div>' +
-                '<div>auth-modal exists: ' + (!!authModal) + '</div>' +
-                '<div>auth-btn-guest exists: ' + (!!guestBtn) + '</div>' +
-                '<div>auth-btn-guest hidden: ' + (guestBtn && guestBtn.classList.contains('hidden')) + '</div>' +
-                '<div>Firebase ready: ' + (window.firebaseServices && window.firebaseServices.isInitialized()) + '</div>';
-        }, 1000);
+        });
     </script>
 </body>
 </html>
+

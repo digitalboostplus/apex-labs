@@ -141,5 +141,24 @@ service cloud.firestore {
             allow create: if true;
             allow read, update, delete: if isAdmin();
         }
+
+        // Wholesale Inquiries collection
+        match /wholesaleInquiries/{inquiryId} {
+            // Anyone can create wholesale inquiries
+            allow create: if request.resource.data.name is string &&
+                          request.resource.data.name.size() > 0 &&
+                          request.resource.data.name.size() <= 100 &&
+                          isValidEmail(request.resource.data.email) &&
+                          request.resource.data.phone is string &&
+                          request.resource.data.phone.size() > 0 &&
+                          request.resource.data.company is string &&
+                          request.resource.data.company.size() > 0 &&
+                          request.resource.data.volume is string &&
+                          request.resource.data.status == 'new' &&
+                          request.resource.data.createdAt == request.time;
+
+            // Only admins can read/update/delete inquiries
+            allow read, update, delete: if isAdmin();
+        }
     }
 }

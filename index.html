@@ -258,7 +258,7 @@
             min-height: 200px;
         }
 
-        #product-grid.list-view .product-card > div:first-child {
+        #product-grid.list-view .product-card>div:first-child {
             width: 200px;
             min-width: 200px;
             height: 200px;
@@ -267,7 +267,7 @@
             border-right: 1px solid rgb(226 232 240);
         }
 
-        #product-grid.list-view .product-card > div:last-child {
+        #product-grid.list-view .product-card>div:last-child {
             flex: 1;
             padding: 1.5rem 2rem;
         }
@@ -289,7 +289,7 @@
             gap: 0.5rem;
         }
 
-        #product-grid.list-view .product-card .mt-auto .grid > * {
+        #product-grid.list-view .product-card .mt-auto .grid>* {
             flex: 0 0 auto;
             width: auto;
             padding-left: 1.5rem;
@@ -561,13 +561,17 @@
 
                 <div class="flex gap-2 p-1 bg-white border border-slate-200 shadow-sm self-start">
 
-                    <button id="view-grid" class="view-toggle w-10 h-10 flex items-center justify-center bg-brand-dark text-white transition-colors" aria-label="Grid view">
+                    <button id="view-grid"
+                        class="view-toggle w-10 h-10 flex items-center justify-center bg-brand-dark text-white transition-colors"
+                        aria-label="Grid view">
 
                         <i data-lucide="layout-grid" class="w-4 h-4"></i>
 
                     </button>
 
-                    <button id="view-list" class="view-toggle w-10 h-10 flex items-center justify-center text-slate-400 hover:text-brand-dark transition-colors" aria-label="List view">
+                    <button id="view-list"
+                        class="view-toggle w-10 h-10 flex items-center justify-center text-slate-400 hover:text-brand-dark transition-colors"
+                        aria-label="List view">
 
                         <i data-lucide="list" class="w-4 h-4"></i>
 
@@ -582,25 +586,22 @@
                     <div class="relative">
 
                         <input type="text" id="product-search" placeholder="Search Compounds..."
-
                             class="bg-white border border-slate-200 px-10 py-2.5 text-xs font-bold uppercase tracking-[0.3em] focus:outline-none focus:border-brand-blue w-full md:w-72 transition-all">
 
                         <i data-lucide="search"
-
                             class="w-3.5 h-3.5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
 
                         <button type="button" id="search-input-clear"
-
                             class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-brand-blue hidden">Clear</button>
 
                     </div>
 
-                    <div class="flex items-center justify-between mt-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+                    <div
+                        class="flex items-center justify-between mt-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
 
                         <span id="search-count">Showing all compounds</span>
 
                         <button type="button" id="search-reset"
-
                             class="text-brand-blue hover:text-brand-dark tracking-[0.3em] hidden">Reset</button>
 
                     </div>
@@ -608,7 +609,7 @@
                 </div>
 
             </div>
-            </div>
+        </div>
         </div>
 
         <!-- GRID LAYOUT: Equal Sizes -->
@@ -616,8 +617,7 @@
 
             <!-- PRODUCT CARD TEMPLATE -->
             <!-- Item 1: AOD-9604 -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="aod-9604" data-name="AOD-9604" data-category="Lipolysis Protocol"
                 data-description="Fragment 176-191 of Human Growth Hormone. Specifically researched for its ability to stimulate lipolysis (fat breakdown) without affecting blood sugar.">
                 <div
@@ -664,8 +664,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'aod-9604', name: 'AOD-9604', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)AOD-9604.png', category: 'Lipolysis Protocol'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'aod-9604', name: 'AOD-9604', price: 55, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)AOD-9604.png', category: 'Lipolysis Protocol'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -675,8 +675,7 @@
             </div>
 
             <!-- Item 2: BPC-157 -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="bpc-157" data-name="BPC-157" data-category="Recovery Agent"
                 data-description="Body Protection Compound. Pentadecapeptide isolated from gastric juice, known for its potent cytoprotective and tissue-healing properties.">
                 <div
@@ -712,8 +711,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'bpc-157', name: 'BPC-157', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)BPC-157.png', category: 'Recovery Agent'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'bpc-157', name: 'BPC-157', price: 42, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)BPC-157.png', category: 'Recovery Agent'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -723,8 +722,7 @@
             </div>
 
             <!-- Item 3: CJC-1295 -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="cjc-1295" data-name="CJC-1295" data-category="GHRH Analog"
                 data-description="Tetrasubstituted 30-amino acid peptide hormone. Promotes pulsatile GH release with an extended half-life compared to native GHRH.">
                 <div
@@ -760,8 +758,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'cjc-1295', name: 'CJC-1295', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)CJC-1295.png', category: 'GHRH Analog'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'cjc-1295', name: 'CJC-1295', price: 55, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)CJC-1295.png', category: 'GHRH Analog'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -771,8 +769,7 @@
             </div>
 
             <!-- Item 4: IPAMORELIN -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="ipamorelin" data-name="IPAMORELIN" data-category="Selective Secretagogue"
                 data-description="A selective GH-Secretagogue causing growth hormone release without significant impact on ACTH/cortisol or prolactin levels.">
                 <div
@@ -809,8 +806,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'ipamorelin', name: 'IPAMORELIN', price: 80, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)IPAMORELIN.png', category: 'Selective Secretagogue'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'ipamorelin', name: 'IPAMORELIN', price: 38, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)IPAMORELIN.png', category: 'Selective Secretagogue'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -820,8 +817,7 @@
             </div>
 
             <!-- Item 5: MOTS-C -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="mots-c" data-name="MOTS-C" data-category="Mitochondrial Derived"
                 data-description="A mitochondrial-derived peptide that regulates metabolic functions and supports cellular energy homeostasis.">
                 <div
@@ -858,8 +854,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'mots-c', name: 'MOTS-C', price: 65, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)MOTS-C.png', category: 'Mitochondrial Derived'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'mots-c', name: 'MOTS-C', price: 45, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)MOTS-C.png', category: 'Mitochondrial Derived'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -869,8 +865,7 @@
             </div>
 
             <!-- Item 6: NADS+ -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="nadplus" data-name="NADS+" data-category="Cellular Vitality"
                 data-description="Critical coenzyme found in all living cells. Essential for sirtuin activation, DNA repair, and energy metabolism.">
                 <div
@@ -907,8 +902,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'nadplus', name: 'NADS+', price: 150, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)NADS+ (1).png', category: 'Cellular Vitality'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'nadplus', name: 'NAD+', price: 55, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)NADS+ (1).png', category: 'Cellular Vitality'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -918,8 +913,7 @@
             </div>
 
             <!-- Item 7: PTP-141 -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="pt-141" data-name="PTP-141 PT-141" data-category="Neural Signaling"
                 data-description="Bremelanotide. A melanocortin receptor agonist which acts centrally to improve libido and arousal in both sexes.">
                 <div
@@ -956,8 +950,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'pt-141', name: 'PTP-141', price: 60, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png', category: 'Neural Signaling'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'pt-141', name: 'PTP-141', price: 38, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)PTP-141.png', category: 'Neural Signaling'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -967,8 +961,7 @@
             </div>
 
             <!-- Item 8: TB-500 -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="tb-500" data-name="TB-500" data-category="Tissue Regeneration"
                 data-description="Synthetic fraction of Thymosin Beta-4. Promotes endothelial cell migration, angiogenesis, and reduced inflammation.">
                 <div
@@ -1005,8 +998,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'tb-500', name: 'TB-500', price: 80, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'tb-500', name: 'TB-500', price: 55, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)TB500.png', category: 'Tissue Regeneration'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -1016,8 +1009,7 @@
             </div>
 
             <!-- Item 9: TESAMORELIN -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="tesamorelin" data-name="TESAMORELIN" data-category="Metabolic Factor"
                 data-description="A stabilized growth hormone-releasing hormone (GHRH) analogue. Clinically shown to reduce visceral adipose tissue.">
                 <div
@@ -1058,8 +1050,7 @@
             </div>
 
             <!-- Item 10: GHK-Cu -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="ghk-cu" data-name="GHK-Cu" data-category="Skin Regeneration"
                 data-description="Copper peptide complex known for its role in skin regeneration, DNA repair, and anti-inflammatory properties.">
                 <div
@@ -1100,8 +1091,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 75, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)GHK-CU.jpg', category: 'Skin Regeneration'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'ghk-cu', name: 'GHK-Cu', price: 44, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)GHK-CU.jpg', category: 'Skin Regeneration'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -1111,8 +1102,7 @@
             </div>
 
             <!-- Item 11: Retatrutide -->
-            <div
-                class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="reta" data-name="Retatrutide RETA" data-category="Advanced Metabolic"
                 data-description="Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum receptor affinity.">
                 <div
@@ -1153,8 +1143,8 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'reta', name: 'Retatrutide', price: 120, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)RETATRUTIDE.png', category: 'Advanced Metabolic'}, 1)"
-                                class="w-full py-4 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                                onclick="cartManager.addItem({id: 'reta', name: 'Retatrutide', price: 70, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)RETATRUTIDE.png', category: 'Advanced Metabolic'}, 1)"
+                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>
@@ -1168,7 +1158,9 @@
 
         <div id="product-list" class="max-w-7xl mx-auto px-6 hidden">
             <div class="space-y-4">
-                <div id="product-list-loading" class="text-center py-12 text-xs font-black uppercase tracking-[0.3em] text-slate-400">Preparing list view...</div>
+                <div id="product-list-loading"
+                    class="text-center py-12 text-xs font-black uppercase tracking-[0.3em] text-slate-400">Preparing
+                    list view...</div>
                 <div id="product-list-content" class="space-y-4 hidden"></div>
             </div>
         </div>
@@ -1176,7 +1168,8 @@
         <div id="no-results" class="text-center py-16">
             <i data-lucide="search-x" class="w-16 h-16 text-slate-300 mx-auto mb-6"></i>
             <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight mb-2">No Compounds Found</h3>
-            <p class="text-slate-500 font-medium">Try adjusting your search terms or <button id="clear-search" class="text-brand-blue hover:underline">clear the search</button></p>
+            <p class="text-slate-500 font-medium">Try adjusting your search terms or <button id="clear-search"
+                    class="text-brand-blue hover:underline">clear the search</button></p>
         </div>
     </section>
 
@@ -1780,7 +1773,7 @@
                         <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400">${wholesaleMessage}</p>
                         <div class="flex flex-col sm:flex-row md:flex-col gap-3">
                             <a href="pricing/${product.id}.html" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center">Details</a>
-                            <button type="button" onclick="cartManager.addItem({id: '${product.id}', name: '${product.name}', price: ${addPrice}, image: '${product.image}', category: '${product.category}'}, 1)" class="w-full py-3 bg-brand-dark text-white hover:bg-brand-blue font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2">
+                            <button type="button" onclick="cartManager.addItem({id: '${product.id}', name: '${product.name}', price: ${addPrice}, image: '${product.image}', category: '${product.category}'}, 1)" class="w-full py-3 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2">
                                 <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                                 Add
                             </button>

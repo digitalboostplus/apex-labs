@@ -5,7 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AOD-9604 Pricing | Apex Labs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#020617',
+                            navy: '#0F172A',
+                            blue: '#0052cc',
+                            cyan: '#00C2FF',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap"
         rel="stylesheet">
@@ -18,6 +34,7 @@
     <script src="../js/auth.js" defer></script>
     <script src='../js/sanitize.js'></script>
     <script src='../js/cart.js'></script>
+    <script src='../js/wholesale.js' defer></script>
     <style>
         body {
             background: #F8FAFC;
@@ -134,7 +151,7 @@
                     </div>
                     <button
                         onclick="cartManager.addItem({id: 'aod-9604', name: 'AOD-9604', price: 55, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)AOD-9604.png', category: 'Lipolysis Protocol'}, 1)"
-                        class="w-full mt-10 py-5 bg-brand-dark text-white hover:bg-brand-blue transition-all text-sm font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4">
+                        class="w-full mt-10 py-5 bg-brand-blue text-white hover:bg-brand-dark shadow-xl transition-all text-sm font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         Add to Cart
                     </button>
@@ -150,11 +167,11 @@
                         <p class="text-brand-dark font-bold text-lg mb-2">Call for Wholesale Pricing</p>
                         <p class="text-slate-500 text-sm text-center">Contact us for volume discounts and distribution pricing</p>
                     </div>
-                    <a href="tel:+1234567890"
+                    <button onclick="openWholesaleModal('AOD-9604')" type="button"
                         class="w-full mt-6 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3">
                         <i data-lucide="phone" class="w-4 h-4"></i>
                         Contact for Wholesale
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -165,6 +182,9 @@
     </footer>
     <script>gsap.from("main > div", { opacity: 0, y: 30, duration: 1.5, ease: "power4.out" });</script>
     <div id='cart-container'></div>
+    <div id='wholesale-container'></div>
 </body>
 
 </html>
+
+

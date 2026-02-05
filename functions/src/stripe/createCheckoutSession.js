@@ -31,40 +31,48 @@ async function validateAndBuildLineItems(items) {
 
     for (const item of items) {
         // Calculate the tiered price based on quantity
-        // Tier 0 (1-9): $75, Tier 1 (10-24): $65, Tier 2 (25+): $50
-        let unitAmount = 7500; // Default $75.00
+        let unitAmount = 5500; // Default base for most $55 products
 
-        // Custom logic for specific products if needed (e.g., NAD+ is $150)
         if (item.id === 'nadplus' || item.name.includes('NAD+')) {
-            // NAD+ tiers: $150 / $135 / $125
-            if (item.quantity >= 25) unitAmount = 12500;
-            else if (item.quantity >= 10) unitAmount = 13500;
-            else unitAmount = 15000;
+            // NAD+ tiers: $55 / $44 / $35
+            if (item.quantity >= 25) unitAmount = 3500;
+            else if (item.quantity >= 10) unitAmount = 4400;
+            else unitAmount = 5500;
         } else if (item.id === 'reta' || item.name.includes('RETA')) {
-            // RETA tiers: $120 / $105 / $95
-            if (item.quantity >= 25) unitAmount = 9500;
-            else if (item.quantity >= 10) unitAmount = 10500;
-            else unitAmount = 12000;
-        } else if (item.id === 'mots-c') {
-            // MOTS-C tiers: $65 / $55 / $45
+            // RETA tiers: $70 / $56 / $45
             if (item.quantity >= 25) unitAmount = 4500;
-            else if (item.quantity >= 10) unitAmount = 5500;
-            else unitAmount = 6500;
-        } else if (item.id === 'pt-141') {
-            // PT-141 tiers: $60 / $50 / $40
-            if (item.quantity >= 25) unitAmount = 4000;
-            else if (item.quantity >= 10) unitAmount = 5000;
-            else unitAmount = 6000;
-        } else if (item.id === 'ipamorelin' || item.id === 'tb-500' || item.id === 'tesamorelin') {
-            // Premium tiers: $80 / $65 / $55
-            if (item.quantity >= 25) unitAmount = 5500;
-            else if (item.quantity >= 10) unitAmount = 6500;
-            else unitAmount = 8000;
+            else if (item.quantity >= 10) unitAmount = 5600;
+            else unitAmount = 7000;
+        } else if (item.id === 'mots-c') {
+            // MOTS-C tiers: $45 / $36 / $30
+            if (item.quantity >= 25) unitAmount = 3000;
+            else if (item.quantity >= 10) unitAmount = 3600;
+            else unitAmount = 4500;
+        } else if (item.id === 'pt-141' || item.id === 'ipamorelin') {
+            // Recovery/Base tiers: $38 / $30 / $25
+            if (item.quantity >= 25) unitAmount = 2500;
+            else if (item.quantity >= 10) unitAmount = 3000;
+            else unitAmount = 3800;
+        } else if (item.id === 'bpc-157') {
+            // BPC tiers: $42 / $34 / $28
+            if (item.quantity >= 25) unitAmount = 2800;
+            else if (item.quantity >= 10) unitAmount = 3400;
+            else unitAmount = 4200;
+        } else if (item.id === 'ghk-cu') {
+            // GHK tiers: $44 / $35 / $29
+            if (item.quantity >= 25) unitAmount = 2900;
+            else if (item.quantity >= 10) unitAmount = 3500;
+            else unitAmount = 4400;
+        } else if (item.id === 'tesamorelin') {
+            // Tesa tiers: $58 / $46 / $38
+            if (item.quantity >= 25) unitAmount = 3800;
+            else if (item.quantity >= 10) unitAmount = 4600;
+            else unitAmount = 5800;
         } else {
-            // Standard tiers (BPC, AOD, CJC, GHK-Cu): $75 / $60 / $50
-            if (item.quantity >= 25) unitAmount = 5000;
-            else if (item.quantity >= 10) unitAmount = 6000;
-            else unitAmount = 7500;
+            // Standard $55 tiers (AOD, CJC, TB-500): $55 / $44 / $35
+            if (item.quantity >= 25) unitAmount = 3500;
+            else if (item.quantity >= 10) unitAmount = 4400;
+            else unitAmount = 5500;
         }
 
         // Build properly encoded image URL

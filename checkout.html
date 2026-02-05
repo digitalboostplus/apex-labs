@@ -5,7 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout | Apex Labs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#020617',
+                            navy: '#0F172A',
+                            blue: '#0052cc',
+                            cyan: '#00C2FF',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="css/design-system.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -424,3 +440,4 @@
 </body>
 
 </html>
+
