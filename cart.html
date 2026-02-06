@@ -226,8 +226,8 @@
             </div>
             `}).join('');
 
-            subtotalEl.textContent = `$${window.cartManager.getCartTotal().toFixed(2)}`;
-            totalEl.textContent = `$${window.cartManager.getCartTotal().toFixed(2)}`;
+            subtotalEl.textContent = `$${window.cartManager.getTotal().toFixed(2)}`;
+            totalEl.textContent = `$${window.cartManager.getTotal().toFixed(2)}`;
 
             if (window.lucide) {
                 window.lucide.createIcons();
