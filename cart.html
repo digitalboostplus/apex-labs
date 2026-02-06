@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart | Apex Labs</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -132,7 +132,7 @@
                         </div>
                     </div>
 
-                    <a href="checkout.html" id="checkout-btn"
+                    <a href="checkout.html" id="page-checkout-btn"
                         class="w-full py-5 bg-brand-dark text-white text-center font-black uppercase text-xs tracking-[0.2em] hover:bg-brand-blue transition-all flex items-center justify-center gap-3">
                         Proceed to Checkout
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -148,21 +148,21 @@
     </footer>
 
     <script>
-        // Load checkout stepper
-        (function () {
-            const container = document.getElementById('checkout-stepper-container');
-            if (container) {
-                fetch('components/checkout-stepper.html')
-                    .then(res => res.text())
-                    .then(html => {
-                        const range = document.createRange();
-                        const fragment = range.createContextualFragment(html);
-                        container.innerHTML = '';
-                        container.appendChild(fragment);
-                    })
-                    .catch(console.error);
-            }
-        })();
+            // Load checkout stepper
+            (function () {
+                const container = document.getElementById('checkout-stepper-container');
+                if (container) {
+                    fetch('components/checkout-stepper.html')
+                        .then(res => res.text())
+                        .then(html => {
+                            const range = document.createRange();
+                            const fragment = range.createContextualFragment(html);
+                            container.innerHTML = '';
+                            container.appendChild(fragment);
+                        })
+                        .catch(console.error);
+                }
+            })();
 
         function renderCart() {
 
@@ -240,4 +240,3 @@
 </body>
 
 </html>
-

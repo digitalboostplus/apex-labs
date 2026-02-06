@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.updateCartDrawerUI = (cart) => {
         const list = document.getElementById('cart-items');
         const totalEl = document.getElementById('cart-total');
-        const checkoutBtn = document.getElementById('checkout-btn');
+        const checkoutBtn = document.getElementById('drawer-checkout-btn');
 
         if (!list || !totalEl || !window.cartManager) return;
 
@@ -205,8 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
         injectComponent('cart-container', `${basePath}/components/cart-drawer.html`, () => {
             if (window.cartManager) {
                 window.cartManager.subscribe(window.updateCartDrawerUI);
-                const checkoutBtn = document.getElementById('checkout-btn');
-                if (checkoutBtn) {
+                // Avoid duplicate redirect listeners if already on checkout page
+                const isCheckoutPage = window.location.pathname.includes('checkout.html');
+                const checkoutBtn = document.getElementById('drawer-checkout-btn');
+                if (checkoutBtn && !isCheckoutPage) {
                     checkoutBtn.addEventListener('click', () => {
                         window.location.href = 'checkout.html';
                     });
