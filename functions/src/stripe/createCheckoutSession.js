@@ -6,7 +6,16 @@
 const admin = require('firebase-admin');
 const { onRequest } = require('firebase-functions/v2/https');
 const Stripe = require('stripe');
-const cors = require('cors')({ origin: true });
+const { logger } = require('firebase-functions');
+const cors = require('cors')({
+    origin: [
+        'https://apex-labs-18862.web.app',
+        'https://apex-labs-18862.firebaseapp.com',
+        'http://localhost:3000',
+        'http://localhost:5000',
+        'http://127.0.0.1:4173'
+    ]
+});
 
 // Initialize Stripe lazily to prevent build-time failures
 let stripe;
@@ -144,7 +153,8 @@ async function createPendingOrder({ sessionId, items, customerEmail, userId, met
  */
 exports.createCheckoutSession = onRequest({
     secrets: ["STRIPE_SECRET_KEY"],
-    maxInstances: 10
+    maxInstances: 10,
+    concurrency: 80
 }, (req, res) => {
     cors(req, res, async () => {
         // Only allow POST requests
@@ -315,7 +325,7 @@ exports.createCheckoutSession = onRequest({
             });
 
         } catch (error) {
-            console.error('Error creating checkout session:', error);
+            logger.error('Error creating checkout session:', error);
             return res.status(error.status || 500).json({ error: error.message || 'Failed to create checkout session' });
         }
     });

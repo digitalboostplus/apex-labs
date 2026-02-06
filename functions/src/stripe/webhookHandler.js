@@ -64,7 +64,7 @@ async function updateOrderLookup(sessionOrId, updates) {
 }
 
 async function handleCheckoutComplete(session) {
-    console.log(`Processing checkout.session.completed: ${session.id}`);
+    logger.info(`Processing checkout.session.completed: ${session.id}`);
 
     const customerDetails = session.customer_details || {};
     const shippingDetails = session.shipping_details || session.shipping || {};
@@ -85,17 +85,21 @@ async function handleCheckoutComplete(session) {
         paidAt: admin.firestore.FieldValue.serverTimestamp()
     };
 
-    const orderId = await updateOrderLookup(session, updates);
+    return await db.runTransaction(async (transaction) => {
+        const orderId = await updateOrderLookup(session, updates);
 
-    if (orderId) {
-        console.log(`Order ${orderId} marked as paid`);
+        if (orderId) {
+            logger.info(`Order ${orderId} marked as paid`);
 
-        const orderDoc = await db.collection('orders').doc(orderId).get();
-        const orderData = orderDoc.data();
+            const orderRef = db.collection('orders').doc(orderId);
+            const orderDoc = await transaction.get(orderRef);
+            const orderData = orderDoc.data();
 
-        if (orderData.userId) {
-            await db.collection('users').doc(orderData.userId)
-                .collection('orders').doc(orderId).set({
+            if (orderData && orderData.userId) {
+                const userOrderRef = db.collection('users').doc(orderData.userId)
+                    .collection('orders').doc(orderId);
+
+                transaction.set(userOrderRef, {
                     orderId: orderId,
                     status: 'paid',
                     amountTotal: updates.amountTotal,
@@ -103,10 +107,10 @@ async function handleCheckoutComplete(session) {
                     createdAt: orderData.createdAt,
                     paidAt: updates.paidAt
                 });
+            }
         }
-    }
-
-    return orderId;
+        return orderId;
+    });
 }
 
 async function handleCheckoutExpired(session) {
@@ -155,7 +159,8 @@ async function handleChargeRefunded(charge) {
 
 exports.stripeWebhook = onRequest({
     secrets: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
-    maxInstances: 10
+    maxInstances: 10,
+    concurrency: 80
 }, async (req, res) => {
 
     if (req.method !== 'POST') {
