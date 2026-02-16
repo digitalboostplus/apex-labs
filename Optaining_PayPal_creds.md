@@ -34,6 +34,36 @@ The Webhook allows PayPal to "talk back" to our website to confirm when a paymen
 5.  Click **Save**.
 6.  Once saved, a **Webhook ID** will appear in the table. Copy this ID.
 
+### Step 5: Configure Firebase Secrets
+Once you have the values above, run these commands in your terminal (replacing `YOUR_VALUE` with the actual codes):
+
+```bash
+# 1. Set the Client ID
+firebase functions:secrets:set PAYPAL_CLIENT_ID
+
+# 2. Set the Secret Key
+firebase functions:secrets:set PAYPAL_CLIENT_SECRET
+
+# 3. Set the Webhook ID
+firebase functions:secrets:set PAYPAL_WEBHOOK_ID
+```
+
+---
+
+### ⚠️ IMPORTANT: Final Deployment Step
+To protect your credentials, the code is currently configured to skip the strict secret check so you could commit to GitHub. **After you have set the secrets above, you MUST uncomment the `secrets` lines in these files:**
+
+1.  `functions/src/paypal/createPayPalOrder.js` (line 129)
+2.  `functions/src/paypal/capturePayPalOrder.js` (line 28)
+3.  `functions/src/paypal/webhookHandler.js` (line 197)
+
+Change:
+`// secrets: ['PAYPAL_CLIENT_ID', ...]`
+To:
+`secrets: ['PAYPAL_CLIENT_ID', ...]`
+
+Then run `firebase deploy --only functions` to finalize the security configuration.
+
 ---
 
 ### Summary Checklist for the Owner
