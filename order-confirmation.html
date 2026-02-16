@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmed | Apex Labs</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -190,30 +190,30 @@
                 window.cartManager.clearCart();
             }
 
-            // Get session_id from URL
+            // Get paypal_order_id from URL
             const urlParams = new URLSearchParams(window.location.search);
-            const sessionId = urlParams.get('session_id');
-            const orderId = sessionStorage.getItem('apex_labs_order_id');
+            const paypalOrderId = urlParams.get('paypal_order_id');
+            const orderId = urlParams.get('order_id') || sessionStorage.getItem('apex_labs_order_id');
 
             // Display order ID
             const orderIdEl = document.getElementById('order-id');
             if (orderId) {
                 orderIdEl.textContent = 'APX-' + orderId.slice(-8).toUpperCase();
                 sessionStorage.removeItem('apex_labs_order_id');
-            } else if (sessionId) {
-                orderIdEl.textContent = 'APX-' + sessionId.slice(-8).toUpperCase();
+            } else if (paypalOrderId) {
+                orderIdEl.textContent = 'APX-' + paypalOrderId.slice(-8).toUpperCase();
             } else {
                 orderIdEl.textContent = 'APX-' + Math.random().toString(36).substr(2, 9).toUpperCase();
             }
 
-            // Try to fetch order details from Firestore if we have session_id
-            if (sessionId && window.firebaseServices) {
+            // Try to fetch order details from Firestore if we have paypalOrderId
+            if (paypalOrderId && window.firebaseServices) {
                 try {
                     const db = window.firebaseServices.getFirestore();
                     if (db) {
                         const ordersSnapshot = await db
                             .collection('orders')
-                            .where('stripeSessionId', '==', sessionId)
+                            .where('paypalOrderId', '==', paypalOrderId)
                             .limit(1)
                             .get();
 
@@ -260,22 +260,22 @@
                 } catch (error) {
                     console.error('Error fetching order details:', error);
                 }
+            }
 
-                // Handle account section visibility
-                const accountSection = document.getElementById('account-section');
-                const accountRedirect = document.getElementById('account-redirect');
+            // Handle account section visibility
+            const accountSection = document.getElementById('account-section');
+            const accountRedirect = document.getElementById('account-redirect');
 
-                if (window.firebase) {
-                    firebase.auth().onAuthStateChanged(user => {
-                        if (user) {
-                            if (accountSection) accountSection.classList.add('hidden');
-                            if (accountRedirect) accountRedirect.classList.remove('hidden');
-                        } else {
-                            if (accountSection) accountSection.classList.remove('hidden');
-                            if (accountRedirect) accountRedirect.classList.add('hidden');
-                        }
-                    });
-                }
+            if (window.firebase) {
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        if (accountSection) accountSection.classList.add('hidden');
+                        if (accountRedirect) accountRedirect.classList.remove('hidden');
+                    } else {
+                        if (accountSection) accountSection.classList.remove('hidden');
+                        if (accountRedirect) accountRedirect.classList.add('hidden');
+                    }
+                });
             }
 
             // GSAP animations
@@ -333,4 +333,3 @@
 </body>
 
 </html>
-

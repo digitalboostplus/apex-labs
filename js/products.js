@@ -24,7 +24,7 @@ class ProductManager {
             try {
                 // Detect path context for proper asset resolution
                 const isInSubdir = window.location.pathname.includes('/pricing/') ||
-                                   window.location.pathname.includes('/pages/');
+                    window.location.pathname.includes('/pages/');
                 const basePath = isInSubdir ? '..' : '.';
 
                 const response = await fetch(`${basePath}/data/products.json`);
@@ -66,12 +66,12 @@ class ProductManager {
     }
 
     /**
-     * Get product by Stripe price ID
-     * @param {string} priceId - Stripe price ID
+     * Get product by SKU identifier
+     * @param {string} sku - Product SKU
      * @returns {Object|null}
      */
-    getByPriceId(priceId) {
-        return this.products.find(p => p.priceId === priceId) || null;
+    getBySku(sku) {
+        return this.products.find(p => p.sku === sku) || null;
     }
 
     /**

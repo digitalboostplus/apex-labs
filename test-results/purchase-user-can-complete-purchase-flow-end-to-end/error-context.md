@@ -232,168 +232,171 @@
             - generic [ref=e308]:
               - generic [ref=e309]: Concentration
               - generic [ref=e310]: 10 MG / VIAL
-            - button "Lab Analysis" [ref=e311] [cursor=pointer]:
-              - text: Lab Analysis
-              - img [ref=e312]
-      - generic [ref=e314]:
-        - generic [ref=e315]:
-          - img "GHK-Cu" [ref=e316]
-          - generic [ref=e317]: In Stock
-        - generic [ref=e318]:
-          - img [ref=e320]
-          - heading "GHK-Cu" [level=3] [ref=e323]
-          - paragraph [ref=e324]: Skin Regeneration
-          - paragraph [ref=e325]: Copper peptide complex known for its role in skin regeneration, DNA repair, and anti-inflammatory properties.
-          - generic [ref=e326]:
-            - generic [ref=e327]:
-              - generic [ref=e328]: Concentration
-              - generic [ref=e329]: 100 MG / VIAL
-            - generic [ref=e330]:
-              - link "Details" [ref=e331] [cursor=pointer]:
+            - generic [ref=e311]:
+              - link "Details" [ref=e312] [cursor=pointer]:
+                - /url: pricing/tesamorelin.html
+              - button "Add" [ref=e313] [cursor=pointer]:
+                - img [ref=e314]
+                - text: Add
+      - generic [ref=e318]:
+        - generic [ref=e319]:
+          - img "GHK-Cu" [ref=e320]
+          - generic [ref=e321]: In Stock
+        - generic [ref=e322]:
+          - img [ref=e324]
+          - heading "GHK-Cu" [level=3] [ref=e327]
+          - paragraph [ref=e328]: Skin Regeneration
+          - paragraph [ref=e329]: Copper peptide complex known for its role in skin regeneration, DNA repair, and anti-inflammatory properties.
+          - generic [ref=e330]:
+            - generic [ref=e331]:
+              - generic [ref=e332]: Concentration
+              - generic [ref=e333]: 100 MG / VIAL
+            - generic [ref=e334]:
+              - link "Details" [ref=e335] [cursor=pointer]:
                 - /url: pricing/ghk-cu.html
-              - button "Add" [ref=e332] [cursor=pointer]:
-                - img [ref=e333]
+              - button "Add" [ref=e336] [cursor=pointer]:
+                - img [ref=e337]
                 - text: Add
-      - generic [ref=e337]:
-        - generic [ref=e338]:
-          - img "Retatrutide" [ref=e339]
-          - generic [ref=e340]: In Stock
-        - generic [ref=e341]:
-          - img [ref=e343]
-          - heading "Retatrutide" [level=3] [ref=e345]
-          - paragraph [ref=e346]: Advanced Metabolic
-          - paragraph [ref=e347]: Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum receptor affinity.
-          - generic [ref=e348]:
-            - generic [ref=e349]:
-              - generic [ref=e350]: Concentration
-              - generic [ref=e351]: 10 MG / VIAL
-            - generic [ref=e352]:
-              - link "Details" [ref=e353] [cursor=pointer]:
+      - generic [ref=e341]:
+        - generic [ref=e342]:
+          - img "Retatrutide" [ref=e343]
+          - generic [ref=e344]: In Stock
+        - generic [ref=e345]:
+          - img [ref=e347]
+          - heading "Retatrutide" [level=3] [ref=e349]
+          - paragraph [ref=e350]: Advanced Metabolic
+          - paragraph [ref=e351]: Triple agonist (GLP-1, GIP, GCGR) for advanced metabolic research. Engineered for maximum receptor affinity.
+          - generic [ref=e352]:
+            - generic [ref=e353]:
+              - generic [ref=e354]: Concentration
+              - generic [ref=e355]: 10 MG / VIAL
+            - generic [ref=e356]:
+              - link "Details" [ref=e357] [cursor=pointer]:
                 - /url: pricing/reta.html
-              - button "Add" [ref=e354] [cursor=pointer]:
-                - img [ref=e355]
+              - button "Add" [ref=e358] [cursor=pointer]:
+                - img [ref=e359]
                 - text: Add
-  - generic [ref=e363]:
-    - generic [ref=e364]:
-      - generic [ref=e367]: Quality Assurance
-      - heading "The Apex Standard" [level=2] [ref=e368]:
+  - generic [ref=e367]:
+    - generic [ref=e368]:
+      - generic [ref=e371]: Quality Assurance
+      - heading "The Apex Standard" [level=2] [ref=e372]:
         - text: The Apex
         - text: Standard
-      - generic [ref=e369]:
-        - generic [ref=e370]:
-          - generic [ref=e371]: "01"
-          - generic [ref=e372]:
-            - heading "HPLC Verified Purity" [level=3] [ref=e373]
-            - paragraph [ref=e374]: Every batch undergoes High-Performance Liquid Chromatography testing. We don't just claim purity; we provide the data to prove it.
-        - generic [ref=e375]:
-          - generic [ref=e376]: "02"
-          - generic [ref=e377]:
-            - heading "Cold-Chain Logistics" [level=3] [ref=e378]
-            - paragraph [ref=e379]: Our lyophilized compounds are maintained in climate-controlled environments from synthesis to dispatch, ensuring maximum stability.
-        - generic [ref=e380]:
-          - generic [ref=e381]: "03"
-          - generic [ref=e382]:
-            - heading "Sterile Environment" [level=3] [ref=e383]
-            - paragraph [ref=e384]: All synthesis and bottling occurs within ISO-certified cleanrooms, preventing cross-contamination and ensuring research integrity.
-    - generic [ref=e388]:
-      - img [ref=e391]
-      - paragraph [ref=e395]: "\"Apex Laboratories was founded on a simple principle: Research requires absolute precision. We remove the variables, so you can focus on the breakthrough.\""
-      - generic [ref=e396]:
-        - generic [ref=e397]: Chief Scientific Officer
-        - generic [ref=e399]: Dr. Adrian Sterling
-  - generic [ref=e401]:
-    - generic [ref=e402]:
-      - generic [ref=e403]: Knowledge Base
-      - heading "Support & FAQ" [level=2] [ref=e404]
-    - generic [ref=e405]:
-      - button "How are your purity levels verified?" [ref=e407] [cursor=pointer]:
-        - generic [ref=e408]: How are your purity levels verified?
-        - img [ref=e409]
-      - button "What is your shipping & stability protocol?" [ref=e411] [cursor=pointer]:
-        - generic [ref=e412]: What is your shipping & stability protocol?
+      - generic [ref=e373]:
+        - generic [ref=e374]:
+          - generic [ref=e375]: "01"
+          - generic [ref=e376]:
+            - heading "HPLC Verified Purity" [level=3] [ref=e377]
+            - paragraph [ref=e378]: Every batch undergoes High-Performance Liquid Chromatography testing. We don't just claim purity; we provide the data to prove it.
+        - generic [ref=e379]:
+          - generic [ref=e380]: "02"
+          - generic [ref=e381]:
+            - heading "Cold-Chain Logistics" [level=3] [ref=e382]
+            - paragraph [ref=e383]: Our lyophilized compounds are maintained in climate-controlled environments from synthesis to dispatch, ensuring maximum stability.
+        - generic [ref=e384]:
+          - generic [ref=e385]: "03"
+          - generic [ref=e386]:
+            - heading "Sterile Environment" [level=3] [ref=e387]
+            - paragraph [ref=e388]: All synthesis and bottling occurs within ISO-certified cleanrooms, preventing cross-contamination and ensuring research integrity.
+    - generic [ref=e392]:
+      - img [ref=e395]
+      - paragraph [ref=e399]: "\"Apex Laboratories was founded on a simple principle: Research requires absolute precision. We remove the variables, so you can focus on the breakthrough.\""
+      - generic [ref=e400]:
+        - generic [ref=e401]: Chief Scientific Officer
+        - generic [ref=e403]: Dr. Adrian Sterling
+  - generic [ref=e405]:
+    - generic [ref=e406]:
+      - generic [ref=e407]: Knowledge Base
+      - heading "Support & FAQ" [level=2] [ref=e408]
+    - generic [ref=e409]:
+      - button "How are your purity levels verified?" [ref=e411] [cursor=pointer]:
+        - generic [ref=e412]: How are your purity levels verified?
         - img [ref=e413]
-      - button "Are these products intended for human use?" [ref=e415] [cursor=pointer]:
-        - generic [ref=e416]: Are these products intended for human use?
+      - button "What is your shipping & stability protocol?" [ref=e415] [cursor=pointer]:
+        - generic [ref=e416]: What is your shipping & stability protocol?
         - img [ref=e417]
-  - generic [ref=e419]:
-    - heading "Ready for Discovery?" [level=2] [ref=e420]:
+      - button "Are these products intended for human use?" [ref=e419] [cursor=pointer]:
+        - generic [ref=e420]: Are these products intended for human use?
+        - img [ref=e421]
+  - generic [ref=e423]:
+    - heading "Ready for Discovery?" [level=2] [ref=e424]:
       - text: Ready for
       - text: Discovery?
-    - paragraph [ref=e421]: Join the thousands of independent researchers choosing Apex for reliable, high-purity laboratory compounds.
-    - generic [ref=e422]:
-      - button "Register Lab Account" [ref=e423] [cursor=pointer]
-      - button "Support Portal" [ref=e424] [cursor=pointer]
-  - contentinfo [ref=e425]:
+    - paragraph [ref=e425]: Join the thousands of independent researchers choosing Apex for reliable, high-purity laboratory compounds.
     - generic [ref=e426]:
-      - generic [ref=e427]:
-        - generic [ref=e428]:
-          - generic [ref=e429]:
-            - generic [ref=e431]: A
-            - generic [ref=e432]:
-              - generic [ref=e433]: APEX
-              - generic [ref=e434]: LABS
-          - paragraph [ref=e435]:
+      - button "Register Lab Account" [ref=e427] [cursor=pointer]
+      - button "Support Portal" [ref=e428] [cursor=pointer]
+  - contentinfo [ref=e429]:
+    - generic [ref=e430]:
+      - generic [ref=e431]:
+        - generic [ref=e432]:
+          - generic [ref=e433]:
+            - generic [ref=e435]: A
+            - generic [ref=e436]:
+              - generic [ref=e437]: APEX
+              - generic [ref=e438]: LABS
+          - paragraph [ref=e439]:
             - text: Ultra-Pure Peptide Synthesis
             - text: For Research Purposes Only.
-        - generic [ref=e436]:
-          - heading "Inventory" [level=4] [ref=e437]
-          - list [ref=e438]:
-            - listitem [ref=e439]:
-              - link "Performance" [ref=e440] [cursor=pointer]:
-                - /url: pricing/ipamorelin.html
-            - listitem [ref=e441]:
-              - link "Regenerative" [ref=e442] [cursor=pointer]:
-                - /url: pricing/bpc-157.html
+        - generic [ref=e440]:
+          - heading "Inventory" [level=4] [ref=e441]
+          - list [ref=e442]:
             - listitem [ref=e443]:
-              - link "Cognitive" [ref=e444] [cursor=pointer]:
-                - /url: pricing/pt-141.html
+              - link "Performance" [ref=e444] [cursor=pointer]:
+                - /url: pricing/ipamorelin.html
             - listitem [ref=e445]:
-              - link "Longevity" [ref=e446] [cursor=pointer]:
+              - link "Regenerative" [ref=e446] [cursor=pointer]:
+                - /url: pricing/bpc-157.html
+            - listitem [ref=e447]:
+              - link "Cognitive" [ref=e448] [cursor=pointer]:
+                - /url: pricing/pt-141.html
+            - listitem [ref=e449]:
+              - link "Longevity" [ref=e450] [cursor=pointer]:
                 - /url: pricing/nadplus.html
-        - generic [ref=e447]:
-          - heading "Verification" [level=4] [ref=e448]
-          - list [ref=e449]:
-            - listitem [ref=e450]:
-              - link "Lab Reports" [ref=e451] [cursor=pointer]:
-                - /url: program-overview.html#matrix
-            - listitem [ref=e452]:
-              - link "HPLC Database" [ref=e453] [cursor=pointer]:
-                - /url: index.html#science
+        - generic [ref=e451]:
+          - heading "Verification" [level=4] [ref=e452]
+          - list [ref=e453]:
             - listitem [ref=e454]:
-              - link "Security Check" [ref=e455] [cursor=pointer]:
+              - link "Lab Reports" [ref=e455] [cursor=pointer]:
                 - /url: program-overview.html#matrix
             - listitem [ref=e456]:
-              - link "COA Portal" [ref=e457] [cursor=pointer]:
+              - link "HPLC Database" [ref=e457] [cursor=pointer]:
+                - /url: index.html#science
+            - listitem [ref=e458]:
+              - link "Security Check" [ref=e459] [cursor=pointer]:
+                - /url: program-overview.html#matrix
+            - listitem [ref=e460]:
+              - link "COA Portal" [ref=e461] [cursor=pointer]:
                 - /url: mailto:qc@apexlabs.com?subject=COA%20Request
-        - generic [ref=e458]:
-          - heading "Intelligence" [level=4] [ref=e459]
-          - generic [ref=e460]:
-            - textbox "EMAIL ADDRESS" [ref=e461]
-            - button [ref=e462] [cursor=pointer]:
-              - img [ref=e463]
-      - generic [ref=e465]:
-        - paragraph [ref=e466]: © 2026 Apex Laboratories Research. Verified Secure.
-        - generic [ref=e467]:
-          - link "Privacy" [ref=e468] [cursor=pointer]:
+        - generic [ref=e462]:
+          - heading "Intelligence" [level=4] [ref=e463]
+          - generic [ref=e464]:
+            - textbox "EMAIL ADDRESS" [ref=e465]
+            - button [ref=e466] [cursor=pointer]:
+              - img [ref=e467]
+      - generic [ref=e469]:
+        - paragraph [ref=e470]: © 2026 Apex Laboratories Research. Verified Secure.
+        - generic [ref=e471]:
+          - link "Privacy" [ref=e472] [cursor=pointer]:
             - /url: https://apexlabs.com/privacy
-          - link "Terms" [ref=e469] [cursor=pointer]:
+          - link "Terms" [ref=e473] [cursor=pointer]:
             - /url: https://apexlabs.com/terms
-          - link "Shipping" [ref=e470] [cursor=pointer]:
+          - link "Shipping" [ref=e474] [cursor=pointer]:
             - /url: https://apexlabs.com/shipping
-  - generic [ref=e472]:
-    - generic [ref=e473]:
-      - heading "Your Cart" [level=2] [ref=e474]
-      - button "Close Cart" [ref=e475] [cursor=pointer]:
-        - img [ref=e476]
-    - generic [ref=e479]:
-      - img [ref=e480]
-      - paragraph [ref=e482]: Your research cart is empty
+  - generic [ref=e476]:
+    - generic [ref=e477]:
+      - heading "Your Cart" [level=2] [ref=e478]
+      - button "Close Cart" [ref=e479] [cursor=pointer]:
+        - img [ref=e480]
     - generic [ref=e483]:
-      - generic [ref=e484]:
-        - generic [ref=e485]: Total
-        - generic [ref=e486]: $0.00
-      - paragraph [ref=e487]: Shipping and taxes calculated at checkout.
+      - img [ref=e484]
+      - paragraph [ref=e486]: Your research cart is empty
+    - generic [ref=e487]:
       - generic [ref=e488]:
-        - button "Proceed to Checkout" [disabled] [ref=e489]
-        - button "Continue Shopping" [ref=e490] [cursor=pointer]
+        - generic [ref=e489]: Total
+        - generic [ref=e490]: $0.00
+      - paragraph [ref=e491]: Shipping and taxes calculated at checkout.
+      - generic [ref=e492]:
+        - button "Proceed to Checkout" [disabled] [ref=e493]
+        - button "Continue Shopping" [ref=e494] [cursor=pointer]
 ```

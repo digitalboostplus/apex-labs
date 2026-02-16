@@ -163,9 +163,9 @@ export interface SubscriptionInfo {
     planId: string;
 
     /**
-     * Stripe subscription ID
+     * PayPal subscription ID
      */
-    stripeSubscriptionId: string;
+    paypalSubscriptionId: string;
 
     /**
      * Subscription status
@@ -253,11 +253,11 @@ export function isCreateUserInput(value: unknown): value is CreateUserInput {
         typeof input.email === 'string' &&
         input.email.length > 0 &&
         (input.displayName === undefined ||
-         input.displayName === null ||
-         typeof input.displayName === 'string') &&
+            input.displayName === null ||
+            typeof input.displayName === 'string') &&
         (input.photoURL === undefined ||
-         input.photoURL === null ||
-         typeof input.photoURL === 'string')
+            input.photoURL === null ||
+            typeof input.photoURL === 'string')
     );
 }
 

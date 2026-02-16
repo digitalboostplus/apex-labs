@@ -12,12 +12,16 @@
         ],
         "rewrites": [
             {
-                "source": "/api/create-checkout-session",
-                "function": "createCheckoutSession"
+                "source": "/api/create-paypal-order",
+                "function": "createPayPalOrder"
             },
             {
-                "source": "/api/stripe-webhook",
-                "function": "stripeWebhook"
+                "source": "/api/capture-paypal-order",
+                "function": "capturePayPalOrder"
+            },
+            {
+                "source": "/api/paypal-webhook",
+                "function": "paypalWebhook"
             }
         ],
         "headers": [

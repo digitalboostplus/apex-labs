@@ -95,9 +95,9 @@ export const subscriptionSchema = z.object({
         .min(1)
         .describe('Subscription plan identifier'),
 
-    stripeSubscriptionId: z.string()
-        .regex(/^sub_[a-zA-Z0-9]+$/, 'Invalid Stripe subscription ID')
-        .describe('Stripe subscription ID'),
+    paypalSubscriptionId: z.string()
+        .min(1, 'Invalid PayPal subscription ID')
+        .describe('PayPal subscription ID'),
 
     status: z.enum(['active', 'past_due', 'canceled', 'trialing'])
         .describe('Current subscription status'),
@@ -344,7 +344,7 @@ export const wishlistItemSchema = z.object({
     priceId: z.string()
         .min(1)
         .optional()
-        .describe('Stripe price ID for the product'),
+        .describe('Product SKU identifier'),
 
     name: z.string()
         .min(1)

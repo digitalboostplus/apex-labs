@@ -99,7 +99,7 @@ This document provides comprehensive documentation for the Firestore user accoun
   ```typescript
   {
       planId: string;
-      stripeSubscriptionId: string;
+      paypalSubscriptionId: string;
       status: 'active' | 'past_due' | 'canceled' | 'trialing';
       currentPeriodStart: Timestamp;
       currentPeriodEnd: Timestamp;

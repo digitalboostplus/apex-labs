@@ -8,9 +8,11 @@ const admin = require('firebase-admin');
 // Initialize Firebase Admin SDK
 admin.initializeApp();
 
-// Export Stripe functions
-const { createCheckoutSession } = require('./src/stripe/createCheckoutSession');
-const { stripeWebhook } = require('./src/stripe/webhookHandler');
+// Export PayPal functions
+const { createPayPalOrder } = require('./src/paypal/createPayPalOrder');
+const { capturePayPalOrder } = require('./src/paypal/capturePayPalOrder');
+const { paypalWebhook } = require('./src/paypal/webhookHandler');
 
-exports.createCheckoutSession = createCheckoutSession;
-exports.stripeWebhook = stripeWebhook;
+exports.createPayPalOrder = createPayPalOrder;
+exports.capturePayPalOrder = capturePayPalOrder;
+exports.paypalWebhook = paypalWebhook;

@@ -165,22 +165,16 @@
                         </div>
                     </div>
 
-                    <!-- Checkout Button -->
-                    <button id="checkout-btn"
-                        class="w-full py-5 bg-black text-white font-black uppercase tracking-[0.2em] text-xs hover:bg-brand-blue transition-all shadow-xl active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
-                        <span id="btn-text">Proceed to Payment</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 btn-icon"></i>
-                        <svg id="btn-spinner" class="hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                    </button>
+                    <!-- PayPal Smart Buttons -->
+                    <div id="paypal-button-container" class="w-full"></div>
+
+                    <!-- Email validation error for PayPal -->
+                    <div id="paypal-email-error" class="hidden text-center text-sm text-red-500 mt-2 font-medium">
+                        Please enter a valid email address above before proceeding.
+                    </div>
 
                     <p class="text-xs text-slate-500 text-center mt-4">
-                        You'll be redirected to our secure payment partner (Stripe) to complete your order.
+                        Complete your payment securely via PayPal. You can pay with PayPal, Debit/Credit Card, or Venmo.
                     </p>
 
                     <!-- Trust Badges -->
@@ -193,7 +187,7 @@
                             </div>
                             <div class="flex flex-col items-center gap-1">
                                 <i data-lucide="credit-card" class="w-5 h-5 text-slate-600"></i>
-                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">Stripe
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">PayPal
                                     Secure</span>
                             </div>
                             <div class="flex flex-col items-center gap-1">
@@ -217,6 +211,10 @@
     <!-- Cart Container (for drawer functionality) -->
     <div id="cart-container"></div>
 
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&intent=capture"
+        data-sdk-integration-source="button-factory"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) window.lucide.createIcons();
@@ -227,7 +225,6 @@
                 document.getElementById('canceled-alert').classList.remove('hidden');
             }
 
-            const checkoutBtn = document.getElementById('checkout-btn');
             const emailInput = document.getElementById('customer-email');
             const guestForm = document.getElementById('guest-email-form');
             const loggedInUser = document.getElementById('logged-in-user');
@@ -272,6 +269,22 @@
                 loggedInUser.classList.add('hidden');
                 emailInput.focus();
             };
+
+            /**
+             * Get the customer email from auth state or guest form
+             * @returns {string|null} Email or null if invalid
+             */
+            function getCustomerEmail() {
+                const user = window.authManager?.getCurrentUser();
+                if (user && guestForm.classList.contains('hidden')) {
+                    return user.email;
+                }
+                const email = emailInput.value.trim();
+                if (!email || !email.includes('@')) {
+                    return null;
+                }
+                return email;
+            }
 
             // Update order UI
             function updateUI(cart) {
@@ -323,97 +336,121 @@
 
             window.cartManager.subscribe(updateUI);
 
-            // Handle checkout button click
-            checkoutBtn.addEventListener('click', async () => {
-                // Get email
-                let customerEmail;
-                const user = window.authManager?.getCurrentUser();
-                const emailError = document.getElementById('email-error');
-
-                // If user is logged in AND not explicitly using the guest form (which is hidden when logged in normally)
-                if (user && guestForm.classList.contains('hidden')) {
-                    customerEmail = user.email;
-                } else {
-                    customerEmail = emailInput.value.trim();
-                    if (!customerEmail || !customerEmail.includes('@')) {
-                        emailInput.focus();
-                        emailInput.classList.add('ring-2', 'ring-red-500', 'border-red-500');
-                        if (emailError) {
-                            emailError.textContent = 'Please enter a valid email address';
-                            emailError.classList.remove('hidden');
-                        }
-                        return;
-                    }
-                }
-
-                // Prepare cart items
-                const cart = window.cartManager.cart || [];
-                if (cart.length === 0) {
-                    window.location.href = 'cart.html';
-                    return;
-                }
-
-                // Show loading state
-                checkoutBtn.disabled = true;
-                document.getElementById('btn-text').textContent = 'Processing...';
-                document.querySelector('.btn-icon')?.classList.add('hidden');
-                document.getElementById('btn-spinner').classList.remove('hidden');
-
-                try {
-                    // Create checkout session
-                    const response = await fetch('/api/create-checkout-session', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            items: cart.map(item => ({
-                                id: item.id,
-                                priceId: item.priceId,
-                                name: item.name,
-                                price: item.price,
-                                quantity: item.quantity,
-                                image: item.image
-                            })),
-                            customerEmail: customerEmail,
-                            userId: user?.uid || null,
-                            usePaymentLink: true // New flag for Stripe Payment Link
-                        })
-                    });
-
-                    if (!response.ok) {
-                        const error = await response.json();
-                        throw new Error(error.error || 'Failed to create checkout session');
-                    }
-
-                    const { sessionUrl, orderId } = await response.json();
-
-                    // Store order ID for confirmation page
-                    sessionStorage.setItem('apex_labs_order_id', orderId);
-
-                    // Redirect to Stripe Checkout
-                    window.location.href = sessionUrl;
-
-                } catch (error) {
-                    console.error('Checkout error:', error);
-
-                    // Show error state
-                    checkoutBtn.disabled = false;
-                    document.getElementById('btn-text').textContent = 'Try Again';
-                    document.querySelector('.btn-icon')?.classList.remove('hidden');
-                    document.getElementById('btn-spinner').classList.add('hidden');
-
-                    // Show error message
-                    alert(`Checkout Error: ${error.message || 'There was an error processing your checkout. Please try again.'}`);
-                }
-            });
-
             // Remove error styling on email input
             emailInput.addEventListener('input', () => {
                 emailInput.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
                 const emailError = document.getElementById('email-error');
                 if (emailError) emailError.classList.add('hidden');
+                document.getElementById('paypal-email-error')?.classList.add('hidden');
             });
+
+            // Initialize PayPal Smart Buttons
+            if (window.paypal) {
+                paypal.Buttons({
+                    style: {
+                        shape: 'rect',
+                        color: 'black',
+                        layout: 'vertical',
+                        label: 'pay'
+                    },
+
+                    // Called when the buyer clicks the PayPal button
+                    createOrder: async function () {
+                        // Validate email first
+                        const customerEmail = getCustomerEmail();
+                        if (!customerEmail) {
+                            emailInput.focus();
+                            emailInput.classList.add('ring-2', 'ring-red-500', 'border-red-500');
+                            const emailError = document.getElementById('email-error');
+                            if (emailError) {
+                                emailError.textContent = 'Please enter a valid email address';
+                                emailError.classList.remove('hidden');
+                            }
+                            document.getElementById('paypal-email-error')?.classList.remove('hidden');
+                            throw new Error('Email required');
+                        }
+
+                        const cart = window.cartManager.cart || [];
+                        if (cart.length === 0) {
+                            window.location.href = 'cart.html';
+                            throw new Error('Cart is empty');
+                        }
+
+                        const user = window.authManager?.getCurrentUser();
+
+                        const response = await fetch('/api/create-paypal-order', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                items: cart.map(item => ({
+                                    id: item.id,
+                                    sku: item.sku || item.priceId || null,
+                                    name: item.name,
+                                    price: item.price,
+                                    quantity: item.quantity,
+                                    image: item.image
+                                })),
+                                customerEmail: customerEmail,
+                                userId: user?.uid || null
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || 'Failed to create PayPal order');
+                        }
+
+                        const data = await response.json();
+
+                        // Store order ID for confirmation page
+                        sessionStorage.setItem('apex_labs_order_id', data.orderId);
+
+                        return data.paypalOrderId;
+                    },
+
+                    // Called after the buyer approves the payment
+                    onApprove: async function (data) {
+                        try {
+                            const response = await fetch('/api/capture-paypal-order', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    paypalOrderId: data.orderID
+                                })
+                            });
+
+                            if (!response.ok) {
+                                const error = await response.json();
+                                throw new Error(error.error || 'Failed to capture payment');
+                            }
+
+                            const result = await response.json();
+
+                            // Redirect to confirmation page
+                            const orderId = sessionStorage.getItem('apex_labs_order_id') || result.orderId;
+                            window.location.href = `/order-confirmation.html?paypal_order_id=${data.orderID}&order_id=${orderId}`;
+
+                        } catch (error) {
+                            console.error('Capture error:', error);
+                            alert(`Payment Error: ${error.message || 'There was an error processing your payment. Please try again.'}`);
+                        }
+                    },
+
+                    // Called if the buyer cancels the payment
+                    onCancel: function () {
+                        console.log('Payment canceled by buyer');
+                    },
+
+                    // Called on errors
+                    onError: function (err) {
+                        console.error('PayPal button error:', err);
+                        // Don't alert on email validation errors (already shown inline)
+                        if (err.message !== 'Email required') {
+                            alert('There was an error loading the payment options. Please refresh and try again.');
+                        }
+                    }
+                }).render('#paypal-button-container');
+            }
 
             // Helper for script-safe injection
             function injectComponent(id, path, callback) {

@@ -327,7 +327,7 @@ classDiagram
 
     class Subscription {
         +string planId
-        +string stripeSubscriptionId
+        +string paypalSubscriptionId
         +string status
         +Timestamp currentPeriodStart
         +Timestamp currentPeriodEnd
