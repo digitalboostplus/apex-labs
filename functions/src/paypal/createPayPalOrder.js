@@ -126,7 +126,7 @@ function buildPurchaseUnit(items, orderId) {
  * Main handler for creating a PayPal order
  */
 exports.createPayPalOrder = onRequest({
-    secrets: ['PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET'],
+    // secrets: ['PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET'], // [RESTORE AFTER SETTING SECRETS]
     maxInstances: 10,
     concurrency: 80
 }, (req, res) => {

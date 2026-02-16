@@ -194,7 +194,7 @@ async function handleCaptureRefunded(resource) {
  * Main webhook handler
  */
 exports.paypalWebhook = onRequest({
-    secrets: ['PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET', 'PAYPAL_WEBHOOK_ID'],
+    // secrets: ['PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET', 'PAYPAL_WEBHOOK_ID'], // [RESTORE AFTER SETTING SECRETS]
     maxInstances: 10,
     concurrency: 80
 }, async (req, res) => {

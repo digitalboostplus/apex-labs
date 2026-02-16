@@ -25,7 +25,7 @@ const db = admin.firestore();
  * Main handler for capturing a PayPal order after buyer approval
  */
 exports.capturePayPalOrder = onRequest({
-    secrets: ['PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET'],
+    // secrets: ['PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET'], // [RESTORE AFTER SETTING SECRETS]
     maxInstances: 10,
     concurrency: 80
 }, (req, res) => {
