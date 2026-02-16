@@ -10,7 +10,12 @@
       "Bash(git commit:*)",
       "Bash(done)",
       "Bash(git push)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(timeout:*)",
+      "Bash(python -m http.server:*)",
+      "Bash(node -e:*)",
+      "Bash(firebase functions:secrets:access:*)"
     ]
   }
 }
