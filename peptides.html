@@ -721,14 +721,15 @@
                 </div>
             </div>
 
-            <!-- Item 3: CJC-1295 -->
-            <div class="product-card group bg-white border border-slate-200 hover:border-brand-blue transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
+            <!-- Item 3: CJC-1295 (SOLD OUT) -->
+            <div class="product-card group bg-white border border-slate-200 transition-all duration-500 flex flex-col h-[520px] relative overflow-hidden card-hover"
                 data-product-id="cjc-1295" data-name="CJC-1295" data-category="GHRH Analog"
                 data-description="Tetrasubstituted 30-amino acid peptide hormone. Promotes pulsatile GH release with an extended half-life compared to native GHRH.">
                 <div
-                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 group-hover:bg-white transition-colors">
+                    class="h-64 p-10 bg-slate-50/50 flex items-center justify-center relative overflow-hidden border-b border-slate-100 transition-colors">
+                    <div class="absolute top-4 right-4 z-10 px-4 py-1.5 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest">SOLD OUT</div>
                     <img src="/assets/product-imgs/APEX LABS(VIAL STICKER)CJC-1295.png" alt="CJC-1295"
-                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg">
+                        class="w-full h-full object-contain card-img transition-transform duration-700 ease-out drop-shadow-lg opacity-50">
                     <div
                         class="absolute inset-x-0 bottom-0 h-1 bg-gradient-tech scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
                     </div>
@@ -758,10 +759,9 @@
                                 Details
                             </a>
                             <button
-                                onclick="cartManager.addItem({id: 'cjc-1295', name: 'CJC-1295', price: 55, image: '/assets/product-imgs/APEX LABS(VIAL STICKER)CJC-1295.png', category: 'GHRH Analog'}, 1)"
-                                class="w-full py-4 bg-brand-blue text-white hover:bg-brand-dark font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-3">
-                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
-                                Add
+                                disabled
+                                class="w-full py-4 bg-slate-300 text-slate-500 cursor-not-allowed font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-3">
+                                Sold Out
                             </button>
                         </div>
                     </div>
