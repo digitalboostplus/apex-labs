@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1N9XZM2TGY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-1N9XZM2TGY');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout | Apex Labs</title>
@@ -165,17 +174,65 @@
                         </div>
                     </div>
 
-                    <!-- PayPal Smart Buttons -->
-                    <div id="paypal-button-container" class="w-full"></div>
-
-                    <!-- Email validation error for PayPal -->
-                    <div id="paypal-email-error" class="hidden text-center text-sm text-red-500 mt-2 font-medium">
-                        Please enter a valid email address above before proceeding.
+                    <!-- Payment Method Selection -->
+                    <div class="mb-6">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide mb-3">Select Payment Method
+                        </h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button type="button" onclick="selectPaymentMethod('zelle')" id="method-zelle"
+                                class="payment-method-btn p-4 border-2 border-slate-200 rounded-xl text-center transition-all hover:border-amber-400 cursor-pointer">
+                                <div class="text-2xl mb-1">🏦</div>
+                                <div class="text-sm font-bold text-slate-900">Zelle</div>
+                            </button>
+                            <button type="button" onclick="selectPaymentMethod('cashapp')" id="method-cashapp"
+                                class="payment-method-btn p-4 border-2 border-slate-200 rounded-xl text-center transition-all hover:border-amber-400 cursor-pointer">
+                                <div class="text-2xl mb-1">💲</div>
+                                <div class="text-sm font-bold text-slate-900">CashApp</div>
+                            </button>
+                        </div>
                     </div>
 
-                    <p class="text-xs text-slate-500 text-center mt-4">
-                        Complete your payment securely via PayPal. You can pay with PayPal, Debit/Credit Card, or Venmo.
-                    </p>
+                    <!-- Payment Instructions (dynamic) -->
+                    <div id="payment-instructions"
+                        class="hidden mb-6 p-5 bg-amber-50 border border-amber-200 rounded-xl">
+                        <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <i data-lucide="info" class="w-4 h-4 text-amber-600"></i>
+                            Payment Instructions
+                        </h4>
+                        <div id="zelle-instructions" class="hidden space-y-2 text-sm text-slate-700">
+                            <p><span class="font-semibold">Send payment via Zelle to:</span></p>
+                            <p
+                                class="font-mono bg-white px-3 py-2 rounded-lg border border-amber-100 text-slate-900 font-bold">
+                                orders@apex-peptide.com</p>
+                            <p><span class="font-semibold">Amount:</span> <span id="zelle-amount"
+                                    class="font-mono font-bold text-slate-900">$0.00</span></p>
+                        </div>
+                        <div id="cashapp-instructions" class="hidden space-y-2 text-sm text-slate-700">
+                            <p><span class="font-semibold">Send payment via CashApp to:</span></p>
+                            <p
+                                class="font-mono bg-white px-3 py-2 rounded-lg border border-amber-100 text-slate-900 font-bold">
+                                $ApexLabs</p>
+                            <p><span class="font-semibold">Amount:</span> <span id="cashapp-amount"
+                                    class="font-mono font-bold text-slate-900">$0.00</span></p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-amber-200 space-y-2 text-sm text-slate-600">
+                            <p>Include your <span class="font-semibold text-slate-800">order reference number</span> in
+                                the payment note.</p>
+                            <p>After sending payment, email a screenshot to
+                                <span class="font-semibold text-slate-800">orders@apex-peptide.com</span>
+                                with your order reference in the subject line.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" id="submit-order-btn" onclick="submitOrder()" disabled
+                        class="w-full py-4 bg-slate-300 text-white font-bold uppercase text-xs tracking-widest rounded-xl transition-all cursor-not-allowed">
+                        Select a Payment Method
+                    </button>
+
+                    <!-- Validation error -->
+                    <div id="submit-error" class="hidden text-center text-sm text-red-500 mt-2 font-medium"></div>
 
                     <!-- Trust Badges -->
                     <div class="mt-6 pt-6 border-t border-slate-100">
@@ -186,9 +243,9 @@
                                     SSL</span>
                             </div>
                             <div class="flex flex-col items-center gap-1">
-                                <i data-lucide="credit-card" class="w-5 h-5 text-slate-600"></i>
-                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">PayPal
-                                    Secure</span>
+                                <i data-lucide="lock" class="w-5 h-5 text-slate-600"></i>
+                                <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wide">Secure
+                                    Checkout</span>
                             </div>
                             <div class="flex flex-col items-center gap-1">
                                 <i data-lucide="refresh-cw" class="w-5 h-5 text-amber-600"></i>
@@ -210,10 +267,6 @@
     <!-- Auth Modal Container -->
     <!-- Cart Container (for drawer functionality) -->
     <div id="cart-container"></div>
-
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&intent=capture"
-        data-sdk-integration-source="button-factory"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -341,116 +394,123 @@
                 emailInput.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
                 const emailError = document.getElementById('email-error');
                 if (emailError) emailError.classList.add('hidden');
-                document.getElementById('paypal-email-error')?.classList.add('hidden');
+                document.getElementById('submit-error')?.classList.add('hidden');
             });
 
-            // Initialize PayPal Smart Buttons
-            if (window.paypal) {
-                paypal.Buttons({
-                    style: {
-                        shape: 'rect',
-                        color: 'black',
-                        layout: 'vertical',
-                        label: 'pay'
-                    },
+            // Payment method selection
+            let selectedMethod = null;
 
-                    // Called when the buyer clicks the PayPal button
-                    createOrder: async function () {
-                        // Validate email first
-                        const customerEmail = getCustomerEmail();
-                        if (!customerEmail) {
-                            emailInput.focus();
-                            emailInput.classList.add('ring-2', 'ring-red-500', 'border-red-500');
-                            const emailError = document.getElementById('email-error');
-                            if (emailError) {
-                                emailError.textContent = 'Please enter a valid email address';
-                                emailError.classList.remove('hidden');
-                            }
-                            document.getElementById('paypal-email-error')?.classList.remove('hidden');
-                            throw new Error('Email required');
-                        }
+            window.selectPaymentMethod = function (method) {
+                selectedMethod = method;
 
-                        const cart = window.cartManager.cart || [];
-                        if (cart.length === 0) {
-                            window.location.href = 'cart.html';
-                            throw new Error('Cart is empty');
-                        }
+                // Update button styles
+                document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                    btn.classList.remove('border-amber-500', 'bg-amber-50', 'shadow-md');
+                    btn.classList.add('border-slate-200');
+                });
+                const activeBtn = document.getElementById('method-' + method);
+                activeBtn.classList.remove('border-slate-200');
+                activeBtn.classList.add('border-amber-500', 'bg-amber-50', 'shadow-md');
 
-                        const user = window.authManager?.getCurrentUser();
+                // Show instructions
+                const instructionsPanel = document.getElementById('payment-instructions');
+                instructionsPanel.classList.remove('hidden');
+                document.getElementById('zelle-instructions').classList.toggle('hidden', method !== 'zelle');
+                document.getElementById('cashapp-instructions').classList.toggle('hidden', method !== 'cashapp');
 
-                        const response = await fetch('/api/create-paypal-order', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                items: cart.map(item => ({
-                                    id: item.id,
-                                    sku: item.sku || item.priceId || null,
-                                    name: item.name,
-                                    price: item.price,
-                                    quantity: item.quantity,
-                                    image: item.image
-                                })),
-                                customerEmail: customerEmail,
-                                userId: user?.uid || null
-                            })
-                        });
+                // Update amounts
+                const total = window.cartManager.getTotal();
+                document.getElementById('zelle-amount').textContent = '$' + total.toFixed(2);
+                document.getElementById('cashapp-amount').textContent = '$' + total.toFixed(2);
 
-                        if (!response.ok) {
-                            const error = await response.json();
-                            throw new Error(error.error || 'Failed to create PayPal order');
-                        }
+                // Enable submit button
+                const submitBtn = document.getElementById('submit-order-btn');
+                submitBtn.disabled = false;
+                submitBtn.textContent = "I've Sent My Payment";
+                submitBtn.classList.remove('bg-slate-300', 'cursor-not-allowed');
+                submitBtn.classList.add('bg-amber-600', 'hover:bg-amber-700', 'cursor-pointer');
 
-                        const data = await response.json();
+                if (window.lucide) window.lucide.createIcons();
+            };
 
-                        // Store order ID for confirmation page
-                        sessionStorage.setItem('apex_labs_order_id', data.orderId);
+            // Submit order to Firestore
+            window.submitOrder = async function () {
+                const submitBtn = document.getElementById('submit-order-btn');
+                const errorEl = document.getElementById('submit-error');
+                errorEl.classList.add('hidden');
 
-                        return data.paypalOrderId;
-                    },
-
-                    // Called after the buyer approves the payment
-                    onApprove: async function (data) {
-                        try {
-                            const response = await fetch('/api/capture-paypal-order', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    paypalOrderId: data.orderID
-                                })
-                            });
-
-                            if (!response.ok) {
-                                const error = await response.json();
-                                throw new Error(error.error || 'Failed to capture payment');
-                            }
-
-                            const result = await response.json();
-
-                            // Redirect to confirmation page
-                            const orderId = sessionStorage.getItem('apex_labs_order_id') || result.orderId;
-                            window.location.href = `/order-confirmation.html?paypal_order_id=${data.orderID}&order_id=${orderId}`;
-
-                        } catch (error) {
-                            console.error('Capture error:', error);
-                            alert(`Payment Error: ${error.message || 'There was an error processing your payment. Please try again.'}`);
-                        }
-                    },
-
-                    // Called if the buyer cancels the payment
-                    onCancel: function () {
-                        console.log('Payment canceled by buyer');
-                    },
-
-                    // Called on errors
-                    onError: function (err) {
-                        console.error('PayPal button error:', err);
-                        // Don't alert on email validation errors (already shown inline)
-                        if (err.message !== 'Email required') {
-                            alert('There was an error loading the payment options. Please refresh and try again.');
-                        }
+                // Validate email
+                const customerEmail = getCustomerEmail();
+                if (!customerEmail) {
+                    emailInput.focus();
+                    emailInput.classList.add('ring-2', 'ring-red-500', 'border-red-500');
+                    const emailError = document.getElementById('email-error');
+                    if (emailError) {
+                        emailError.textContent = 'Please enter a valid email address';
+                        emailError.classList.remove('hidden');
                     }
-                }).render('#paypal-button-container');
-            }
+                    errorEl.textContent = 'Please enter a valid email address above.';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                if (!selectedMethod) {
+                    errorEl.textContent = 'Please select a payment method.';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                const cart = window.cartManager.cart || [];
+                if (cart.length === 0) {
+                    window.location.href = 'cart.html';
+                    return;
+                }
+
+                // Disable button while submitting
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting Order...';
+                submitBtn.classList.add('opacity-70');
+
+                try {
+                    await window.firebaseServices.onReady();
+                    const db = window.firebaseServices.getFirestore();
+                    const user = window.authManager?.getCurrentUser();
+
+                    const orderData = {
+                        status: 'pending_payment',
+                        paymentMethod: selectedMethod,
+                        items: cart.map(item => ({
+                            id: item.id,
+                            priceId: item.priceId || item.id,
+                            name: item.name,
+                            price: window.cartManager.getItemPrice(item.id, item.quantity) || item.price,
+                            quantity: item.quantity,
+                            image: item.image || ''
+                        })),
+                        customerEmail: customerEmail,
+                        userId: user?.uid || null,
+                        amountTotal: window.cartManager.getTotal(),
+                        currency: 'USD',
+                        metadata: { source: 'apex_labs_checkout' },
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    const docRef = await db.collection('orders').add(orderData);
+
+                    // Store for confirmation page
+                    sessionStorage.setItem('apex_labs_order_id', docRef.id);
+                    window.location.href = '/order-confirmation.html?order_id=' + docRef.id;
+
+                } catch (error) {
+                    console.error('Order submission error:', error);
+                    errorEl.textContent = 'There was an error submitting your order. Please try again.';
+                    errorEl.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "I've Sent My Payment";
+                    submitBtn.classList.remove('opacity-70');
+                }
+            };
 
             // Helper for script-safe injection
             function injectComponent(id, path, callback) {

@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1N9XZM2TGY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-1N9XZM2TGY');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart | Apex Labs</title>
@@ -132,8 +141,18 @@
                         </div>
                     </div>
 
+                    <label class="flex items-start gap-3 mb-4 cursor-pointer select-none" id="research-ack-label">
+                        <input type="checkbox" id="research-ack"
+                            class="mt-1 w-4 h-4 accent-brand-blue flex-shrink-0 cursor-pointer">
+                        <span class="text-xs text-slate-500 leading-relaxed">
+                            I acknowledge these are research peptides, not for human use, and no dosing instructions can
+                            be provided. I will conduct my own research and consult a doctor if needed.
+                        </span>
+                    </label>
+
                     <a href="checkout.html" id="page-checkout-btn"
-                        class="w-full py-5 bg-brand-dark text-white text-center font-black uppercase text-xs tracking-[0.2em] hover:bg-brand-blue transition-all flex items-center justify-center gap-3">
+                        class="w-full py-5 bg-slate-300 text-white text-center font-black uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3 pointer-events-none"
+                        aria-disabled="true">
                         Proceed to Checkout
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
@@ -236,6 +255,25 @@
 
         window.addEventListener('cartUpdated', renderCart);
         document.addEventListener('DOMContentLoaded', renderCart);
+
+        // Research acknowledgement checkbox controls checkout button
+        document.addEventListener('DOMContentLoaded', () => {
+            const ackCheckbox = document.getElementById('research-ack');
+            const checkoutBtn = document.getElementById('page-checkout-btn');
+            if (ackCheckbox && checkoutBtn) {
+                ackCheckbox.addEventListener('change', () => {
+                    if (ackCheckbox.checked) {
+                        checkoutBtn.classList.remove('bg-slate-300', 'pointer-events-none');
+                        checkoutBtn.classList.add('bg-brand-dark', 'hover:bg-brand-blue');
+                        checkoutBtn.removeAttribute('aria-disabled');
+                    } else {
+                        checkoutBtn.classList.add('bg-slate-300', 'pointer-events-none');
+                        checkoutBtn.classList.remove('bg-brand-dark', 'hover:bg-brand-blue');
+                        checkoutBtn.setAttribute('aria-disabled', 'true');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

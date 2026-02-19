@@ -107,8 +107,15 @@ service cloud.firestore {
             // Users can read their own orders
             allow read: if isAuthenticated() &&
                         resource.data.userId == request.auth.uid;
-            // Only Cloud Functions can create/update orders
-            allow write: if false;
+            // Admins can read/update any order
+            allow read, update, delete: if isAdmin();
+            // Allow client-side order creation for manual payment methods
+            allow create: if
+                request.resource.data.status == 'pending_payment' &&
+                request.resource.data.paymentMethod in ['zelle', 'cashapp'] &&
+                request.resource.data.amountTotal is number &&
+                request.resource.data.items is list &&
+                request.resource.data.customerEmail is string;
         }
 
         // Products collection
