@@ -211,7 +211,7 @@
                             <p><span class="font-semibold">Send payment via CashApp to:</span></p>
                             <p
                                 class="font-mono bg-white px-3 py-2 rounded-lg border border-amber-100 text-slate-900 font-bold">
-                                $ApexLabs</p>
+                                $dynamicTx</p>
                             <p><span class="font-semibold">Amount:</span> <span id="cashapp-amount"
                                     class="font-mono font-bold text-slate-900">$0.00</span></p>
                         </div>
@@ -224,6 +224,15 @@
                             </p>
                         </div>
                     </div>
+
+                    <!-- Research Acknowledgement -->
+                    <label class="flex items-start gap-3 mb-4 cursor-pointer select-none">
+                        <input type="checkbox" id="research-ack-checkout"
+                            class="mt-1 w-4 h-4 accent-amber-600 flex-shrink-0 cursor-pointer">
+                        <span class="text-xs text-slate-500 leading-relaxed">
+                            I acknowledge these are research peptides, not for human use, and no dosing instructions can be provided. I will conduct my own research and consult a doctor if needed.
+                        </span>
+                    </label>
 
                     <!-- Submit Button -->
                     <button type="button" id="submit-order-btn" onclick="submitOrder()" disabled
@@ -456,6 +465,14 @@
 
                 if (!selectedMethod) {
                     errorEl.textContent = 'Please select a payment method.';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                // Validate research acknowledgement
+                const ackCheckbox = document.getElementById('research-ack-checkout');
+                if (!ackCheckbox || !ackCheckbox.checked) {
+                    errorEl.textContent = 'You must acknowledge the research use disclaimer to proceed.';
                     errorEl.classList.remove('hidden');
                     return;
                 }
