@@ -23,7 +23,7 @@ const seedProducts = onCall(async (request) => {
     }
 
     // Read products.json
-    const productsPath = path.join(__dirname, '..', '..', 'data', 'products.json');
+    const productsPath = path.join(__dirname, '..', 'data', 'products.json');
     let productsData;
     try {
         const raw = fs.readFileSync(productsPath, 'utf8');

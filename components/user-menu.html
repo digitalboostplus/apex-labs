@@ -40,6 +40,19 @@
                 </div>
             </div>
 
+            <!-- Admin Link (hidden by default, shown for admins) -->
+            <div id="admin-menu-section" class="border-b border-slate-100 hidden">
+                <a id="admin-link" href="admin.html"
+                    class="flex items-center gap-4 px-6 py-3 text-[10px] font-black text-brand-blue uppercase tracking-widest hover:bg-brand-blue/5 border-l-2 border-brand-cyan transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    Product Manager
+                    <span class="ml-auto px-2 py-0.5 text-[8px] font-black bg-brand-blue/10 text-brand-blue rounded-sm">ADMIN</span>
+                </a>
+            </div>
+
             <!-- Menu Navigation -->
             <div class="py-2">
                 <a href="pages/account/index.html"
@@ -121,6 +134,33 @@
             }
         };
 
+        // Check if user is admin and show admin link
+        async function checkAndShowAdminLink(user) {
+            const adminSection = document.getElementById('admin-menu-section');
+            const adminLink = document.getElementById('admin-link');
+            if (!adminSection) return;
+
+            adminSection.classList.add('hidden');
+
+            if (!user) return;
+
+            try {
+                const { db } = await window.firebaseServices.onReady();
+                const doc = await db.collection('admins').doc(user.uid).get();
+                if (doc.exists && doc.data().role === 'admin') {
+                    // Fix admin link path for subdirectory pages
+                    const isInSubdir = window.location.pathname.includes('/pricing/') ||
+                        window.location.pathname.includes('/pages/');
+                    if (adminLink && isInSubdir) {
+                        adminLink.href = '../admin.html';
+                    }
+                    adminSection.classList.remove('hidden');
+                }
+            } catch (e) {
+                // Silently fail — non-admins won't see the link
+            }
+        }
+
         // Update UI based on auth state
         function updateUserMenuUI(user) {
             const guestBtn = document.getElementById('auth-btn-guest');
@@ -148,6 +188,9 @@
                 if (userName) userName.textContent = displayName;
                 if (dropdownName) dropdownName.textContent = displayName;
                 if (dropdownEmail) dropdownEmail.textContent = user.email || '';
+
+                // Check admin status
+                checkAndShowAdminLink(user);
             } else {
                 // User is signed out
                 guestBtn?.classList.remove('hidden');
