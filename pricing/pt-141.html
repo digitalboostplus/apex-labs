@@ -2,10 +2,19 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-141458J082"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-141458J082');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PT-141 Pricing | Apex Labs</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -65,22 +74,22 @@
             <a href="../index.html" class="text-xl font-bold tracking-tighter text-brand-dark">APEX<span
                     class="text-[#0052cc]">LABS</span></button>
 
-                        <div class="flex items-center gap-8">
-                <!-- User Auth & Portal -->
-                <div id="user-menu-container"></div>
-                <div id="auth-modal-container"></div>
-                <a href="../pricing.html"
-                    class="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">&larr;
-                    Back to Wholesale Matrix</button>
+                <div class="flex items-center gap-8">
+                    <!-- User Auth & Portal -->
+                    <div id="user-menu-container"></div>
+                    <div id="auth-modal-container"></div>
+                    <a href="../pricing.html"
+                        class="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-blue transition-colors">&larr;
+                        Back to Wholesale Matrix</button>
 
-                <!-- Cart Icon -->
-                <a href="../cart.html"
-                    class="relative p-2 text-brand-dark hover:text-brand-blue transition-colors group">
-                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
-                    <span
-                        class="cart-counter absolute -top-1 -right-1 bg-brand-blue text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden">0</span>
-                </button>
-            </div>
+                        <!-- Cart Icon -->
+                        <a href="../cart.html"
+                            class="relative p-2 text-brand-dark hover:text-brand-blue transition-colors group">
+                            <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                            <span
+                                class="cart-counter absolute -top-1 -right-1 bg-brand-blue text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden">0</span>
+                            </button>
+                </div>
         </div>
     </nav>
     <main class="flex-grow container mx-auto px-6 py-24">
@@ -98,7 +107,8 @@
                 <div class="glass p-6 mb-8">
                     <div class="flex items-center gap-2 mb-4">
                         <i data-lucide="target" class="w-4 h-4 text-[#00C2FF]"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Research Focus</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Research
+                            Focus</span>
                     </div>
                     <p class="text-[#0052cc] font-bold text-sm mb-4">Best for: Desire, confidence, intimacy</p>
                     <ul class="space-y-2 text-slate-600 text-sm mb-4">
@@ -116,7 +126,9 @@
                         </li>
                     </ul>
                     <div class="pt-4 border-t border-slate-200">
-                        <p class="text-xs text-slate-500"><strong class="text-slate-700">Longevity benefit:</strong> Sexual wellness is directly tied to confidence, emotional well-being, and quality of life.</p>
+                        <p class="text-xs text-slate-500"><strong class="text-slate-700">Longevity benefit:</strong>
+                            Sexual wellness is directly tied to confidence, emotional well-being, and quality of life.
+                        </p>
                     </div>
                 </div>
 
@@ -145,12 +157,14 @@
                     <div class="flex justify-between items-center mb-6">
                         <span class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Wholesale</span>
                         <span
-                            class="px-3 py-1 bg-slate-100 text-[10px] text-brand-dark font-black uppercase tracking-widest">Bulk Orders</span>
+                            class="px-3 py-1 bg-slate-100 text-[10px] text-brand-dark font-black uppercase tracking-widest">Bulk
+                            Orders</span>
                     </div>
                     <div class="flex flex-col items-center justify-center py-8">
                         <i data-lucide="phone" class="w-12 h-12 text-[#00C2FF] mb-4"></i>
                         <p class="text-brand-dark font-bold text-lg mb-2">Call for Wholesale Pricing</p>
-                        <p class="text-slate-500 text-sm text-center">Contact us for volume discounts and distribution pricing</p>
+                        <p class="text-slate-500 text-sm text-center">Contact us for volume discounts and distribution
+                            pricing</p>
                     </div>
                     <button onclick="openWholesaleModal('PT-141')" type="button"
                         class="w-full mt-6 py-5 bg-slate-100 border border-slate-200 hover:bg-brand-dark hover:text-white transition-all text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3">
@@ -171,5 +185,3 @@
 </body>
 
 </html>
-
-

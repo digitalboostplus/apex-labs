@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-141458J082"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-141458J082');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order History | Apex Labs</title>
@@ -22,8 +31,10 @@
                     <span class="text-xl font-black text-slate-900 tracking-tight">APEX LABS</span>
                 </a>
                 <div class="flex items-center gap-4">
-                    <a href="../../peptides.html" class="text-sm font-medium text-slate-600 hover:text-slate-900">Shop</a>
-                    <button onclick="toggleCart()" class="relative p-2 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+                    <a href="../../peptides.html"
+                        class="text-sm font-medium text-slate-600 hover:text-slate-900">Shop</a>
+                    <button onclick="toggleCart()"
+                        class="relative p-2 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
                         <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-600"></i>
                     </button>
                 </div>
@@ -37,7 +48,9 @@
             <aside class="lg:col-span-3">
                 <div class="bg-white rounded-xl border border-slate-100 p-6 sticky top-24">
                     <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
-                        <div id="sidebar-avatar" class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-lg"></div>
+                        <div id="sidebar-avatar"
+                            class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-lg">
+                        </div>
                         <div>
                             <p id="sidebar-name" class="font-bold text-slate-900">Loading...</p>
                             <p id="sidebar-email" class="text-sm text-slate-500 truncate max-w-[150px]"></p>
@@ -45,25 +58,30 @@
                     </div>
 
                     <nav class="space-y-1">
-                        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <a href="index.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
                             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                             Dashboard
                         </a>
-                        <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 text-amber-700 font-medium">
+                        <a href="orders.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 text-amber-700 font-medium">
                             <i data-lucide="package" class="w-5 h-5"></i>
                             Orders
                         </a>
-                        <a href="wishlist.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <a href="wishlist.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
                             <i data-lucide="heart" class="w-5 h-5"></i>
                             Wishlist
                         </a>
-                        <a href="addresses.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <a href="addresses.html"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
                             <i data-lucide="map-pin" class="w-5 h-5"></i>
                             Addresses
                         </a>
                     </nav>
 
-                    <button onclick="handleSignOut()" class="w-full mt-6 pt-6 border-t border-slate-100 flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                    <button onclick="handleSignOut()"
+                        class="w-full mt-6 pt-6 border-t border-slate-100 flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
                         <i data-lucide="log-out" class="w-5 h-5"></i>
                         Sign Out
                     </button>
@@ -79,7 +97,9 @@
 
                 <!-- Loading State -->
                 <div id="loading-state" class="text-center py-12">
-                    <div class="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    <div
+                        class="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto">
+                    </div>
                     <p class="text-slate-500 mt-4">Loading orders...</p>
                 </div>
 
@@ -93,7 +113,8 @@
                     <i data-lucide="package" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
                     <h2 class="text-xl font-bold text-slate-900 mb-2">No orders yet</h2>
                     <p class="text-slate-500 mb-6">Start shopping to see your orders here.</p>
-                    <a href="../../peptides.html" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-colors">
+                    <a href="../../peptides.html"
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-colors">
                         <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                         Browse Products
                     </a>
@@ -111,7 +132,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) window.lucide.createIcons();
 
-            window.handleSignOut = async function() {
+            window.handleSignOut = async function () {
                 await window.authManager?.signOut();
                 window.location.href = '../../index.html';
             };
