@@ -111,12 +111,22 @@ service cloud.firestore {
             allow write: if false;
         }
 
-        // Products collection (if we migrate from JSON)
+        // Products collection
         match /products/{productId} {
             // Anyone can read products
             allow read: if true;
-            // Only admins can write products
-            allow write: if isAdmin();
+            // Only admins can create/update products with field validation
+            allow create, update: if isAdmin() &&
+                request.resource.data.name is string &&
+                request.resource.data.name.size() > 0 &&
+                request.resource.data.name.size() <= 200 &&
+                request.resource.data.price is number &&
+                request.resource.data.price >= 0 &&
+                request.resource.data.id is string &&
+                request.resource.data.id.size() > 0 &&
+                request.resource.data.inStock is bool;
+            // Only admins can delete products
+            allow delete: if isAdmin();
         }
 
         // Reviews collection

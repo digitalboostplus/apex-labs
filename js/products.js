@@ -22,22 +22,13 @@ class ProductManager {
 
         this.loadPromise = (async () => {
             try {
-                // Detect path context for proper asset resolution
-                const isInSubdir = window.location.pathname.includes('/pricing/') ||
-                    window.location.pathname.includes('/pages/');
-                const basePath = isInSubdir ? '..' : '.';
-
-                const response = await fetch(`${basePath}/data/products.json`);
-                if (!response.ok) {
-                    throw new Error(`Failed to load products: ${response.status}`);
+                // Try Firestore first, fall back to JSON
+                const loaded = await this._loadFromFirestore();
+                if (!loaded) {
+                    await this._loadFromJson();
                 }
 
-                const data = await response.json();
-                this.products = data.products || [];
-                this.categories = data.categories || [];
-                this.pricingTiers = data.pricingTiers || [];
                 this.loaded = true;
-
                 this._notifySubscribers('loaded', this.products);
             } catch (error) {
                 console.error('ProductManager: Failed to load products', error);
@@ -46,6 +37,55 @@ class ProductManager {
         })();
 
         return this.loadPromise;
+    }
+
+    /**
+     * Load products from Firestore
+     * @returns {Promise<boolean>} true if products were loaded
+     */
+    async _loadFromFirestore() {
+        try {
+            if (!window.firebaseServices) return false;
+
+            const { db } = await window.firebaseServices.onReady();
+            if (!db) return false;
+
+            const snapshot = await db.collection('products').get();
+            if (snapshot.empty) return false;
+
+            this.products = snapshot.docs.map(doc => ({
+                ...doc.data(),
+                _firestoreId: doc.id
+            }));
+
+            console.log(`ProductManager: Loaded ${this.products.length} products from Firestore`);
+            return true;
+        } catch (error) {
+            console.warn('ProductManager: Firestore load failed, falling back to JSON', error);
+            return false;
+        }
+    }
+
+    /**
+     * Load products from static JSON file
+     * @returns {Promise<void>}
+     */
+    async _loadFromJson() {
+        const isInSubdir = window.location.pathname.includes('/pricing/') ||
+            window.location.pathname.includes('/pages/');
+        const basePath = isInSubdir ? '..' : '.';
+
+        const response = await fetch(`${basePath}/data/products.json`);
+        if (!response.ok) {
+            throw new Error(`Failed to load products: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.products = data.products || [];
+        this.categories = data.categories || [];
+        this.pricingTiers = data.pricingTiers || [];
+
+        console.log(`ProductManager: Loaded ${this.products.length} products from JSON`);
     }
 
     /**

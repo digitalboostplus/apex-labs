@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Apex Labs</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#020617',
+                            navy: '#0F172A',
+                            blue: '#0052cc',
+                            cyan: '#00C2FF',
+                            slate: '#F8FAFC',
+                        },
+                        accent: {
+                            cyan: '#22D3EE',
+                            blue: '#3B82F6',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        heading: ['"Oswald"', 'sans-serif'],
+                        brand: ['"Montserrat"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Firebase Functions SDK (needed for callable seed function) -->
+    <link rel="stylesheet" href="css/design-system.css">
+
+    <!-- App Scripts -->
+    <script src="js/sanitize.js"></script>
+    <script src="js/firebase-init.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/admin.js" defer></script>
+
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Modal backdrop */
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Custom scrollbar for modal */
+        .modal-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+    <!-- ============================================================ -->
+    <!-- Auth Gate -->
+    <!-- ============================================================ -->
+    <div id="auth-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-brand-dark to-brand-navy">
+        <div class="text-center px-6">
+            <div class="mb-6">
+                <h1 class="text-3xl font-heading text-white mb-2">Apex Labs Admin</h1>
+                <p id="auth-gate-message" class="text-slate-400 text-sm">Sign in with your admin account to continue.</p>
+            </div>
+            <div id="auth-gate-signin">
+                <button id="admin-signin-btn"
+                    class="inline-flex items-center gap-3 px-8 py-3 bg-white text-brand-navy font-semibold rounded-xl hover:bg-slate-100 transition-colors shadow-lg">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Sign in with Google
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Admin Content -->
+    <!-- ============================================================ -->
+    <div id="admin-content" class="hidden">
+
+        <!-- Top Bar -->
+        <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-lg border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="font-brand font-bold text-brand-navy text-lg tracking-tight">APEX LABS</a>
+                    <span class="text-xs font-medium text-white bg-brand-blue px-2 py-0.5 rounded-full uppercase tracking-wider">Admin</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="admin-email" class="text-sm text-slate-500 hidden sm:inline"></span>
+                    <button id="admin-signout-btn"
+                        class="text-sm text-slate-500 hover:text-red-600 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+            <!-- Page Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-2xl font-heading text-brand-navy">Product Catalog</h2>
+                    <p class="text-sm text-slate-500 mt-1">Manage your peptide product inventory.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="seed-products-btn"
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                        <i data-lucide="database" class="w-4 h-4"></i>
+                        Seed from JSON
+                    </button>
+                    <button onclick="window.adminModule.openProductModal()"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-brand-blue rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        New Product
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search & Filter Bar -->
+            <div class="flex items-center justify-between gap-4 mb-6">
+                <div class="relative flex-1 max-w-md">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                    <input id="product-search" type="text" placeholder="Search products..."
+                        class="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-colors">
+                </div>
+                <span id="product-count" class="text-sm text-slate-400"></span>
+            </div>
+
+            <!-- Product Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50/50">
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Product</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Price</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tier 1</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tier 2</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Stock</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Featured</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-24">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-tbody">
+                            <tr>
+                                <td colspan="9" class="px-6 py-12 text-center text-slate-400">
+                                    Loading products...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Create/Edit Product Modal -->
+    <!-- ============================================================ -->
+    <div id="product-modal" class="hidden fixed inset-0 z-50 items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+                <h3 id="modal-title" class="text-lg font-heading text-brand-navy">Create Product</h3>
+                <button onclick="window.adminModule.closeProductModal()"
+                    class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <form id="product-form" class="flex-1 overflow-y-auto modal-scroll px-6 py-5 space-y-5">
+
+                <!-- Row: ID + Price ID -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Product ID *</label>
+                        <input id="field-id" type="text" required placeholder="e.g. bpc-157"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Stripe Price ID</label>
+                        <input id="field-priceId" type="text" placeholder="price_..."
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                </div>
+
+                <!-- Row: Name + Category -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Name *</label>
+                        <input id="field-name" type="text" required placeholder="Product name"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Category</label>
+                        <input id="field-category" type="text" placeholder="e.g. Recovery Agent"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                </div>
+
+                <!-- Row: Pricing -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Price ($) *</label>
+                        <input id="field-price" type="number" required min="0" step="0.01" placeholder="0.00"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Tier 1 Price ($)</label>
+                        <input id="field-wholesale1Price" type="number" min="0" step="0.01" placeholder="0.00"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Tier 2 Price ($)</label>
+                        <input id="field-wholesale2Price" type="number" min="0" step="0.01" placeholder="0.00"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                </div>
+
+                <!-- Row: Min Quantities -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Tier 1 Min Qty</label>
+                        <input id="field-wholesaleMinQty" type="number" min="1" value="10"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Tier 2 Min Qty</label>
+                        <input id="field-wholesale2MinQty" type="number" min="1" value="25"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                </div>
+
+                <!-- Image URL -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1.5">Image Path / URL</label>
+                    <input id="field-image" type="text" placeholder="/assets/product-imgs/..."
+                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1.5">Description</label>
+                    <textarea id="field-description" rows="3" placeholder="Full product description..."
+                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue resize-none"></textarea>
+                </div>
+
+                <!-- Short Description -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1.5">Short Description</label>
+                    <input id="field-shortDescription" type="text" placeholder="Brief summary"
+                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                </div>
+
+                <!-- Row: Specs -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Concentration</label>
+                        <input id="field-concentration" type="text" placeholder="10 MG/VIAL"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Purity</label>
+                        <input id="field-purity" type="text" placeholder="99.8%"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Format</label>
+                        <input id="field-format" type="text" placeholder="Lyophilized"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1.5">Tags (comma-separated)</label>
+                    <input id="field-tags" type="text" placeholder="recovery, healing, tissue-repair"
+                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                </div>
+
+                <!-- Row: Stock & Toggles -->
+                <div class="grid grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Stock Level</label>
+                        <input id="field-stockLevel" type="number" min="0" value="0"
+                            class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue">
+                    </div>
+                    <label class="flex items-center gap-2 pb-2 cursor-pointer">
+                        <input id="field-inStock" type="checkbox" checked
+                            class="w-4 h-4 text-brand-blue border-slate-300 rounded focus:ring-brand-blue/20">
+                        <span class="text-sm text-slate-700">In Stock</span>
+                    </label>
+                    <label class="flex items-center gap-2 pb-2 cursor-pointer">
+                        <input id="field-featured" type="checkbox"
+                            class="w-4 h-4 text-brand-blue border-slate-300 rounded focus:ring-brand-blue/20">
+                        <span class="text-sm text-slate-700">Featured</span>
+                    </label>
+                </div>
+            </form>
+
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200">
+                <button onclick="window.adminModule.closeProductModal()" type="button"
+                    class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    Cancel
+                </button>
+                <button id="modal-submit-btn" type="submit" form="product-form"
+                    class="px-6 py-2.5 text-sm font-semibold text-white bg-brand-blue rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
+                    Create Product
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Delete Confirmation Modal -->
+    <!-- ============================================================ -->
+    <div id="delete-modal" class="hidden fixed inset-0 z-50 items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 text-center">
+            <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-red-50 flex items-center justify-center">
+                <i data-lucide="alert-triangle" class="w-6 h-6 text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-heading text-brand-navy mb-2">Delete Product</h3>
+            <p class="text-sm text-slate-500 mb-6">
+                Are you sure you want to delete <strong id="delete-product-name" class="text-slate-900"></strong>? This action cannot be undone.
+            </p>
+            <div class="flex items-center justify-center gap-3">
+                <button onclick="window.adminModule.closeDeleteModal()"
+                    class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    Cancel
+                </button>
+                <button id="confirm-delete-btn"
+                    class="px-6 py-2.5 text-sm font-semibold text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[60] flex flex-col gap-2 items-end"></div>
+
+    <!-- Firebase Functions SDK (for callable seed function) -->
+    <script>
+        // Load functions SDK after firebase-init loads the core SDKs
+        window.addEventListener('firebase-ready', async function() {
+            const version = '12.8.0';
+            const script = document.createElement('script');
+            script.src = `https://www.gstatic.com/firebasejs/${version}/firebase-functions-compat.js`;
+            document.head.appendChild(script);
+        });
+    </script>
+
+</body>
+
+</html>

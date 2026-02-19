@@ -16,3 +16,7 @@ const { paypalWebhook } = require('./src/paypal/webhookHandler');
 exports.createPayPalOrder = createPayPalOrder;
 exports.capturePayPalOrder = capturePayPalOrder;
 exports.paypalWebhook = paypalWebhook;
+
+// Export product management functions
+const { seedProducts } = require('./src/seedProducts');
+exports.seedProducts = seedProducts;

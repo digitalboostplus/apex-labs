@@ -15,7 +15,15 @@ class Cart {
 
     async initProductData() {
         try {
-            // Detect path context for products.json
+            // Delegate to ProductManager if available (reads from Firestore with JSON fallback)
+            if (window.productManager) {
+                await window.productManager.load();
+                this.productData = window.productManager.getAll();
+                this.notifyListeners();
+                return;
+            }
+
+            // Direct JSON fallback for pages that don't load products.js
             const isInSubdir = window.location.pathname.includes('/pricing/') ||
                 window.location.pathname.includes('/pages/');
             const jsonPath = isInSubdir ? '../data/products.json' : 'data/products.json';
@@ -23,7 +31,7 @@ class Cart {
             const response = await fetch(jsonPath);
             const data = await response.json();
             this.productData = data.products;
-            this.notifyListeners(); // Refresh UI once data is loaded
+            this.notifyListeners();
         } catch (e) {
             console.error('Error loading product data for cart:', e);
         }
